@@ -19,10 +19,14 @@ public class VirtualRunway {
         return origParams;
     }
 
-    public RunwayParameters getRecalcParams() throws Exception {
+    public RunwayParameters getRecalcParams() throws NoDistancesAssignedException {
         if (recalcParams == null) {
-            throw new Exception("Recalculated parameters were not calculated or assigned!");
+            throw new NoDistancesAssignedException();
         }
         return recalcParams;
+    }
+
+    public void setRecalcParams(RunwayParameters recalcParams) {
+        this.recalcParams = recalcParams;
     }
 }
