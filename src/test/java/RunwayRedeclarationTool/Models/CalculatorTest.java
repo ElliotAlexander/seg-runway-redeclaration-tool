@@ -81,6 +81,64 @@ public class CalculatorTest {
     }
 
     @Test
+    public void scenario3() {
+        Obstacle o = new Obstacle("scenario3", 15, 150, 3203, 60, RunwaySide.RIGHT);
+
+        try {
+            Runway r = runways.get(0); // Runway 09R/27L
+            calculator.calculate(o, r);
+
+            // 09R
+            RunwayParameters params = r.leftRunway.getRecalcParams();
+            assertEquals(params.TORA, 2903);
+            assertEquals(params.TORA, 2903);
+            assertEquals(params.TORA, 2903);
+            assertEquals(params.LDA, 2393);
+
+            // 27L
+            params = r.rightRunway.getRecalcParams();
+            assertEquals(params.TORA, 2393);
+            assertEquals(params.TODA,2393);
+            assertEquals(params.ASDA,2393);
+            assertEquals(params.LDA,2903);
+
+        } catch (NoRedeclarationNeededException e) {
+            fail("Calculator throws exception in the wrong situation.");
+        } catch (NoDistancesAssignedException e) {
+            fail("Calculator failed to assign redeclared distances to runways.");
+        }
+    }
+
+    @Test
+    public void scenario4() {
+        Obstacle o = new Obstacle("scenario4", 20, 3546, 50, 20, RunwaySide.RIGHT);
+
+        try {
+            Runway r = runways.get(1); // Runway 09L/27R
+            calculator.calculate(o, r);
+
+            // 09L
+            RunwayParameters params = r.leftRunway.getRecalcParams();
+            assertEquals(params.TORA, 2793);
+            assertEquals(params.TORA, 2793);
+            assertEquals(params.TORA, 2793);
+            assertEquals(params.LDA, 3246);
+
+            // 27R
+            params = r.rightRunway.getRecalcParams();
+            assertEquals(params.TORA, 3534);
+            assertEquals(params.TODA,3612);
+            assertEquals(params.ASDA,3534);
+            assertEquals(params.LDA,2774);
+
+        } catch (NoRedeclarationNeededException e) {
+            fail("Calculator throws exception in the wrong situation.");
+        } catch (NoDistancesAssignedException e) {
+            fail("Calculator failed to assign redeclared distances to runways.");
+        }
+    }
+
+    @Test
     public void outsideInstrumentStrip() {
         ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
         obstacles.add(new Obstacle("outside", 5, -70, 3730, 1, RunwaySide.LEFT));
