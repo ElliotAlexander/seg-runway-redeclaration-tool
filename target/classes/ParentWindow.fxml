@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.161"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Views.ParentWindow">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="New runway..."/>
+                        <MenuItem mnemonicParsing="false" text="New obstruction..."/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="View">
+                    <items>
+                        <CheckMenuItem mnemonicParsing="false" text="Clearway"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Stopway"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Cleared and graded areas"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="About">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Help"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+    <center>
+        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <tabs>
+                <Tab text="Top-down view">
+                    <content>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Side view"/>
+            </tabs>
+        </TabPane>
+    </center>
+    <right>
+        <VBox prefWidth="350.0" BorderPane.alignment="CENTER">
+            <children>
+                <GridPane hgap="5.0">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" prefWidth="100.0"/>
+                        <ColumnConstraints prefWidth="250.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label text="Airport:"/>
+                        <Label text="Runway:" GridPane.rowIndex="1"/>
+                        <ComboBox prefWidth="325.0" promptText="Select an airport..." GridPane.columnIndex="1"/>
+                        <ComboBox prefWidth="325.0" promptText="Select a runway..." GridPane.columnIndex="1"
+                                  GridPane.rowIndex="1"/>
+                    </children>
+                </GridPane>
+                <GridPane hgap="5.0">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" prefWidth="100.0"/>
+                        <ColumnConstraints prefWidth="250.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label text="Obstruction:"/>
+                        <ComboBox prefWidth="325.0" promptText="Add an obstruction..." GridPane.columnIndex="1"/>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" top="10.0"/>
+                    </padding>
+                </GridPane>
+                <GridPane hgap="5.0">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" prefWidth="250.0"/>
+                        <ColumnConstraints prefWidth="70.0"/>
+                        <ColumnConstraints minWidth="10.0" prefWidth="40.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label text="Obstruction distance from THR LEFT:"/>
+                        <Label text="Obstruction distance from THR RIGHT:" GridPane.rowIndex="1"/>
+                        <Label text="Obstruction distance from C/L:" GridPane.rowIndex="3"/>
+                        <TextField GridPane.columnIndex="1"/>
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+                        <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                        <Label text="m" GridPane.columnIndex="2"/>
+                        <Label text="Obstruction side of C/L:" GridPane.rowIndex="2"/>
+                        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0"/>
+                    </padding>
+                </GridPane>
+                <TabPane prefHeight="500.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab text="Declared distances">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                    <children>
+                                        <TableView layoutX="20.0" layoutY="14.0" prefHeight="400.0" prefWidth="300.0">
+                                            <columns>
+                                                <TableColumn prefWidth="100.0" text="Parameter"/>
+                                                <TableColumn prefWidth="100.0" text="Original value"/>
+                                                <TableColumn prefWidth="100.0" text="New value"/>
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                        <Tab text="Calculation breakdown">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </VBox>
+    </right>
+
+</BorderPane>
