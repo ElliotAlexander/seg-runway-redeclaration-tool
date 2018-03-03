@@ -38,6 +38,7 @@ public class CalculatorTest {
             assertEquals(params.TORA, 3345);
             assertEquals(params.TORA, 3345);
             assertEquals(params.LDA, 2985);
+            System.out.println(r.leftRunway.getRecalcBreakdown());
 
             // 27R
             params = r.rightRunway.getRecalcParams();
@@ -45,11 +46,12 @@ public class CalculatorTest {
             assertEquals(params.TODA,2986);
             assertEquals(params.ASDA,2986);
             assertEquals(params.LDA,3346);
+            System.out.println(r.rightRunway.getRecalcBreakdown());
 
         } catch (NoRedeclarationNeededException e) {
             fail("Calculator throws exception in the wrong situation.");
         } catch (AttributeNotAssignedException e) {
-            fail("Calculator failed to assign redeclared distances to runways.");
+            fail("Calculator failed to assign redeclared distances and breakdown to runways.");
         }
     }
 
@@ -67,6 +69,7 @@ public class CalculatorTest {
             assertEquals(params.TORA, 1850);
             assertEquals(params.TORA, 1850);
             assertEquals(params.LDA, 2553);
+            System.out.println(r.leftRunway.getRecalcBreakdown());
 
             // 27L
             params = r.rightRunway.getRecalcParams();
@@ -74,11 +77,12 @@ public class CalculatorTest {
             assertEquals(params.TODA,2860);
             assertEquals(params.ASDA,2860);
             assertEquals(params.LDA,1850);
+            System.out.println(r.rightRunway.getRecalcBreakdown());
 
         } catch (NoRedeclarationNeededException e) {
             fail("Calculator throws exception in the wrong situation.");
         } catch (AttributeNotAssignedException e) {
-            fail("Calculator failed to assign redeclared distances to runways.");
+            fail("Calculator failed to assign redeclared distances and breakdown to runways.");
         }
     }
 
@@ -96,6 +100,7 @@ public class CalculatorTest {
             assertEquals(params.TORA, 2903);
             assertEquals(params.TORA, 2903);
             assertEquals(params.LDA, 2393);
+            System.out.println(r.leftRunway.getRecalcBreakdown());
 
             // 27L
             params = r.rightRunway.getRecalcParams();
@@ -103,11 +108,12 @@ public class CalculatorTest {
             assertEquals(params.TODA,2393);
             assertEquals(params.ASDA,2393);
             assertEquals(params.LDA,2903);
+            System.out.println(r.rightRunway.getRecalcBreakdown());
 
         } catch (NoRedeclarationNeededException e) {
             fail("Calculator throws exception in the wrong situation.");
         } catch (AttributeNotAssignedException e) {
-            fail("Calculator failed to assign redeclared distances to runways.");
+            fail("Calculator failed to assign redeclared distances and breakdown to runways.");
         }
     }
 
@@ -125,6 +131,7 @@ public class CalculatorTest {
             assertEquals(params.TORA, 2793);
             assertEquals(params.TORA, 2793);
             assertEquals(params.LDA, 3246);
+            System.out.println(r.leftRunway.getRecalcBreakdown());
 
             // 27R
             params = r.rightRunway.getRecalcParams();
@@ -132,11 +139,12 @@ public class CalculatorTest {
             assertEquals(params.TODA,3612);
             assertEquals(params.ASDA,3534);
             assertEquals(params.LDA,2774);
+            System.out.println(r.rightRunway.getRecalcBreakdown());
 
         } catch (NoRedeclarationNeededException e) {
             fail("Calculator throws exception in the wrong situation.");
         } catch (AttributeNotAssignedException e) {
-            fail("Calculator failed to assign redeclared distances to runways.");
+            fail("Calculator failed to assign redeclared distances and breakdown to runways.");
         }
     }
 

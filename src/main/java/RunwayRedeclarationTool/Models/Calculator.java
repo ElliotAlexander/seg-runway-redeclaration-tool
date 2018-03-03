@@ -48,20 +48,44 @@ public class Calculator {
         int stopway = params.ASDA - params.TORA;
         int clearway = params.TODA - params.TORA;
         int displacedTSH = params.TORA - params.LDA;
+        StringBuffer brkdwn = new StringBuffer(300);
 
         // Take off distances
         int rTORA = params.TORA - distFromTSH - displacedTSH - visual_strip_end - RESA;
-        int rASDA = rTORA + stopway;
         int rTODA = rTORA + clearway;
+        int rASDA = rTORA + stopway;
 
-        // Landing distances
+        // And their breakdown
+        brkdwn.append("TORA = original TORA - distance from threshold - displaced threshold - blast protection\n")
+                .append("     = ").append(params.TORA).append(" - ").append(distFromTSH).append(" - ")
+                .append(displacedTSH).append(visual_strip_end + RESA).append(" = ").append(rTORA).append("\n");
+        brkdwn.append("TODA = recalculated TORA + clearway\n").append("     = ").append(params.TORA).append(" + ")
+                .append(clearway).append(" = ").append(rTODA).append("\n");
+        brkdwn.append("ASDA = recalculated TORA + stopway\n").append("     = ").append(params.TORA).append(" + ")
+                .append(stopway).append(" = ").append(rASDA).append("\n");
+
+        // Landing distance
         int slopeCalc = o.getHeight() * 50;
+        boolean largeSlope = true;
         if (slopeCalc < RESA) {
             slopeCalc = RESA;  // minimum distance from obstacle: RESA + strip end
+            largeSlope = false;
         }
         int rLDA = params.LDA - distFromTSH - slopeCalc - visual_strip_end;
 
+        // And its breakdown
+        if (largeSlope) {
+            brkdwn.append("LDA  = original LDA - distance from threshold - slope calculation - strip end\n")
+                    .append("     = ").append(params.LDA).append(" - ").append(distFromTSH).append(" - ")
+                    .append(o.getHeight()).append("*50 - ").append(visual_strip_end).append(" = ").append(rLDA);
+        } else {
+            brkdwn.append("LDA  = original LDA - distance from threshold - blast protection\n").append("     = ")
+                    .append(params.LDA).append(" - ").append(distFromTSH).append(" - ").append(visual_strip_end + RESA)
+                    .append(" = ").append(rLDA);
+        }
+
         vRunway.setRecalcParams(new RunwayParameters(rTORA, rTODA, rASDA, rLDA));
+        vRunway.setRecalcBreakdown(brkdwn.toString());
     }
 
     // Requires the greater distance from threshold
