@@ -1,5 +1,7 @@
 package RunwayRedeclarationTool.Models;
 
+import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
+import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 import org.junit.Test;
 import java.util.ArrayList;
 import static org.junit.Assert.*;
@@ -46,7 +48,7 @@ public class CalculatorTest {
 
         } catch (NoRedeclarationNeededException e) {
             fail("Calculator throws exception in the wrong situation.");
-        } catch (NoDistancesAssignedException e) {
+        } catch (AttributeNotAssignedException e) {
             fail("Calculator failed to assign redeclared distances to runways.");
         }
     }
@@ -75,7 +77,7 @@ public class CalculatorTest {
 
         } catch (NoRedeclarationNeededException e) {
             fail("Calculator throws exception in the wrong situation.");
-        } catch (NoDistancesAssignedException e) {
+        } catch (AttributeNotAssignedException e) {
             fail("Calculator failed to assign redeclared distances to runways.");
         }
     }
@@ -104,7 +106,7 @@ public class CalculatorTest {
 
         } catch (NoRedeclarationNeededException e) {
             fail("Calculator throws exception in the wrong situation.");
-        } catch (NoDistancesAssignedException e) {
+        } catch (AttributeNotAssignedException e) {
             fail("Calculator failed to assign redeclared distances to runways.");
         }
     }
@@ -133,7 +135,7 @@ public class CalculatorTest {
 
         } catch (NoRedeclarationNeededException e) {
             fail("Calculator throws exception in the wrong situation.");
-        } catch (NoDistancesAssignedException e) {
+        } catch (AttributeNotAssignedException e) {
             fail("Calculator failed to assign redeclared distances to runways.");
         }
     }

@@ -1,12 +1,13 @@
 package RunwayRedeclarationTool.Models;
 
+import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
+
 // Singleton that takes in Obstacle and Runway and sets the recalculated runway parameters in the two virtual runways
 public class Calculator {
     public static final Calculator instance = new Calculator();
 
     private static final int visual_strip_end = 60;
     private static final int visual_strip_width = 75;
-    private static final int engine_blast_allowance = 500; // Could be between 300-500 m
     private static final int RESA = 240;
 
     private Calculator() {}
@@ -50,7 +51,7 @@ public class Calculator {
         // land
         int slopeCalc = o.getHeight() * 50;
         if (slopeCalc < RESA) {
-            slopeCalc = RESA;  // minimum distance from obstacle: strip end + RESA
+            slopeCalc = RESA;  // minimum distance from obstacle: RESA + strip end
         }
         int rLDA = params.LDA - distFromTSH - slopeCalc - visual_strip_end;
 

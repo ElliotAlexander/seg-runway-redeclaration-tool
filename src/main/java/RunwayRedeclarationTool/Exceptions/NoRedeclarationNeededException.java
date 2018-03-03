@@ -1,4 +1,4 @@
-package RunwayRedeclarationTool.Models;
+package RunwayRedeclarationTool.Exceptions;
 
 public class NoRedeclarationNeededException extends Exception {
     public NoRedeclarationNeededException() {
