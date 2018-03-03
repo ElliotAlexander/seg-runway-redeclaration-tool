@@ -10,4 +10,20 @@ public class RunwayParameters {
         this.ASDA = ASDA;
         this.LDA = LDA;
     }
+
+    public int getTORA() {
+        return TORA;
+    }
+
+    public int getTODA() {
+        return TODA;
+    }
+
+    public int getASDA() {
+        return ASDA;
+    }
+
+    public int getLDA() {
+        return LDA;
+    }
 }
