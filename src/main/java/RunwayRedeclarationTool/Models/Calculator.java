@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.Models;
 
+import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 
 // Singleton that takes in Obstacle and Runway and sets the recalculated runway parameters in the two virtual runways
@@ -48,43 +49,49 @@ public class Calculator {
         int stopway = params.ASDA - params.TORA;
         int clearway = params.TODA - params.TORA;
         int displacedTSH = params.TORA - params.LDA;
-        StringBuffer brkdwn = new StringBuffer(300);
 
         // Take off distances
         int rTORA = params.TORA - distFromTSH - displacedTSH - visual_strip_end - RESA;
         int rTODA = rTORA + clearway;
         int rASDA = rTORA + stopway;
 
-        // And their breakdown
-        brkdwn.append("TORA = original TORA - distance from threshold - displaced threshold - blast protection\n")
-                .append("     = ").append(params.TORA).append(" - ").append(distFromTSH).append(" - ")
-                .append(displacedTSH).append(visual_strip_end + RESA).append(" = ").append(rTORA).append("\n");
-        brkdwn.append("TODA = recalculated TORA + clearway\n").append("     = ").append(params.TORA).append(" + ")
-                .append(clearway).append(" = ").append(rTODA).append("\n");
-        brkdwn.append("ASDA = recalculated TORA + stopway\n").append("     = ").append(params.TORA).append(" + ")
-                .append(stopway).append(" = ").append(rASDA).append("\n");
-
         // Landing distance
         int slopeCalc = o.getHeight() * 50;
-        boolean largeSlope = true;
         if (slopeCalc < RESA) {
             slopeCalc = RESA;  // minimum distance from obstacle: RESA + strip end
-            largeSlope = false;
         }
         int rLDA = params.LDA - distFromTSH - slopeCalc - visual_strip_end;
 
-        // And its breakdown
-        if (largeSlope) {
-            brkdwn.append("LDA  = original LDA - distance from threshold - slope calculation - strip end\n")
-                    .append("     = ").append(params.LDA).append(" - ").append(distFromTSH).append(" - ")
-                    .append(o.getHeight()).append("*50 - ").append(visual_strip_end).append(" = ").append(rLDA);
-        } else {
-            brkdwn.append("LDA  = original LDA - distance from threshold - blast protection\n").append("     = ")
-                    .append(params.LDA).append(" - ").append(distFromTSH).append(" - ").append(visual_strip_end + RESA)
-                    .append(" = ").append(rLDA);
-        }
-
         vRunway.setRecalcParams(new RunwayParameters(rTORA, rTODA, rASDA, rLDA));
+        takeoffAwayLandOverBreakdown(vRunway, distFromTSH, o.getHeight());
+    }
+
+    // TODO: change blast protection to RESA + strip end
+    private void takeoffAwayLandOverBreakdown(VirtualRunway vRunway, int distFromTSH, int obHeight) {
+        // Setting up all needed values
+        RunwayParameters oParams = vRunway.getOrigParams();
+        RunwayParameters rParams = null;
+        try {
+            rParams = vRunway.getRecalcParams();
+        } catch (AttributeNotAssignedException e) {
+            e.printStackTrace();    //Shouldn't happen since we're setting them just before this method is called. Everything is private
+        }
+        int stopway = oParams.ASDA - oParams.TORA;
+        int clearway = oParams.TODA - oParams.TORA;
+        int displacedTSH = oParams.TORA - oParams.LDA;
+        StringBuffer brkdwn = new StringBuffer(300);
+
+        brkdwn.append("TORA = original TORA - distance from threshold - displaced threshold - blast protection\n")
+                .append("     = ").append(oParams.TORA).append(" - ").append(distFromTSH).append(" - ")
+                .append(displacedTSH).append(visual_strip_end + RESA).append(" = ").append(rParams.TORA).append("\n");
+        brkdwn.append("TODA = recalculated TORA + clearway\n").append("     = ").append(oParams.TORA).append(" + ")
+                .append(clearway).append(" = ").append(rParams.TODA).append("\n");
+        brkdwn.append("ASDA = recalculated TORA + stopway\n").append("     = ").append(oParams.TORA).append(" + ")
+                .append(stopway).append(" = ").append(rParams.ASDA).append("\n");
+        brkdwn.append("LDA  = original LDA - distance from threshold - slope calculation - strip end\n")
+                .append("     = ").append(oParams.LDA).append(" - ").append(distFromTSH).append(" - ")
+                .append(obHeight).append("*50 - ").append(visual_strip_end).append(" = ").append(rParams.LDA);
+
         vRunway.setRecalcBreakdown(brkdwn.toString());
     }
 
@@ -105,5 +112,31 @@ public class Calculator {
         int rLDA = distFromTSH - RESA - visual_strip_end;
 
         vRunway.setRecalcParams(new RunwayParameters(rTORA, rTORA, rTORA, rLDA));
+        takeoffTowardsLandTowardsBreakdown(vRunway, distFromTSH, o.getHeight());
+    }
+
+    private void takeoffTowardsLandTowardsBreakdown(VirtualRunway vRunway, int distFromTSH, int obHeight) {
+        // Setting up all needed values
+        RunwayParameters oParams = vRunway.getOrigParams();
+        RunwayParameters rParams = null;
+        try {
+            rParams = vRunway.getRecalcParams();
+        } catch (AttributeNotAssignedException e) {
+            e.printStackTrace();    //Shouldn't happen since we're setting them just before this method is called. Everything is private
+        }
+//        int stopway = oParams.ASDA - oParams.TORA;
+//        int clearway = oParams.TODA - oParams.TORA;
+        int displacedTSH = oParams.TORA - oParams.LDA;
+        StringBuffer brkdwn = new StringBuffer(300);
+
+        brkdwn.append("TORA = distance from threshold + displaced threshold - slope calculation - strip end\n")
+                .append(distFromTSH).append(" + ").append(displacedTSH).append(" - ").append(obHeight).append("*50 - ")
+                .append(visual_strip_end).append(" = ").append(rParams.TORA).append("\n");
+        brkdwn.append("TODA = recalculated TORA\n").append("     = ").append(rParams.TODA).append("\n");
+        brkdwn.append("ASDA = recalculated TORA\n").append("     = ").append(rParams.ASDA).append("\n");
+        brkdwn.append("LDA  = distance from threshold - blast protection\n").append("     = ").append(distFromTSH)
+                .append(" - ").append(visual_strip_end + RESA).append(" = ").append(rParams.LDA);
+
+        vRunway.setRecalcBreakdown(brkdwn.toString());
     }
 }
