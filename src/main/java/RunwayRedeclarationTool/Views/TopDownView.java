@@ -1,18 +1,18 @@
 package RunwayRedeclarationTool.Views;
 
+import RunwayRedeclarationTool.Models.Runway;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 
 public class TopDownView extends Canvas {
+    public Runway runway;
 
-    public TopDownView() {
+    public TopDownView(Runway runway) {
+        this.runway = runway;
         draw();
 
         widthProperty().addListener(new InvalidationListener() {
@@ -27,12 +27,13 @@ public class TopDownView extends Canvas {
         });
     }
 
-    private double rescalex(double length){
-        return length/5120*getWidth();
+    private double rescale_x(double length){
+        //return length/5120*getWidth();
+        return length / (runway.leftRunway.getOrigParams().getTORA() + 120) * getWidth();
     }
 
-    private double rescaley(double length){
-        return length/300*getHeight();
+    private double rescale_y(double length){
+        return length / 300 * getHeight();
     }
 
     public void draw() {
@@ -47,34 +48,40 @@ public class TopDownView extends Canvas {
 
         // draw the cleared and graded area
         gc.setFill(Color.web("aaaaaa"));
-        gc.fillPolygon(new double[]{0, rescalex(210), rescalex(360), rescalex(4760), rescalex(4910), rescalex(5120), rescalex(5120),  rescalex(4910), rescalex(4760), rescalex(360), rescalex(210), 0},
-                new double[]{rescaley(75), rescaley(75), rescaley(45), rescaley(45), rescaley(75), rescaley(75), rescaley(225), rescaley(225), rescaley(255), rescaley(255), rescaley(225), rescaley(225)}, 12);
+        gc.fillPolygon(new double[]{0, rescale_x(210), rescale_x(360), rescale_x(runway.leftRunway.getOrigParams().getTORA()-240), rescale_x(runway.leftRunway.getOrigParams().getTORA()-90), rescale_x(runway.leftRunway.getOrigParams().getTORA()+120), rescale_x(runway.leftRunway.getOrigParams().getTORA()+120),  rescale_x(runway.leftRunway.getOrigParams().getTORA()-90), rescale_x(runway.leftRunway.getOrigParams().getTORA()-240), rescale_x(360), rescale_x(210), 0},
+                new double[]{rescale_y(75), rescale_y(75), rescale_y(45), rescale_y(45), rescale_y(75), rescale_y(75), rescale_y(225), rescale_y(225), rescale_y(255), rescale_y(255), rescale_y(225), rescale_y(225)}, 12);
 
         // draw the runway
         gc.setFill(Color.web("333333"));
-        gc.fillRect(rescalex(60), rescaley(125),rescalex(5000), rescaley(50));
+        gc.fillRect(rescale_x(60), rescale_y(125),rescale_x(runway.leftRunway.getOrigParams().getTORA()), rescale_y(50));
 
         // draw the threshold markers
         gc.setStroke(Color.WHITE);
-        gc.setLineWidth(rescaley(2));
+        gc.setLineWidth(rescale_y(2));
         for(int i = 130; i<175; i+=5){
-            gc.strokeLine(rescalex(120), rescaley(i),rescalex(500), rescaley(i));
-            gc.strokeLine(rescalex(5000), rescaley(i),rescalex(4620), rescaley(i));
+            gc.strokeLine(rescale_x(120), rescale_y(i),rescale_x(520), rescale_y(i));
+            gc.strokeLine(rescale_x(runway.leftRunway.getOrigParams().getTORA()), rescale_y(i),rescale_x(runway.leftRunway.getOrigParams().getTORA()-400), rescale_y(i));
         }
 
-        gc.setLineWidth(rescaley(1));
-        gc.setLineDashes(40);
-        gc.strokeLine(rescalex(850), rescaley(150), rescalex(4270),rescaley(150));
+        // draw C/L
+        gc.setLineWidth(rescale_y(1));
+        gc.setLineDashes(15);
+        gc.strokeLine(rescale_x(850), rescale_y(150), rescale_x(runway.leftRunway.getOrigParams().getTORA()-730), rescale_y(150));
         gc.setLineDashes(0);
 
-        gc.setFill(Color.web("ffffff"));
-        gc.setFont(Font.font(null, FontWeight.BOLD, rescalex(150)));
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.setTextBaseline(VPos.CENTER);
-        gc.fillText("09", rescalex(650), rescaley(138));
-        gc.fillText("R", rescalex(650), rescaley(162));
-        gc.fillText("27", rescalex(4470), rescaley(138));
-        gc.fillText("L", rescalex(4470), rescaley(162));
+        gc.setFill(Color.WHITE);
+        gc.setFont(Font.font("Consolas", 24));
+        gc.fillText(runway.toString(), rescale_x(100), rescale_y(20));
+
+        gc.setStroke(Color.BLACK);
+        gc.setFill(Color.BLACK);
+        gc.setLineWidth(rescale_y(0.5));
+        gc.setFont(Font.font("Consolas", 16));
+        gc.strokeLine(rescale_x(100), rescale_y(280), rescale_x(600), rescale_y(280));
+        gc.strokeLine(rescale_x(100), rescale_y(278), rescale_x(100), rescale_y(282));
+        gc.strokeLine(rescale_x(600), rescale_y(278), rescale_x(600), rescale_y(282));
+        gc.fillText("500m", rescale_x(100), rescale_y(276));
+
     }
 
     @Override
