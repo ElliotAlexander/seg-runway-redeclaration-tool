@@ -8,7 +8,6 @@ import RunwayRedeclarationTool.Views.TopDownView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.FlowPane;
 
 import java.net.URL;
@@ -18,13 +17,8 @@ public class MainWindowController implements Initializable {
     private Calculator calculator;
 
     @FXML
-    ComboBox<Runway> runwayComboBox;
-
-    @FXML
-    FlowPane topDownViewParent = new FlowPane();
-
-    @FXML
-    Tab test;
+    FlowPane topDownViewContainer;
+    @FXML ComboBox<Runway> runwayComboBox;
 
     public void initialize(URL url, ResourceBundle bundle){
         calculator = Calculator.getInstance();
@@ -42,9 +36,12 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    public void showRunway(){
+    public void drawRunway(){
         TopDownView view = new TopDownView();
-        view.widthProperty().bind(topDownViewParent.widthProperty());
-        topDownViewParent.getChildren().add(view);
+        view.widthProperty().bind(topDownViewContainer.widthProperty());
+        view.heightProperty().bind(topDownViewContainer.heightProperty());
+        topDownViewContainer.getChildren().add(view);
     }
+
+
 }

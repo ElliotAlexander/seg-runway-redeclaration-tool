@@ -15,11 +15,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.layout.FlowPane?>
+<!--<?import RunwayRedeclarationTool.Views.TopDownView?>-->
+
 <BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
@@ -42,9 +44,8 @@
     </top>
     <center>
         <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-            <Tab fx:id="test" text="Top-down view">
-                <FlowPane fx:id="topDownViewParent">
-                </FlowPane>
+            <Tab text="Top-down view">
+                <FlowPane fx:id="topDownViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" />
             </Tab>
             <Tab text="Side view" />
         </TabPane>
@@ -63,7 +64,7 @@
                 <Label text="Airport:" />
                 <Label text="Runway:" GridPane.rowIndex="1" />
                 <ComboBox prefWidth="325.0" promptText="Select an airport..." GridPane.columnIndex="1" />
-                <ComboBox fx:id="runwayComboBox" onAction="#showRunway" prefWidth="325.0" promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <ComboBox fx:id="runwayComboBox" onAction="#drawRunway" prefWidth="325.0" promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
             </GridPane>
             <GridPane hgap="5.0">
                 <columnConstraints>

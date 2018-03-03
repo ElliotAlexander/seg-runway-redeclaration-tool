@@ -13,6 +13,8 @@ import javafx.scene.text.TextAlignment;
 public class TopDownView extends Canvas {
 
     public TopDownView() {
+        draw();
+
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
@@ -33,14 +35,14 @@ public class TopDownView extends Canvas {
         return length/300*getHeight();
     }
 
-    private void draw() {
+    public void draw() {
         double width = getWidth();
         double height = getHeight();
 
         GraphicsContext gc = getGraphicsContext2D();
 
         // draw the background
-        gc.setFill(Color.web("eeeeee"));
+        gc.setFill(Color.web("cccccc"));
         gc.fillRect(0, 0, width, height);
 
         // draw the cleared and graded area
@@ -60,6 +62,7 @@ public class TopDownView extends Canvas {
             gc.strokeLine(rescalex(5000), rescaley(i),rescalex(4620), rescaley(i));
         }
 
+        gc.setLineWidth(rescaley(1));
         gc.setLineDashes(40);
         gc.strokeLine(rescalex(850), rescaley(150), rescalex(4270),rescaley(150));
         gc.setLineDashes(0);
