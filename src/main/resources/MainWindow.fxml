@@ -110,9 +110,9 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <TableView layoutX="20.0" layoutY="14.0" prefHeight="400.0" prefWidth="300.0">
                             <columns>
-                                <TableColumn prefWidth="100.0" text="Parameter" />
-                                <TableColumn prefWidth="100.0" text="New value" />
-                                <TableColumn prefWidth="100.0" text="Original value" />
+                                <TableColumn editable="false" prefWidth="100.0" sortable="false" text="Parameter" />
+                                <TableColumn editable="false" prefWidth="100.0" sortable="false" text="New value" />
+                                <TableColumn editable="false" prefWidth="100.0" sortable="false" text="Original value" />
                             </columns>
                         </TableView>
                     </AnchorPane>
