@@ -1,25 +1,23 @@
 package RunwayRedeclarationTool.Controllers;
 
+import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
-import RunwayRedeclarationTool.View.TopDownView;
-import RunwayRedeclarationTool.Models.Runway;
+import RunwayRedeclarationTool.Views.TopDownView;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
-import javafx.fxml.Initializable;
-
-import java.util.ResourceBundle;
-
-import javafx.fxml.FXML;
 
 import java.net.URL;
+import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
 
     @FXML
     FlowPane topDownViewContainer;
     @FXML
-    ComboBox<Runway> runwayComboBox;
+    ComboBox<VirtualRunway> runwayComboBox;
 
     public void initialize(URL url, ResourceBundle bundle) {
 
@@ -32,7 +30,7 @@ public class MainWindowController implements Initializable {
         Runway runway2 = new Runway(runway09L, runway27R);
 
         // populate dropdown list with demo runways
-        runwayComboBox.getItems().addAll(runway1, runway2);
+        runwayComboBox.getItems().addAll(runway09R, runway27L, runway09L, runway27R);
     }
 
     @FXML
