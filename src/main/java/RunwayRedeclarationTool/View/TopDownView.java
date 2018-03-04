@@ -1,4 +1,4 @@
-package RunwayRedeclarationTool.Views;
+package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Models.Runway;
 import javafx.beans.InvalidationListener;

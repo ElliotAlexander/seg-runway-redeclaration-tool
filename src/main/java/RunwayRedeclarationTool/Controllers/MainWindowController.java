@@ -2,7 +2,7 @@ package RunwayRedeclarationTool.Controllers;
 
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
-import RunwayRedeclarationTool.Views.TopDownView;
+import RunwayRedeclarationTool.View.TopDownView;
 import RunwayRedeclarationTool.Models.Runway;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
