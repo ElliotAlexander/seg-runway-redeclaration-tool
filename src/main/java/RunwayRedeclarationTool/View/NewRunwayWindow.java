@@ -21,12 +21,18 @@ public class NewRunwayWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(FXML_FILE));
         primaryStage.setTitle("Add a runway");
         primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setMinWidth(600);
+        primaryStage.setMinHeight(400);
         primaryStage.show();
+    }
 
+
+    public NewRunwayWindow(){
+        launch();
+        
     }
 
 }
