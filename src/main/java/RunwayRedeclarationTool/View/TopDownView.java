@@ -28,10 +28,11 @@ public class TopDownView extends Canvas {
         draw();
     }
 
-    private double scale_x(double length){
+    private double scale_x(double length) {
         return length / (runway.getOrigParams().getTORA() + 120) * getWidth();
     }
-    private double scale_y(double length){
+
+    private double scale_y(double length) {
         return length / 300 * getHeight();
     }
 
@@ -47,12 +48,12 @@ public class TopDownView extends Canvas {
         // Cleared and graded areas
         gc.setFill(Color.web("AAAAAA"));
         gc.fillPolygon(
-                new double[]{0, scale_x(210), scale_x(360), scale_x(runway.getOrigParams().getTORA()-240), scale_x(runway.getOrigParams().getTORA()-90), scale_x(runway.getOrigParams().getTORA()+120), scale_x(runway.getOrigParams().getTORA()+120),  scale_x(runway.getOrigParams().getTORA()-90), scale_x(runway.getOrigParams().getTORA()-240), scale_x(360), scale_x(210), 0},
+                new double[]{0, scale_x(210), scale_x(360), scale_x(runway.getOrigParams().getTORA() - 240), scale_x(runway.getOrigParams().getTORA() - 90), scale_x(runway.getOrigParams().getTORA() + 120), scale_x(runway.getOrigParams().getTORA() + 120), scale_x(runway.getOrigParams().getTORA() - 90), scale_x(runway.getOrigParams().getTORA() - 240), scale_x(360), scale_x(210), 0},
                 new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)}, 12);
 
         // Runway and outline
         gc.setFill(Color.WHITE);
-        scaledFillRect(40, 124, runway.getOrigParams().getTORA()+40, 52);
+        scaledFillRect(40, 124, runway.getOrigParams().getTORA() + 40, 52);
 
         gc.setFill(Color.web("333333"));
         scaledFillRect(60, 125, runway.getOrigParams().getTORA(), 50);
@@ -60,15 +61,15 @@ public class TopDownView extends Canvas {
         // Threshold markers
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(scale_y(2));
-        for(int i = 130; i<175; i+=5){
+        for (int i = 130; i < 175; i += 5) {
             scaledStrokeLine(120, i, 520, i);
-            scaledStrokeLine(runway.getOrigParams().getTORA(), i, runway.getOrigParams().getTORA()-400, i);
+            scaledStrokeLine(runway.getOrigParams().getTORA(), i, runway.getOrigParams().getTORA() - 400, i);
         }
 
         // C/L
         gc.setLineWidth(scale_y(1));
         gc.setLineDashes(15);
-        scaledStrokeLine(850, 150, runway.getOrigParams().getTORA()-730, 150);
+        scaledStrokeLine(850, 150, runway.getOrigParams().getTORA() - 730, 150);
         gc.setLineDashes(0);
 
         drawDesignators(gc);
@@ -92,34 +93,34 @@ public class TopDownView extends Canvas {
 
     }
 
-    private void scaledStrokeLine(double x1, double y1, double x2, double y2){
+    private void scaledStrokeLine(double x1, double y1, double x2, double y2) {
         GraphicsContext gc = getGraphicsContext2D();
         gc.strokeLine(scale_x(x1), scale_y(y1), scale_x(x2), scale_y(y2));
     }
 
-    private void scaledFillRect(double x, double y, double w, double h){
+    private void scaledFillRect(double x, double y, double w, double h) {
         GraphicsContext gc = getGraphicsContext2D();
         gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
     }
 
-    private void drawDesignators(GraphicsContext gc){
+    private void drawDesignators(GraphicsContext gc) {
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Consolas", 24));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
 
-        String designator1 = runway.getDesignator().substring(0,2) + "\n" + runway.getDesignator().substring(2,runway.getDesignator().length());
-        String designator2 = String.format("%02d", 36 - Integer.parseInt(runway.getDesignator().substring(0,2)));
+        String designator1 = runway.getDesignator().substring(0, 2) + "\n" + runway.getDesignator().substring(2, runway.getDesignator().length());
+        String designator2 = String.format("%02d", 36 - Integer.parseInt(runway.getDesignator().substring(0, 2)));
 
-        if (runway.getDesignator().substring(2,runway.getDesignator().length()).equals("L")){
+        if (runway.getDesignator().substring(2, runway.getDesignator().length()).equals("L")) {
             designator2 += "\nR";
-        } else if (runway.getDesignator().substring(2,runway.getDesignator().length()).equals("R")) {
+        } else if (runway.getDesignator().substring(2, runway.getDesignator().length()).equals("R")) {
             designator2 += "\nL";
         } else {
-            designator2 += "\n" + runway.getDesignator().substring(2,runway.getDesignator().length());
+            designator2 += "\n" + runway.getDesignator().substring(2, runway.getDesignator().length());
         }
 
-        if(Integer.parseInt(runway.getDesignator().substring(0,2)) < 36 - Integer.parseInt(runway.getDesignator().substring(0,2))){
+        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) < 36 - Integer.parseInt(runway.getDesignator().substring(0, 2))) {
             gc.fillText(designator1, scale_x(685), scale_y(150));
             gc.fillText(designator2, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(150));
         } else {
