@@ -2,21 +2,17 @@ package RunwayRedeclarationTool.Controllers;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.View.TopDownView;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TreeCell;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -84,6 +80,13 @@ public class MainWindowController implements Initializable {
         } catch (AttributeNotAssignedException e){
             //TODO
         }
+    }
+
+
+
+    public void add_Runway(Runway r){
+        runwayComboBox.getItems().add(r);
+        Logger.Log("Adding new runway " + r.toString() + " to main window controller.");
     }
 
 }
