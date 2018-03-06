@@ -9,7 +9,10 @@ public class DB_controller
 {
 
 
-    private static final String DB_NAME = "airports.db";
+    // TODO - Config file?
+    private final String DB_NAME = "airports.db";
+    private final String SCRIPTS_FOLDER = "scripts/";
+    private final String DB_URL = "jdbc:sqlite:db/";
 
     // Testing
     public static void main(String[] args){
@@ -29,7 +32,7 @@ public class DB_controller
         Connection conn = null;
         try {
             // db parameters
-            String url = "jdbc:sqlite:db/" + DB_NAME;
+            String url = DB_URL + DB_NAME;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
@@ -62,7 +65,7 @@ public class DB_controller
 
     private void rebuild_db(Connection connection){
         try {
-            File dir = new File("scripts/");
+            File dir = new File(SCRIPTS_FOLDER);
             for(File f : dir.listFiles()){
                 DB_Import.importSQL(connection, f);
             }
