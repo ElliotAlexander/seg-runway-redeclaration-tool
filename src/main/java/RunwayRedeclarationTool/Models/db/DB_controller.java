@@ -1,6 +1,6 @@
 package RunwayRedeclarationTool.Models.db;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import RunwayRedeclarationTool.Logger.Logger;
 
 import java.io.File;
 import java.sql.*;
@@ -36,7 +36,7 @@ public class DB_controller
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
-            System.out.println("Connection to SQLite has been established.");
+            Logger.Log("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -53,7 +53,7 @@ public class DB_controller
             }
 
             if(!not_null){
-                System.out.println(DB_NAME + " is empty, rebuilding from included scripts.");
+                Logger.Log(Logger.Level.WARNING, DB_NAME + " is empty, rebuilding from included scripts.");
                 rebuild_db(conn);
             }
 
@@ -72,6 +72,5 @@ public class DB_controller
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 }
