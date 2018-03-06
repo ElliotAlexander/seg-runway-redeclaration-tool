@@ -34,16 +34,16 @@ public class Calculator {
 
     public void decideSideOfRunway (ObstaclePosition o, Runway r) {
         if (o.getDistLeftTSH() < o.getDistRightTSH()) {
-            takeoffAwayLandOver(o, r.leftRunway, o.getDistLeftTSH());
-            takeoffTowardsLandTowards(o, r.rightRunway, o.getDistRightTSH());
+            takeoffAwayLandOver(o.getObstacle(), r.leftRunway, o.getDistLeftTSH());
+            takeoffTowardsLandTowards(o.getObstacle(), r.rightRunway, o.getDistRightTSH());
         } else {
-            takeoffAwayLandOver(o, r.rightRunway, o.getDistRightTSH());
-            takeoffTowardsLandTowards(o, r.leftRunway, o.getDistLeftTSH());
+            takeoffAwayLandOver(o.getObstacle(), r.rightRunway, o.getDistRightTSH());
+            takeoffTowardsLandTowards(o.getObstacle(), r.leftRunway, o.getDistLeftTSH());
         }
     }
 
     // Requires the smaller distance from threshold
-    private void takeoffAwayLandOver (ObstaclePosition o, VirtualRunway vRunway, int distFromTSH) {
+    private void takeoffAwayLandOver (Obstacle o, VirtualRunway vRunway, int distFromTSH) {
         // Setting up all needed values
         RunwayParameters params = vRunway.getOrigParams();
         int stopway = params.ASDA - params.TORA;
@@ -95,7 +95,7 @@ public class Calculator {
     }
 
     // Requires the greater distance from threshold
-    private void takeoffTowardsLandTowards(ObstaclePosition o, VirtualRunway vRunway, int distFromTSH) {
+    private void takeoffTowardsLandTowards(Obstacle o, VirtualRunway vRunway, int distFromTSH) {
         // Setting up all needed values
         RunwayParameters params = vRunway.getOrigParams();
         int displacedTSH = params.TORA - params.LDA;
