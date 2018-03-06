@@ -3,7 +3,7 @@ package RunwayRedeclarationTool.Models;
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 
-// Singleton that takes in Obstacle and Runway and sets the recalculated runway parameters in the two virtual runways
+// Singleton that takes in ObstaclePosition and Runway and sets the recalculated runway parameters in the two virtual runways
 public class Calculator {
     public static final Calculator instance = new Calculator();
 
@@ -17,7 +17,7 @@ public class Calculator {
         return instance;
     }
 
-    public void calculate (Obstacle o, Runway r) throws NoRedeclarationNeededException {
+    public void calculate (ObstaclePosition o, Runway r) throws NoRedeclarationNeededException {
         // The two virtual runways:
         RunwayParameters leftParams = r.leftRunway.getOrigParams();
         RunwayParameters rightParams = r.rightRunway.getOrigParams();
@@ -26,13 +26,13 @@ public class Calculator {
         if (o.getDistLeftTSH() < -visual_strip_end ||
                 o.getDistRightTSH() < -visual_strip_end ||
                 o.getDistFromCL() > visual_strip_width) {
-            throw new NoRedeclarationNeededException("Obstacle is outside visual strip.");
+            throw new NoRedeclarationNeededException("ObstaclePosition is outside visual strip.");
         }
 
         decideSideOfRunway(o, r);
     }
 
-    public void decideSideOfRunway (Obstacle o, Runway r) {
+    public void decideSideOfRunway (ObstaclePosition o, Runway r) {
         if (o.getDistLeftTSH() < o.getDistRightTSH()) {
             takeoffAwayLandOver(o, r.leftRunway, o.getDistLeftTSH());
             takeoffTowardsLandTowards(o, r.rightRunway, o.getDistRightTSH());
@@ -43,7 +43,7 @@ public class Calculator {
     }
 
     // Requires the smaller distance from threshold
-    private void takeoffAwayLandOver (Obstacle o, VirtualRunway vRunway, int distFromTSH) {
+    private void takeoffAwayLandOver (ObstaclePosition o, VirtualRunway vRunway, int distFromTSH) {
         // Setting up all needed values
         RunwayParameters params = vRunway.getOrigParams();
         int stopway = params.ASDA - params.TORA;
@@ -95,7 +95,7 @@ public class Calculator {
     }
 
     // Requires the greater distance from threshold
-    private void takeoffTowardsLandTowards(Obstacle o, VirtualRunway vRunway, int distFromTSH) {
+    private void takeoffTowardsLandTowards(ObstaclePosition o, VirtualRunway vRunway, int distFromTSH) {
         // Setting up all needed values
         RunwayParameters params = vRunway.getOrigParams();
         int displacedTSH = params.TORA - params.LDA;

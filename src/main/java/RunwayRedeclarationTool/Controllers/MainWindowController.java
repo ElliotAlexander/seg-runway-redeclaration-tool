@@ -20,7 +20,7 @@ public class MainWindowController implements Initializable {
 
     @FXML FlowPane topDownViewContainer;
     @FXML ComboBox<Runway> runwayComboBox;
-    @FXML ComboBox<Obstacle> obstructionComboBox;
+    @FXML ComboBox<ObstaclePosition> obstructionComboBox;
     @FXML TextFlow declaredDistances, calculationsBreakdown;
     @FXML Button calculateButton;
 
@@ -32,11 +32,11 @@ public class MainWindowController implements Initializable {
     VirtualRunway runway27R = new VirtualRunway("27R", new RunwayParameters(3884, 3962, 3884, 3884));
     Runway runway2 = new Runway(runway09L, runway27R);
 
-    Obstacle testObstacle = new Obstacle("Test", 12, -50, 3646, 0, RunwaySide.LEFT);
+    ObstaclePosition testObstaclePosition = new ObstaclePosition(new Obstacle("Test", 12),-50, 3646, 0, RunwaySide.LEFT);
 
     public void initialize(URL url, ResourceBundle bundle) {
         runwayComboBox.getItems().addAll(runway1, runway2);
-        obstructionComboBox.getItems().add(testObstacle);
+        obstructionComboBox.getItems().add(testObstaclePosition);
     }
 
     @FXML
@@ -62,8 +62,8 @@ public class MainWindowController implements Initializable {
         Calculator calculator = Calculator.getInstance();
         try{
             Runway runway = runwayComboBox.getValue();
-            Obstacle obstacle = obstructionComboBox.getValue();
-            calculator.calculate(obstacle, runway);
+            ObstaclePosition obstaclePosition = obstructionComboBox.getValue();
+            calculator.calculate(obstaclePosition, runway);
 
             declaredDistances.getChildren().clear();
             declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));

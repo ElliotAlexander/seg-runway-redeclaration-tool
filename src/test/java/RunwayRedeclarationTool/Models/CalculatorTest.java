@@ -26,7 +26,7 @@ public class CalculatorTest {
 
     @Test
     public void scenario1() {
-        Obstacle o = new Obstacle("scenario1", 12, -50, 3646, 0, RunwaySide.LEFT);
+        ObstaclePosition o = new ObstaclePosition("scenario1", 12, -50, 3646, 0, RunwaySide.LEFT);
 
         try {
             Runway r = runways.get(1); // Runway 09L/27R
@@ -57,7 +57,7 @@ public class CalculatorTest {
 
     @Test
     public void scenario2() {
-        Obstacle o = new Obstacle("scenario2", 25, 2853, 500, 20, RunwaySide.RIGHT);
+        ObstaclePosition o = new ObstaclePosition("scenario2", 25, 2853, 500, 20, RunwaySide.RIGHT);
 
         try {
             Runway r = runways.get(0); // Runway 09R/27L
@@ -88,7 +88,7 @@ public class CalculatorTest {
 
     @Test
     public void scenario3() {
-        Obstacle o = new Obstacle("scenario3", 15, 150, 3203, 60, RunwaySide.RIGHT);
+        ObstaclePosition o = new ObstaclePosition("scenario3", 15, 150, 3203, 60, RunwaySide.RIGHT);
 
         try {
             Runway r = runways.get(0); // Runway 09R/27L
@@ -119,7 +119,7 @@ public class CalculatorTest {
 
     @Test
     public void scenario4() {
-        Obstacle o = new Obstacle("scenario4", 20, 3546, 50, 20, RunwaySide.RIGHT);
+        ObstaclePosition o = new ObstaclePosition("scenario4", 20, 3546, 50, 20, RunwaySide.RIGHT);
 
         try {
             Runway r = runways.get(1); // Runway 09L/27R
@@ -150,13 +150,13 @@ public class CalculatorTest {
 
     @Test
     public void outsideInstrumentStrip() {
-        ArrayList<Obstacle> obstacles = new ArrayList<Obstacle>();
-        obstacles.add(new Obstacle("outside", 5, -70, 3730, 1, RunwaySide.LEFT));
-        obstacles.add(new Obstacle("outside", 5, 3730, -100, 1, RunwaySide.LEFT));
-        obstacles.add(new Obstacle("outside", 5, 50, 3600, 76, RunwaySide.LEFT));
+        ArrayList<ObstaclePosition> obstaclePositions = new ArrayList<ObstaclePosition>();
+        obstaclePositions.add(new ObstaclePosition("outside", 5, -70, 3730, 1, RunwaySide.LEFT));
+        obstaclePositions.add(new ObstaclePosition("outside", 5, 3730, -100, 1, RunwaySide.LEFT));
+        obstaclePositions.add(new ObstaclePosition("outside", 5, 50, 3600, 76, RunwaySide.LEFT));
 
         for (Runway r : runways) {
-            for (Obstacle o : obstacles) {
+            for (ObstaclePosition o : obstaclePositions) {
                 try {
                     calculator.calculate(o, r);
                     fail("Expected exception for " + r.toString() + " and " + o.toString());
