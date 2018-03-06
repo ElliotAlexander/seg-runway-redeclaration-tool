@@ -4,6 +4,7 @@ import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
+import RunwayRedeclarationTool.View.NewRunwayWindow;
 import RunwayRedeclarationTool.View.TopDownView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,6 +13,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -83,6 +85,16 @@ public class MainWindowController implements Initializable {
     }
 
 
+    @FXML
+    public void handleNewRunway(){
+        NewRunwayWindow runway = new NewRunwayWindow();
+        try {
+            runway.add_mwc(this);
+            runway.start(new Stage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void add_Runway(Runway r){
         runwayComboBox.getItems().add(r);

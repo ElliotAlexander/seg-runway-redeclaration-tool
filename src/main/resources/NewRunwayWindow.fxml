@@ -30,7 +30,7 @@
                                                 <Insets top="15.0" />
                                             </FlowPane.margin>
                                         </Label>
-                                        <TextField fx:id="designation_textfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                        <TextField fx:id="designation_textfield_1" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                             <FlowPane.margin>
                                                 <Insets top="15.0" />
                                             </FlowPane.margin>
@@ -47,7 +47,7 @@
                                                 <Insets right="120.0" />
                                             </FlowPane.margin>
                                         </Label>
-                                        <TextField fx:id="tora_textfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                        <TextField fx:id="tora_textfield_1" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                             <FlowPane.margin>
                                                 <Insets />
                                             </FlowPane.margin>
@@ -59,7 +59,7 @@
                                                         <Insets right="120.0" top="15.0" />
                                                     </FlowPane.margin>
                                                 </Label>
-                                                <TextField fx:id="asda_textfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                                <TextField fx:id="asda_textfield_1" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                                     <FlowPane.margin>
                                                         <Insets top="15.0" />
                                                     </FlowPane.margin>
@@ -73,7 +73,7 @@
                                                         <Insets right="120.0" top="15.0" />
                                                     </FlowPane.margin>
                                                 </Label>
-                                                <TextField fx:id="toda_textfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                                <TextField fx:id="toda_textfield_1" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                                     <FlowPane.margin>
                                                         <Insets top="15.0" />
                                                     </FlowPane.margin>
@@ -117,7 +117,7 @@
                                                       <Insets top="15.0" />
                                                   </FlowPane.margin>
                                               </Label>
-                                              <TextField fx:id="designation_textfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                              <TextField fx:id="designation_textfield_2" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                                   <FlowPane.margin>
                                                       <Insets top="15.0" />
                                                   </FlowPane.margin>
@@ -134,7 +134,7 @@
                                                       <Insets right="120.0" />
                                                   </FlowPane.margin>
                                               </Label>
-                                              <TextField fx:id="tora_textfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                              <TextField fx:id="tora_textfield_2" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                                   <FlowPane.margin>
                                                       <Insets />
                                                   </FlowPane.margin>
@@ -146,7 +146,7 @@
                                                             <Insets right="120.0" top="15.0" />
                                                         </FlowPane.margin>
                                                     </Label>
-                                                    <TextField fx:id="asda_textfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                                    <TextField fx:id="asda_textfield_2" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                                         <FlowPane.margin>
                                                             <Insets top="15.0" />
                                                         </FlowPane.margin>
@@ -160,7 +160,7 @@
                                                             <Insets right="120.0" top="15.0" />
                                                         </FlowPane.margin>
                                                     </Label>
-                                                    <TextField fx:id="toda_textfield" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                                    <TextField fx:id="toda_textfield_2" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                                         <FlowPane.margin>
                                                             <Insets top="15.0" />
                                                         </FlowPane.margin>
@@ -179,7 +179,7 @@
                                                       <Insets right="120.0" top="15.0" />
                                                   </FlowPane.margin>
                                               </Label>
-                                              <TextField fx:id="lda_textfield_1" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
+                                              <TextField fx:id="lda_textfield_2" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="150.0">
                                                   <FlowPane.margin>
                                                       <Insets top="15.0" />
                                                   </FlowPane.margin>

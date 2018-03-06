@@ -10,7 +10,7 @@
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu text="File">
-                <MenuItem text="New runway..."/>
+                <MenuItem text="New runway..." fx:id="new_runway_button" onAction="#handleNewRunway"/>
                 <MenuItem text="New obstruction..."/>
             </Menu>
             <Menu text="View">
