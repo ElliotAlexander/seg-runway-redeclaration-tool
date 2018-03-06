@@ -24,7 +24,7 @@ public class NewRunwayWindow extends Application {
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource(FXML_FILE));
         primaryStage.setTitle("Add a runway");
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root, 600, 450));
         primaryStage.show();
 
     }
