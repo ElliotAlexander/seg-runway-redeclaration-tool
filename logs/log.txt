@@ -1,0 +1,1 @@
+[INFO] Connection to SQLite has been established.

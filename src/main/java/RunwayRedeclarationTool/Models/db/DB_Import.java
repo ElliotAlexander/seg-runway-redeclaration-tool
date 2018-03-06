@@ -20,7 +20,7 @@ public class DB_Import {
             Scanner s = new Scanner(targetStream);
             s.useDelimiter("(;(\r)?\n)|(--\n)");
             st = conn.createStatement();
-            while (s.hasNext())
+            while (s.hasNext());
             {
                 String line = s.next();
                 if (line.startsWith("/*!") && line.endsWith("*/"))

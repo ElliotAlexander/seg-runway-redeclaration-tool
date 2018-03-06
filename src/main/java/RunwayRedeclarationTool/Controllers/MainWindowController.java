@@ -4,12 +4,9 @@ import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import RunwayRedeclarationTool.View.TopDownView;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -27,6 +24,7 @@ public class MainWindowController implements Initializable {
     TextFlow declaredDistances;
     @FXML
     TextFlow calculationsBreakdown;
+
 
 
     public void initialize(URL url, ResourceBundle bundle) {

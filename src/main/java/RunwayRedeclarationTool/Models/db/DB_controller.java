@@ -1,6 +1,7 @@
 package RunwayRedeclarationTool.Models.db;
 
 import RunwayRedeclarationTool.Logger.Logger;
+import RunwayRedeclarationTool.Models.Runway;
 
 import java.io.File;
 import java.sql.*;
@@ -14,10 +15,7 @@ public class DB_controller
     private final String SCRIPTS_FOLDER = "scripts/";
     private final String DB_URL = "jdbc:sqlite:db/";
 
-    // Testing
-    public static void main(String[] args){
-
-    }
+    private Connection conn;
 
     // singleton
     public static final DB_controller instance = new DB_controller();
@@ -29,14 +27,12 @@ public class DB_controller
 
 
     private void init(){
-        Connection conn = null;
         try {
             // db parameters
             String url = DB_URL + DB_NAME;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 
-            Logger.Log("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -57,10 +53,23 @@ public class DB_controller
                 rebuild_db(conn);
             }
 
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public boolean add_Runway(){
+        return true;
+    }
+
+
+    public Runway[] get_Runways(){
+        return null;
+    }
+
+
 
 
     private void rebuild_db(Connection connection){
