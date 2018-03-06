@@ -3,7 +3,7 @@ package RunwayRedeclarationTool.Models;
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 
-// Singleton that takes in Obstacle and Runway and sets the recalculated runway parameters in the two virtual runways
+// Singleton that takes in ObstaclePosition and Runway and sets the recalculated runway parameters in the two virtual runways
 public class Calculator {
     public static final Calculator instance = new Calculator();
 
@@ -17,7 +17,7 @@ public class Calculator {
         return instance;
     }
 
-    public void calculate (Obstacle o, Runway r) throws NoRedeclarationNeededException {
+    public void calculate (ObstaclePosition o, Runway r) throws NoRedeclarationNeededException {
         // The two virtual runways:
         RunwayParameters leftParams = r.leftRunway.getOrigParams();
         RunwayParameters rightParams = r.rightRunway.getOrigParams();
@@ -26,19 +26,19 @@ public class Calculator {
         if (o.getDistLeftTSH() < -visual_strip_end ||
                 o.getDistRightTSH() < -visual_strip_end ||
                 o.getDistFromCL() > visual_strip_width) {
-            throw new NoRedeclarationNeededException("Obstacle is outside visual strip.");
+            throw new NoRedeclarationNeededException("ObstaclePosition is outside visual strip.");
         }
 
         decideSideOfRunway(o, r);
     }
 
-    public void decideSideOfRunway (Obstacle o, Runway r) {
+    public void decideSideOfRunway (ObstaclePosition o, Runway r) {
         if (o.getDistLeftTSH() < o.getDistRightTSH()) {
-            takeoffAwayLandOver(o, r.leftRunway, o.getDistLeftTSH());
-            takeoffTowardsLandTowards(o, r.rightRunway, o.getDistRightTSH());
+            takeoffAwayLandOver(o.getObstacle(), r.leftRunway, o.getDistLeftTSH());
+            takeoffTowardsLandTowards(o.getObstacle(), r.rightRunway, o.getDistRightTSH());
         } else {
-            takeoffAwayLandOver(o, r.rightRunway, o.getDistRightTSH());
-            takeoffTowardsLandTowards(o, r.leftRunway, o.getDistLeftTSH());
+            takeoffAwayLandOver(o.getObstacle(), r.rightRunway, o.getDistRightTSH());
+            takeoffTowardsLandTowards(o.getObstacle(), r.leftRunway, o.getDistLeftTSH());
         }
     }
 
