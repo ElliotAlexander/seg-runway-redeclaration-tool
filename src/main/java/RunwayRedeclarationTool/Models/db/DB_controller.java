@@ -2,6 +2,7 @@ package RunwayRedeclarationTool.Models.db;
 
 import RunwayRedeclarationTool.Exceptions.MalformattedDataException;
 import RunwayRedeclarationTool.Logger.Logger;
+import RunwayRedeclarationTool.Models.Airport;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
@@ -166,6 +167,21 @@ public class DB_controller
         }
 
         return return_array.toArray(new Runway[return_array.size()]);
+    }
+
+
+    public Airport[] get_Airports(){
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * from runway");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+
     }
 
     private void rebuild_db(Connection connection){
