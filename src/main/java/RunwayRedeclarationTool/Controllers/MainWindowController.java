@@ -4,6 +4,7 @@ import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.View.NewObstaclePopup;
 import RunwayRedeclarationTool.View.NewRunwayPopup;
 import RunwayRedeclarationTool.View.TopDownView;
 import javafx.fxml.FXML;
@@ -15,7 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -39,18 +39,9 @@ public class MainWindowController implements Initializable {
     @FXML
     TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL;
 
-    VirtualRunway runway09R = new VirtualRunway("09R", new RunwayParameters(3660, 3660, 3660, 3353));
-    VirtualRunway runway27L = new VirtualRunway("27L", new RunwayParameters(3660, 3660, 3660, 3660));
-    Runway runway1 = new Runway(runway09R, runway27L);
-
-    VirtualRunway runway09L = new VirtualRunway("09L", new RunwayParameters(3902, 3902, 3902, 3595));
-    VirtualRunway runway27R = new VirtualRunway("27R", new RunwayParameters(3884, 3962, 3884, 3884));
-    Runway runway2 = new Runway(runway09L, runway27R);
-
     Obstacle obstacle = new Obstacle("Demo obstacle", 12);
 
     public void initialize(URL url, ResourceBundle bundle) {
-//        runwayComboBox.getItems().addAll(runway1, runway2);
         DB_controller db_controller = DB_controller.instance;
         runwayComboBox.getItems().addAll(db_controller.get_runways());
 
@@ -97,8 +88,8 @@ public class MainWindowController implements Initializable {
             ObstaclePosition obstaclePosition = new ObstaclePosition(obstacle, Integer.parseInt(distanceFromTHRLeft.getText()), Integer.parseInt(distanceFromTHRRight.getText()), Integer.parseInt(distanceFromCL.getText()), runwaySideComboBox.getValue());
 
             declaredDistances.getChildren().clear();
-            declaredDistances.getChildren().add(new Text(obstaclePosition.toString()));
-            declaredDistances.getChildren().add(new Text("\n\nOriginal distances:\n"));
+            //declaredDistances.getChildren().add(new Text(obstaclePosition.toString()));
+            declaredDistances.getChildren().add(new Text("Original distances:\n"));
             declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
             declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n\n"));
 
@@ -121,15 +112,26 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void handleNewRunway() {
-        Runway newRunway;
-        newRunway = NewRunwayPopup.display("Add a New Runway to <Airport>");
-        runwayComboBox.getItems().addAll(newRunway);
-        runwayComboBox.setValue(newRunway);
+        try {
+            Runway newRunway;
+            newRunway = NewRunwayPopup.display("Add a New Runway to <Airport>");
+            runwayComboBox.getItems().addAll(newRunway);
+            runwayComboBox.setValue(newRunway);
 
-        // TODO Move away from arbitrary airports.
-        DB_controller.instance.add_Runway(newRunway, "LGW");
-        drawRunway();
+            // TODO Move away from arbitrary airports.
+            DB_controller.instance.add_Runway(newRunway, "LGW");
+            drawRunway();
+        } catch (NullPointerException e){}
+
     }
 
-
+    @FXML
+    public void handleNewObstacle() {
+        try {
+            Obstacle newObstacle;
+            newObstacle = NewObstaclePopup.display("Add a New Obstacle");
+            obstructionComboBox.getItems().addAll(newObstacle);
+            obstructionComboBox.setValue(newObstacle);
+        } catch (NullPointerException e){}
+    }
 }

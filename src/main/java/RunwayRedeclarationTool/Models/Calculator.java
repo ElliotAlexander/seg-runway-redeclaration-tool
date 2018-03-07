@@ -2,6 +2,7 @@ package RunwayRedeclarationTool.Models;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
+import RunwayRedeclarationTool.Logger.Logger;
 
 // Singleton that takes in ObstaclePosition and Runway and sets the recalculated runway parameters in the two virtual runways
 public class Calculator {
@@ -63,6 +64,7 @@ public class Calculator {
         int rLDA = params.LDA - distFromTSH - slopeCalc - visual_strip_end;
 
         vRunway.setRecalcParams(new RunwayParameters(rTORA, rTODA, rASDA, rLDA));
+        Logger.Log("Calculated parameters for " + vRunway.getDesignator() + " taking off away and landing over.");
         takeoffAwayLandOverBreakdown(vRunway, distFromTSH, o.getHeight());
     }
 
@@ -91,6 +93,7 @@ public class Calculator {
                 "LDA  = original LDA - distance from threshold - slope calculation - strip end\n" + "     = " +
                 oParams.LDA + " - " + distFromTSH + " - " + obHeight + "*50 - " + visual_strip_end + " = " + rParams.LDA;
 
+        Logger.Log("Added breakdown calculations for " + vRunway.getDesignator() + " taking off away and landing over.");
         vRunway.setRecalcBreakdown(brkdwn);
     }
 
@@ -111,6 +114,7 @@ public class Calculator {
         int rLDA = distFromTSH - RESA - visual_strip_end;
 
         vRunway.setRecalcParams(new RunwayParameters(rTORA, rTORA, rTORA, rLDA));
+        Logger.Log("Calculated parameters for " + vRunway.getDesignator() + " taking off towards and landing towards.");
         takeoffTowardsLandTowardsBreakdown(vRunway, distFromTSH, o.getHeight());
     }
 
@@ -135,6 +139,7 @@ public class Calculator {
                 "LDA  = distance from threshold - RESA - strip end\n" + "     = " + distFromTSH + " - " + RESA +
                 " - " + visual_strip_end + " = " + rParams.LDA;
 
+        Logger.Log("Added breakdown calculations for " + vRunway.getDesignator() + " taking off towards and landing towards.");
         vRunway.setRecalcBreakdown(brkdwn);
     }
 }
