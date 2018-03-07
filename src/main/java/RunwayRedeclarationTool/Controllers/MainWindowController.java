@@ -52,7 +52,10 @@ public class MainWindowController implements Initializable {
     Obstacle obstacle = new Obstacle("Demo obstacle", 12);
 
     public void initialize(URL url, ResourceBundle bundle) {
-        runwayComboBox.getItems().addAll(runway1, runway2);
+//        runwayComboBox.getItems().addAll(runway1, runway2);
+        DB_controller db_controller = DB_controller.instance;
+        runwayComboBox.getItems().addAll(db_controller.get_runways());
+
         obstructionComboBox.getItems().add(obstacle);
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT);
     }

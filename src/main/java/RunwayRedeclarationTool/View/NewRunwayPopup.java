@@ -107,7 +107,7 @@ public class NewRunwayPopup {
                         Integer.parseInt(lda.getText())
                 ));
                 VirtualRunway rightRunway = new VirtualRunway(
-                        designatorField.getText(),
+                        designatorField2.getText(),
                         new RunwayParameters(
                                 Integer.parseInt(tora2.getText()),
                                 Integer.parseInt(toda2.getText()),
