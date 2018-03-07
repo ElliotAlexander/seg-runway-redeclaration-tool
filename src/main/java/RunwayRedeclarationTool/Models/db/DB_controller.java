@@ -2,6 +2,8 @@ package RunwayRedeclarationTool.Models.db;
 
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.Runway;
+import RunwayRedeclarationTool.Models.RunwayParameters;
+import RunwayRedeclarationTool.Models.VirtualRunway;
 
 import java.io.File;
 import java.sql.*;
@@ -15,6 +17,10 @@ public class DB_controller
     private final String SCRIPTS_FOLDER = "scripts/";
     private final String DB_URL = "jdbc:sqlite:db/";
 
+
+    // temporary?????
+    private int runway_id = 0;
+    private int physical_runway_id = 0;
     private Connection conn;
 
     // singleton
@@ -23,6 +29,7 @@ public class DB_controller
 
     private DB_controller(){
         init();
+        Logger.Log("Running DB_Controller...");
     }
 
 
@@ -32,12 +39,9 @@ public class DB_controller
             String url = DB_URL + DB_NAME;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
-
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
 
         DatabaseMetaData md = null;
         try {
@@ -47,35 +51,87 @@ public class DB_controller
             while (rs.next()) {
                 not_null = true;
             }
-
             if(!not_null){
                 Logger.Log(Logger.Level.WARNING, DB_NAME + " is empty, rebuilding from included scripts.");
                 rebuild_db(conn);
             }
-
-
-
+            refresh_runway_id();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean add_Runway(){
+    public void refresh_runway_id(){
+
+        // TODO move queries into scripts for my own sanity.
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT MAX(runway_id),MAX(physical_runway_id) FROM runway");
+            runway_id = rs.getInt("MAX(runway_id)") + 1;
+            physical_runway_id = rs.getInt("MAX(physical_runway_id)") + 1;
+            Logger.Log("Updated runway ID to reflect database. [new_id=="+runway_id+"].");
+            Logger.Log("Updated physical runway ID to reflect database. [new_id=="+physical_runway_id+"].");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public boolean add_Runway(Runway runway, String airport_id){
+        RunwayParameters R = runway.rightRunway.getOrigParams();
+        RunwayParameters L = runway.leftRunway.getOrigParams();
+
+        String useful = runway.toString().replace("Runway ", "");
+
+        String query_right = "INSERT INTO runway VALUES (" +
+                runway_id + ", \'" +
+                airport_id + "\', " +
+                physical_runway_id + ", \'" +
+                useful.split("/")[0] + "\'," +
+                R.getTORA() + ", " +
+                R.getTODA() + ", " +
+                R.getASDA() + ", " +
+                R.getLDA() + ", \'None\'" +
+                ");";
+
+        Logger.Log(query_right);
+
+        String query_left = "INSERT INTO runway VALUES (" +
+                (runway_id + 1) + ", \'" +
+                airport_id + "\', " +
+                physical_runway_id + ", \'" +
+                useful.split("/")[1] + "\'," +
+                L.getTORA() + ", " +
+                L.getTODA() + ", " +
+                L.getASDA() + ", " +
+                L.getLDA() + ",\' None\' " +
+                ");";
+
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query_right);
+            stmt.execute(query_left);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        runway_id += 2;
+        physical_runway_id += 1;
+
         return true;
     }
 
-
-    public Runway[] get_Runways(){
-        return null;
+    public boolean add_airport(){
+        // Stub
+        return true;
     }
-
-
-
 
     private void rebuild_db(Connection connection){
         try {
             File dir = new File(SCRIPTS_FOLDER);
             for(File f : dir.listFiles()){
+                Logger.Log("Loading " + f.getName());
                 DB_Import.importSQL(connection, f);
             }
         } catch (SQLException e) {

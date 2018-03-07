@@ -4,6 +4,7 @@ import RunwayRedeclarationTool.Controllers.MainWindowController;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
+import RunwayRedeclarationTool.Models.db.DB_controller;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -84,6 +85,10 @@ public class NewRunwayWindow extends Application {
 
 
             Runway final_runway = new Runway(VR_1, VR_2);
+
+            DB_controller.instance.add_Runway(final_runway, "EGLL");
+
+
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
 

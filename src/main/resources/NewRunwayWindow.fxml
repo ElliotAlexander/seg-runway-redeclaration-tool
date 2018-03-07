@@ -25,7 +25,7 @@
                             <children>
                                 <FlowPane prefHeight="66.0" prefWidth="667.0">
                                     <children>
-                                        <Label prefWidth="200.0" text="Runway Designation">
+                                        <Label prefWidth="200.0" text="Runway Designator">
                                             <FlowPane.margin>
                                                 <Insets top="15.0" />
                                             </FlowPane.margin>
@@ -112,7 +112,7 @@
                            <children>
                                       <FlowPane prefHeight="67.0" prefWidth="667.0">
                                           <children>
-                                              <Label prefWidth="200.0" text="Runway Designation">
+                                              <Label prefWidth="200.0" text="Runway Designatior">
                                                   <FlowPane.margin>
                                                       <Insets top="15.0" />
                                                   </FlowPane.margin>

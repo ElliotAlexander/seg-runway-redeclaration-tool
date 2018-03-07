@@ -1,1 +1,1 @@
-[INFO] Connection to SQLite has been established.
+[INFO] Updated runway ID to reflect database. [new_id==1].[INFO] Updated physical runway ID to reflect database. [new_id==1].[INFO] Running DB_Controller...[INFO] INSERT INTO runway VALUES (1, 'EGLL', 1, '06R',1000, 1000, 1000, 1000, 'None');

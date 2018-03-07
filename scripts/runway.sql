@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS `runway` (
  `runway_id` INT NOT NULL,
- `airport_id` INT NULL,
+ `airport_id` VARCHAR NULL,
+ `physical_runway_id` INT NOT NULL,
  `runway_designator` VARCHAR(45) NULL,
  `tora` INT NULL,
  `toda` INT NULL,
