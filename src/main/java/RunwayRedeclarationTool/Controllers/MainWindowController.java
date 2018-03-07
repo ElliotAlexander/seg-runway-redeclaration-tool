@@ -4,6 +4,7 @@ import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
+import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.View.NewRunwayPopup;
 import RunwayRedeclarationTool.View.NewRunwayWindow;
 import RunwayRedeclarationTool.View.TopDownView;
@@ -87,6 +88,9 @@ public class MainWindowController implements Initializable {
 
         Calculator calculator = Calculator.getInstance();
         try {
+
+            // TODO - When calculate is clicked with empty values, nothing is shown to the user. Catch NumberFormatExcpetion and throw a popup
+            // Can copy code from NewRunwayWindow probs.
             Runway runway = runwayComboBox.getValue();
             Obstacle obstacle = obstructionComboBox.getValue();
             ObstaclePosition obstaclePosition = new ObstaclePosition(obstacle, Integer.parseInt(distanceFromTHRLeft.getText()), Integer.parseInt(distanceFromTHRRight.getText()), Integer.parseInt(distanceFromCL.getText()), runwaySideComboBox.getValue());
@@ -120,6 +124,9 @@ public class MainWindowController implements Initializable {
         newRunway = NewRunwayPopup.display("Add a New Runway to <Airport>");
         runwayComboBox.getItems().addAll(newRunway);
         runwayComboBox.setValue(newRunway);
+
+        // TODO Move away from arbitrary airports.
+        DB_controller.instance.add_Runway(newRunway, "LGW");
         drawRunway();
     }
 

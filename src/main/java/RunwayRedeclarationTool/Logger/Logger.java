@@ -7,13 +7,13 @@ public class Logger {
 
     public static void Log(Level l, String message){
         System.out.println("[SERVER " + l + "] " + message);
-        fl.Log("[" + l + "] " +  message);
+        fl.Log("[" + l + "] \n" +  message + "\n");
     }
 
 
     // Defaults to info
     public static void Log(String message){
         System.out.println("[SERVER INFO] " + message);
-        fl.Log("[" + Level.INFO + "] " +  message);
+        fl.Log("[" + Level.INFO + "] " +  message + "\n");
     }
 }

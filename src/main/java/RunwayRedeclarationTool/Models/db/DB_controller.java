@@ -130,7 +130,6 @@ public class DB_controller
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * from runway");
             while(rs.next()){
-                Logger.Log("Loaded new row");
                 String designator = rs.getString("runway_designator");
                 int TORA = rs.getInt("tora");
                 int TODA = rs.getInt("toda");
@@ -164,7 +163,7 @@ public class DB_controller
 
         return return_array.toArray(new Runway[return_array.size()]);
     }
-    
+
     private void rebuild_db(Connection connection){
         try {
             File dir = new File(SCRIPTS_FOLDER);
