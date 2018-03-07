@@ -124,9 +124,5 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    public void add_Runway(Runway r) {
-        runwayComboBox.getItems().add(r);
-        Logger.Log("Adding new runway " + r.toString() + " to main window controller.");
-    }
 
 }
