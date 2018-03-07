@@ -4,6 +4,7 @@ import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
+import RunwayRedeclarationTool.View.NewRunwayPopup;
 import RunwayRedeclarationTool.View.NewRunwayWindow;
 import RunwayRedeclarationTool.View.TopDownView;
 import javafx.fxml.FXML;
@@ -115,13 +116,11 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void handleNewRunway() {
-        NewRunwayWindow runway = new NewRunwayWindow();
-        try {
-            runway.add_mwc(this);
-            runway.start(new Stage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Runway newRunway;
+        newRunway = NewRunwayPopup.display("Add a New Runway to <Airport>");
+        runwayComboBox.getItems().addAll(newRunway);
+        runwayComboBox.setValue(newRunway);
+        drawRunway();
     }
 
 
