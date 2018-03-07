@@ -13,6 +13,8 @@ import java.util.Scanner;
 
 public class DB_Import {
 
+
+    // TODO Fix this
     protected static void importSQL(Connection conn, File f) throws SQLException
     {
         Statement st = null;
@@ -45,6 +47,4 @@ public class DB_Import {
             if (st != null) st.close();
         }
     }
-
-
 }
