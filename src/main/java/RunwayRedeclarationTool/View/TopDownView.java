@@ -72,6 +72,7 @@ public class TopDownView extends Canvas {
         scaledStrokeLine(850, 150, runway.getOrigParams().getTORA() - 730, 150);
         gc.setLineDashes(0);
 
+        // Designator
         drawDesignators(gc);
 
         // Map scale
@@ -109,15 +110,22 @@ public class TopDownView extends Canvas {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
 
-        String designator1 = runway.getDesignator().substring(0, 2) + "\n" + runway.getDesignator().substring(2, runway.getDesignator().length());
-        String designator2 = String.format("%02d", 36 - Integer.parseInt(runway.getDesignator().substring(0, 2)));
+        int num = Integer.parseInt(runway.getDesignator().substring(0, 2));
+        String designator1 = num + "\n" + runway.getDesignator().substring(2, runway.getDesignator().length());
 
-        if (runway.getDesignator().substring(2, runway.getDesignator().length()).equals("L")) {
+        int oppositeNum = num + 18;
+        if (oppositeNum > 36) {
+            oppositeNum -= 36;
+        }
+        String designator2 = String.format("%02d", oppositeNum);
+
+        String letter = runway.getDesignator().substring(2, runway.getDesignator().length());
+        if (letter.equals("L")) {
             designator2 += "\nR";
-        } else if (runway.getDesignator().substring(2, runway.getDesignator().length()).equals("R")) {
+        } else if (letter.equals("R")) {
             designator2 += "\nL";
         } else {
-            designator2 += "\n" + runway.getDesignator().substring(2, runway.getDesignator().length());
+            designator2 += "\n" + letter;
         }
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) < 36 - Integer.parseInt(runway.getDesignator().substring(0, 2))) {
