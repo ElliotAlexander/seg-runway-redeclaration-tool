@@ -36,22 +36,24 @@ public class DB_controller
 
     private void init(){
         try {
+
+            // Check the db folder exists
+            File db_folder = new File("db/");
+            db_folder.mkdir();
+
+
             // db parameters
             String url = DB_URL + DB_NAME;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        DatabaseMetaData md = null;
-        try {
-            md = conn.getMetaData();
+            Logger.Log("Attempting to open database at " + url);
+            DatabaseMetaData md = conn.getMetaData();
             ResultSet rs = md.getTables(null, null, "%", null);
             Boolean not_null = false;
             while (rs.next()) {
                 not_null = true;
             }
+
             if(!not_null){
                 Logger.Log(Logger.Level.WARNING, DB_NAME + " is empty, rebuilding from included scripts.");
                 rebuild_db(conn);
@@ -107,6 +109,8 @@ public class DB_controller
                 L.getASDA() + ", " +
                 L.getLDA() + ",\' None\' " +
                 ");";
+
+        Logger.Log(query_left);
 
         try {
             Statement stmt = conn.createStatement();

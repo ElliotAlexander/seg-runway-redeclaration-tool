@@ -1,5 +1,7 @@
 package RunwayRedeclarationTool.Models.db;
 
+import RunwayRedeclarationTool.Logger.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,6 +24,7 @@ public class DB_Import {
             st = conn.createStatement();
             while (s.hasNext());
             {
+                Logger.Log("Entering while loop");
                 String line = s.next();
                 if (line.startsWith("/*!") && line.endsWith("*/"))
                 {

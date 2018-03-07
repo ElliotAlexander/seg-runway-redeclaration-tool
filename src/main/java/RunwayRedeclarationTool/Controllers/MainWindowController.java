@@ -2,11 +2,9 @@ package RunwayRedeclarationTool.Controllers;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
-import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.View.NewRunwayPopup;
-import RunwayRedeclarationTool.View.NewRunwayWindow;
 import RunwayRedeclarationTool.View.TopDownView;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
