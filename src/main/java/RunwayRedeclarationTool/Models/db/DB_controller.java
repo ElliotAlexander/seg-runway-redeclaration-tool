@@ -189,7 +189,7 @@ public class DB_controller
         ArrayList<Airport> return_list = new ArrayList<Airport>();
         try {
             stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from runway");
+            ResultSet rs = stmt.executeQuery("SELECT * from airport");
             while(rs.next()){
                 Airport new_airport = new Airport(rs.getString("airport_name"), rs.getString("airport_id"));
                 return_list.add(new_airport);
