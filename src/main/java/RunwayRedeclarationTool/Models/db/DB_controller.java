@@ -169,6 +169,20 @@ public class DB_controller
         return return_array.toArray(new Runway[return_array.size()]);
     }
 
+    public boolean add_airport(Airport airport){
+        String airport_query = "INSERT INTO airport VALUES (" +
+                airport.airport_id + ", \'" +
+                airport.airport_name + "\', " +
+                0 + ");";
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(airport_query);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public Airport[] get_airports(){
         Statement stmt = null;
