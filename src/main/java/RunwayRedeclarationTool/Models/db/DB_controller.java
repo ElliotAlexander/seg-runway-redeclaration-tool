@@ -170,8 +170,8 @@ public class DB_controller
     }
 
     public boolean add_airport(Airport airport){
-        String airport_query = "INSERT INTO airport VALUES (" +
-                airport.airport_id + ", \'" +
+        String airport_query = "INSERT INTO airport VALUES (\'" +
+                airport.airport_id + "\', \'" +
                 airport.airport_name + "\', " +
                 0 + ");";
         try {
