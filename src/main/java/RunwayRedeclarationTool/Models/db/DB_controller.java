@@ -20,15 +20,10 @@ public class DB_controller
     private final String SCRIPTS_FOLDER = "scripts/";
     private final String DB_URL = "jdbc:sqlite:db/";
 
-
-    // temporary?????
     private int runway_id = 0;
     private int physical_runway_id = 0;
     private Connection conn;
-
-    // singleton
     public static final DB_controller instance = new DB_controller();
-
 
     private DB_controller(){
         init();
@@ -38,7 +33,6 @@ public class DB_controller
             Logger.Log(r.toString());
         }
     }
-
 
     private void init(){
         try {
@@ -129,11 +123,6 @@ public class DB_controller
         return true;
     }
 
-    public boolean add_airport(){
-
-        return true;
-    }
-
     public Runway[] get_runways(){
         ArrayList<Runway> return_array = new ArrayList<Runway>();
         HashMap<Integer, ArrayList<VirtualRunway>> runways = new HashMap<Integer, ArrayList<VirtualRunway>>();
@@ -149,8 +138,6 @@ public class DB_controller
                 int LDA = rs.getInt("lda");
                 RunwayParameters rp = new RunwayParameters(TORA, TODA, ASDA, LDA);
                 VirtualRunway vr = new VirtualRunway(designator, rp);
-
-
                 int key = rs.getInt("physical_runway_id");
                 if(!(runways.keySet().contains(key))) {
                     runways.put(key, new ArrayList<VirtualRunway>());
@@ -177,7 +164,7 @@ public class DB_controller
 
         return return_array.toArray(new Runway[return_array.size()]);
     }
-
+    
     private void rebuild_db(Connection connection){
         try {
             File dir = new File(SCRIPTS_FOLDER);
