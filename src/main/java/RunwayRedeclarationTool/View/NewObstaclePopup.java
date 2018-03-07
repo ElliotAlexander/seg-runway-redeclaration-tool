@@ -48,7 +48,8 @@ public class NewObstaclePopup {
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 // TODO catch Number Format here.
-                Obstacle obstacle = new Obstacle(designatorField.getText(), Integer.parseInt(heightField.getText()));
+                Obstacle newObstacle = new Obstacle(designatorField.getText(), Integer.parseInt(heightField.getText()));
+                obstacle = newObstacle;
                 window.close();
             }
         });
