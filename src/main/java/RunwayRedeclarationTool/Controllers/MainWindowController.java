@@ -114,22 +114,26 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void handleNewRunway() {
-        Runway newRunway;
-        newRunway = NewRunwayPopup.display("Add a New Runway to <Airport>");
-        runwayComboBox.getItems().addAll(newRunway);
-        runwayComboBox.setValue(newRunway);
+        try {
+            Runway newRunway;
+            newRunway = NewRunwayPopup.display("Add a New Runway to <Airport>");
+            runwayComboBox.getItems().addAll(newRunway);
+            runwayComboBox.setValue(newRunway);
 
-        // TODO Move away from arbitrary airports.
-        DB_controller.instance.add_Runway(newRunway, "LGW");
-        drawRunway();
+            // TODO Move away from arbitrary airports.
+            DB_controller.instance.add_Runway(newRunway, "LGW");
+            drawRunway();
+        } catch (NullPointerException e){}
+
     }
 
     @FXML
     public void handleNewObstacle() {
-        Obstacle newObstacle;
-        newObstacle = NewObstaclePopup.display("Add a New Obstacle");
-        obstructionComboBox.getItems().addAll(newObstacle);
-        obstructionComboBox.setValue(newObstacle);
+        try {
+            Obstacle newObstacle;
+            newObstacle = NewObstaclePopup.display("Add a New Obstacle");
+            obstructionComboBox.getItems().addAll(newObstacle);
+            obstructionComboBox.setValue(newObstacle);
+        } catch (NullPointerException e){}
     }
-
 }
