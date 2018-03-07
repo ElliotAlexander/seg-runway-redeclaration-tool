@@ -170,12 +170,18 @@ public class DB_controller
     }
 
 
-    public Airport[] get_Airports(){
+    public Airport[] get_airports(){
         Statement stmt = null;
+        ArrayList<Airport> return_list = new ArrayList<Airport>();
         try {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * from runway");
+            while(rs.next()){
+                Airport new_airport = new Airport(rs.getString("airport_name"), rs.getString("airport_id"));
+                return_list.add(new_airport);
+            }
 
+            return return_list.toArray(new Airport[return_list.size()]);
         } catch (SQLException e) {
             e.printStackTrace();
         }
