@@ -3,6 +3,7 @@ package RunwayRedeclarationTool.View;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
+import RunwayRedeclarationTool.Models.db.DB_controller;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

@@ -15,12 +15,9 @@ public class FileLogger {
     // Protected constructor, instantiated by logger.
     protected FileLogger(){
         try {
-
-
             // will have no effect if dir already exists
             File log_dir = new File("logs/");
             log_dir.mkdir();
-
 
             File f = new File(log_dir.getAbsolutePath() + "/" + LOG_FILE);
             f.createNewFile();
