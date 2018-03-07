@@ -110,10 +110,10 @@ public class TopDownView extends Canvas {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
 
-        int num = Integer.parseInt(runway.getDesignator().substring(0, 2));
+        String num = runway.getDesignator().substring(0, 2);
         String designator1 = num + "\n" + runway.getDesignator().substring(2, runway.getDesignator().length());
 
-        int oppositeNum = num + 18;
+        int oppositeNum = Integer.parseInt(num) + 18;
         if (oppositeNum > 36) {
             oppositeNum -= 36;
         }
