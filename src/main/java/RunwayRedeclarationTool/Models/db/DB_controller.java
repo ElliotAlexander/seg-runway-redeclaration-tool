@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.Models.db;
 
+import RunwayRedeclarationTool.Exceptions.MalformattedDataException;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
@@ -7,6 +8,8 @@ import RunwayRedeclarationTool.Models.VirtualRunway;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DB_controller
 {
@@ -30,6 +33,10 @@ public class DB_controller
     private DB_controller(){
         init();
         Logger.Log("Running DB_Controller...");
+
+        for(Runway r : get_runways()){
+            Logger.Log(r.toString());
+        }
     }
 
 
@@ -123,8 +130,52 @@ public class DB_controller
     }
 
     public boolean add_airport(){
-        // Stub
+
         return true;
+    }
+
+    public Runway[] get_runways(){
+        ArrayList<Runway> return_array = new ArrayList<Runway>();
+        HashMap<Integer, ArrayList<VirtualRunway>> runways = new HashMap<Integer, ArrayList<VirtualRunway>>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * from runway");
+            while(rs.next()){
+                Logger.Log("Loaded new row");
+                String designator = rs.getString("runway_designator");
+                int TORA = rs.getInt("tora");
+                int TODA = rs.getInt("toda");
+                int ASDA = rs.getInt("asda");
+                int LDA = rs.getInt("lda");
+                RunwayParameters rp = new RunwayParameters(TORA, TODA, ASDA, LDA);
+                VirtualRunway vr = new VirtualRunway(designator, rp);
+
+
+                int key = rs.getInt("physical_runway_id");
+                if(!(runways.keySet().contains(key))) {
+                    runways.put(key, new ArrayList<VirtualRunway>());
+                }
+                runways.get(key).add(vr);
+            }
+
+            for(int i : runways.keySet()){
+                ArrayList<VirtualRunway> vrs = runways.get(i);
+                if(vrs.size() > 2){
+                    throw new MalformattedDataException("Found > 2 virtual runways with the same physical ID.");
+                } else {
+                    Logger.Log("Building new runway...");
+                    Runway new_runway = new Runway(vrs.get(0), vrs.get(1));
+                    return_array.add(new_runway);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (MalformattedDataException e) {
+            e.printStackTrace();
+        }
+
+        return return_array.toArray(new Runway[return_array.size()]);
     }
 
     private void rebuild_db(Connection connection){

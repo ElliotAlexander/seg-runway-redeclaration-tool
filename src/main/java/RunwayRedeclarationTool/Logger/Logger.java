@@ -2,11 +2,8 @@ package RunwayRedeclarationTool.Logger;
 
 public class Logger {
 
-
-
-    public enum Level{INFO, WARNING, ERROR, MESSAGE}
+    public enum Level{INFO, WARNING, ERROR}
     private static final FileLogger fl = new FileLogger();
-
 
     public static void Log(Level l, String message){
         System.out.println("[SERVER " + l + "] " + message);
@@ -19,5 +16,4 @@ public class Logger {
         System.out.println("[SERVER INFO] " + message);
         fl.Log("[" + Level.INFO + "] " +  message);
     }
-
 }

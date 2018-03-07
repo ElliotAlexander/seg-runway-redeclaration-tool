@@ -2,7 +2,6 @@ package RunwayRedeclarationTool.Controllers;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
-import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.View.NewRunwayWindow;
 import RunwayRedeclarationTool.View.TopDownView;
@@ -117,12 +116,9 @@ public class MainWindowController implements Initializable {
     public void handleNewRunway() {
         NewRunwayWindow runway = new NewRunwayWindow();
         try {
-            runway.add_mwc(this);
             runway.start(new Stage());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 }

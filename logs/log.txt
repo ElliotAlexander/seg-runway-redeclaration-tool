@@ -1,1 +1,1 @@
-[INFO] Updated runway ID to reflect database. [new_id==1].[INFO] Updated physical runway ID to reflect database. [new_id==1].[INFO] Running DB_Controller...[INFO] INSERT INTO runway VALUES (1, 'EGLL', 1, '06R',1000, 1000, 1000, 1000, 'None');
+[INFO] Updated runway ID to reflect database. [new_id==3].[INFO] Updated physical runway ID to reflect database. [new_id==2].[INFO] Running DB_Controller...[INFO] Loaded new row[INFO] Loaded new row[INFO] Building new runway...[INFO] Runway 06R/01L
