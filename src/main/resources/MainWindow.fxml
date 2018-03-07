@@ -59,8 +59,8 @@
                 <rowConstraints>
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
-                <Label text="Obstruction:"/>
-                <ComboBox fx:id="obstructionComboBox" prefWidth="325.0" promptText="Add an obstruction..." GridPane.columnIndex="1"/>
+                <Label text="Obstacle:"/>
+                <ComboBox fx:id="obstructionComboBox" prefWidth="325.0" promptText="Add an obstacle..." GridPane.columnIndex="1"/>
                 <padding>
                     <Insets bottom="10.0" top="10.0"/>
                 </padding>
@@ -80,14 +80,14 @@
                 <Label text="Obstruction distance from THR LEFT:"/>
                 <Label text="Obstruction distance from THR RIGHT:" GridPane.rowIndex="1"/>
                 <Label text="Obstruction distance from C/L:" GridPane.rowIndex="3"/>
-                <TextField GridPane.columnIndex="1"/>
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <TextField GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <TextField fx:id="distanceFromTHRLeft" GridPane.columnIndex="1"/>
+                <TextField fx:id="distanceFromTHRRight" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <TextField fx:id="distanceFromCL" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                 <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
                 <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
                 <Label text="m" GridPane.columnIndex="2"/>
                 <Label text="Obstruction side of C/L:" GridPane.rowIndex="2"/>
-                <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <ComboBox fx:id="runwaySideComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                 <padding>
                     <Insets bottom="10.0"/>
                 </padding>
