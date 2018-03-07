@@ -7,4 +7,8 @@ public class Airport {
         this.airport_name = airport_name;
         this.airport_id = airport_id;
     }
+
+    public String toString(){
+        return airport_name + " (" + airport_id + ")";
+    }
 }

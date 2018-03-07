@@ -57,7 +57,7 @@
                 </rowConstraints>
                 <Label text="Airport:"/>
                 <Label text="Runway:" GridPane.rowIndex="1"/>
-                <ComboBox prefWidth="325.0" promptText="Select an airport..." GridPane.columnIndex="1"/>
+                <ComboBox fx:id="airportComboBox" prefWidth="325.0" promptText="Select an airport..." GridPane.columnIndex="1"/>
                 <ComboBox fx:id="runwayComboBox" onAction="#drawRunway" prefWidth="325.0"
                           promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </GridPane>

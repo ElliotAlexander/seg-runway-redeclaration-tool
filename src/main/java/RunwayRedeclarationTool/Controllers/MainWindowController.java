@@ -33,6 +33,8 @@ public class MainWindowController implements Initializable {
     @FXML
     ComboBox<RunwaySide> runwaySideComboBox;
     @FXML
+    ComboBox<Airport> airportComboBox;
+    @FXML
     TextFlow declaredDistances, calculationsBreakdown;
     @FXML
     Button calculateButton;
@@ -43,8 +45,10 @@ public class MainWindowController implements Initializable {
 
     public void initialize(URL url, ResourceBundle bundle) {
         DB_controller db_controller = DB_controller.instance;
-        runwayComboBox.getItems().addAll(db_controller.get_runways());
+        db_controller.add_airport(new Airport("London Heathrow", "EGLL"));
 
+        runwayComboBox.getItems().addAll(db_controller.get_runways());
+        airportComboBox.getItems().addAll(db_controller.get_airports());
         obstructionComboBox.getItems().add(obstacle);
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT);
     }
