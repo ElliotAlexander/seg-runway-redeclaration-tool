@@ -45,7 +45,6 @@ public class MainWindowController implements Initializable {
 
     public void initialize(URL url, ResourceBundle bundle) {
         DB_controller db_controller = DB_controller.instance;
-        db_controller.add_airport(new Airport("London Heathrow", "EGLL"));
 
         runwayComboBox.getItems().addAll(db_controller.get_runways());
         airportComboBox.getItems().addAll(db_controller.get_airports());
