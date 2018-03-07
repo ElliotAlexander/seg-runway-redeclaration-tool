@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
@@ -21,13 +22,22 @@ import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
 
-    @FXML FlowPane topDownViewContainer;
-    @FXML ComboBox<Runway> runwayComboBox;
-    @FXML ComboBox<Obstacle> obstructionComboBox;
-    @FXML ComboBox<RunwaySide> runwaySideComboBox;
-    @FXML TextFlow declaredDistances, calculationsBreakdown;
-    @FXML Button calculateButton;
-    @FXML TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL;
+    @FXML
+    FlowPane leftTopDownViewContainer, rightTopDownViewContainer;
+    @FXML
+    Tab leftRunwayTab, rightRunwayTab;
+    @FXML
+    ComboBox<Runway> runwayComboBox;
+    @FXML
+    ComboBox<Obstacle> obstructionComboBox;
+    @FXML
+    ComboBox<RunwaySide> runwaySideComboBox;
+    @FXML
+    TextFlow declaredDistances, calculationsBreakdown;
+    @FXML
+    Button calculateButton;
+    @FXML
+    TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL;
 
     VirtualRunway runway09R = new VirtualRunway("09R", new RunwayParameters(3660, 3660, 3660, 3353));
     VirtualRunway runway27L = new VirtualRunway("27L", new RunwayParameters(3660, 3660, 3660, 3660));
@@ -47,7 +57,8 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void drawRunway() {
-        topDownViewContainer.getChildren().clear();
+        leftTopDownViewContainer.getChildren().clear();
+        rightTopDownViewContainer.getChildren().clear();
         declaredDistances.getChildren().clear();
 
         Runway runway = runwayComboBox.getValue();
@@ -55,28 +66,38 @@ public class MainWindowController implements Initializable {
         declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
         declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n"));
 
-        TopDownView view = new TopDownView(runway.leftRunway); //TODO: Which runway to draw?
-        view.widthProperty().bind(topDownViewContainer.widthProperty());
-        view.heightProperty().bind(topDownViewContainer.heightProperty());
+        TopDownView leftView = new TopDownView(runway.leftRunway);
+        leftView.widthProperty().bind(leftTopDownViewContainer.widthProperty());
+        leftView.heightProperty().bind(leftTopDownViewContainer.heightProperty());
+        leftTopDownViewContainer.getChildren().add(leftView);
 
-        topDownViewContainer.getChildren().add(view);
+        TopDownView rightView = new TopDownView(runway.rightRunway);
+        rightView.widthProperty().bind(rightTopDownViewContainer.widthProperty());
+        rightView.heightProperty().bind(rightTopDownViewContainer.heightProperty());
+        rightTopDownViewContainer.getChildren().add(rightView);
+
+        leftRunwayTab.setText("Runway " + runway.leftRunway.getDesignator());
+        rightRunwayTab.setText("Runway " + runway.rightRunway.getDesignator());
+
     }
 
     @FXML
-    public void recalculateDistances(){
+    public void recalculateDistances() {
 
         Calculator calculator = Calculator.getInstance();
-        try{
+        try {
             Runway runway = runwayComboBox.getValue();
             Obstacle obstacle = obstructionComboBox.getValue();
             ObstaclePosition obstaclePosition = new ObstaclePosition(obstacle, Integer.parseInt(distanceFromTHRLeft.getText()), Integer.parseInt(distanceFromTHRRight.getText()), Integer.parseInt(distanceFromCL.getText()), runwaySideComboBox.getValue());
-            calculator.calculate(obstaclePosition, runway);
 
             declaredDistances.getChildren().clear();
             declaredDistances.getChildren().add(new Text(obstaclePosition.toString()));
             declaredDistances.getChildren().add(new Text("\n\nOriginal distances:\n"));
             declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
             declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n\n"));
+
+            calculator.calculate(obstaclePosition, runway);
+
             declaredDistances.getChildren().add(new Text("Recalculated distances:\n"));
             declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getRecalcParams().getTORA() + "m\nTODA: " + runway.leftRunway.getRecalcParams().getTODA() + "m\nASDA: " + runway.leftRunway.getRecalcParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getRecalcParams().getLDA() + "m\n\n"));
             declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getRecalcParams().getTORA() + "m\nTODA: " + runway.rightRunway.getRecalcParams().getTODA() + "m\nASDA: " + runway.rightRunway.getRecalcParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getRecalcParams().getLDA() + "m\n"));
@@ -84,15 +105,16 @@ public class MainWindowController implements Initializable {
             calculationsBreakdown.getChildren().clear();
             calculationsBreakdown.getChildren().add(new Text(runway.leftRunway.getRecalcBreakdown() + "\n\n"));
             calculationsBreakdown.getChildren().add(new Text(runway.rightRunway.getRecalcBreakdown()));
-        } catch (NoRedeclarationNeededException e){
+        } catch (NoRedeclarationNeededException e) {
             System.out.println(e.getMessage());
-        } catch (AttributeNotAssignedException e){
+            declaredDistances.getChildren().add(new Text("\n\n" + e.getMessage()));
+        } catch (AttributeNotAssignedException e) {
             //TODO
         }
     }
 
     @FXML
-    public void handleNewRunway(){
+    public void handleNewRunway() {
         NewRunwayWindow runway = new NewRunwayWindow();
         try {
             runway.add_mwc(this);
@@ -102,7 +124,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    public void add_Runway(Runway r){
+    public void add_Runway(Runway r) {
         runwayComboBox.getItems().add(r);
         Logger.Log("Adding new runway " + r.toString() + " to main window controller.");
     }
