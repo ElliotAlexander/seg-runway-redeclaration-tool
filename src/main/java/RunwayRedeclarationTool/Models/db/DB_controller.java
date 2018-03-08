@@ -205,8 +205,12 @@ public class DB_controller
     }
 
     private void rebuild_db(Connection connection){
-        try {
-            File dir = new File(SCRIPTS_FOLDER);
+        //try {
+
+        DB_Import.setupDBHARDCODE(connection);
+
+        /**
+        File dir = new File(SCRIPTS_FOLDER);
             for(File f : dir.listFiles()){
                 Logger.Log("Loading " + f.getName());
                 DB_Import.importSQL(connection, f);
@@ -214,5 +218,7 @@ public class DB_controller
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+         **/
     }
 }

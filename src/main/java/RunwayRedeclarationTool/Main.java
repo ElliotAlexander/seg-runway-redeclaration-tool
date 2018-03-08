@@ -17,8 +17,9 @@ public class Main extends Application{
 
         DB_controller dbc = DB_controller.instance;
 
-
         primaryStage.setTitle("Runway Re-declaration Tool");
+
+
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
