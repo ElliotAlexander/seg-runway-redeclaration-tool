@@ -2,60 +2,53 @@ package RunwayRedeclarationTool.Models.db;
 
 import RunwayRedeclarationTool.Logger.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Scanner;
 
 public class DB_Import {
 
-
-    // TODO Fix this
-    protected static void importSQL(Connection conn, File f) throws SQLException
+    public static void importSQL(Connection c, File f) throws SQLException
     {
-        Statement st = null;
+        String s = new String();
+        StringBuffer sb = new StringBuffer();
+
+
+        Logger.Log("Importing file " + f.getName() + " into database.");
         try
         {
-            InputStream targetStream = new FileInputStream(f);
-            Scanner s = new Scanner(targetStream);
-            s.useDelimiter("(;(\r)?\n)|(--\n)");
-            Logger.Log("Setup input stream.");
+            FileReader fr = new FileReader(f);
+            // be sure to not have line starting with "--" or "/*" or any other non aplhabetical character
 
-            st = conn.createStatement();
-            Logger.Log("Creating statement");
+            BufferedReader br = new BufferedReader(fr);
 
-            boolean test = true;
-            Logger.Log("Test is true?!");
-            while (test);
+            while((s = br.readLine()) != null)
             {
-                Logger.Log("Hello World");
-                if(s.hasNext() == true){
-                    String line = s.next();
-                    if (line.startsWith("/*!") && line.endsWith("*/"))
-                    {
-                        int i = line.indexOf(' ');
-                        line = line.substring(i + 1, line.length() - " */".length());
-                    }
+                sb.append(s);
+            }
+            Logger.Log("Closing file");
+            br.close();
+            String[] inst = sb.toString().split(";");
+            Statement st = c.createStatement();
 
-                    if (line.trim().length() > 0)
-                    {
-                        st.execute(line);
-                    }
-                } else {
-                   test = false;
+            for(int i = 0; i<inst.length; i++)
+            {
+                if(!inst[i].trim().equals(""))
+                {
+                    st.executeUpdate(inst[i]);
+                    Logger.Log("Executing statement:");
+                    Logger.Log(inst[i]);
                 }
             }
-            Logger.Log("Exiting while loop");
-        } catch (FileNotFoundException e) {
-            System.out.println("Error! Failed to open input stream for file.");
-            e.printStackTrace();
-        } finally
-        {
-            if (st != null) st.close();
         }
+        catch(Exception e)
+        {
+            Logger.Log(Logger.Level.ERROR, "*** Error : " + e.toString());
+            e.printStackTrace();
+            Logger.Log(Logger.Level.ERROR, sb.toString());
+        }
+
     }
+
 }
