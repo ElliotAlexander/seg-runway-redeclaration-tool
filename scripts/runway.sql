@@ -13,4 +13,4 @@ CREATE TABLE IF NOT EXISTS `runway` (
    FOREIGN KEY (`runway_id`)
    REFERENCES `airport` (`airport_id`)
    ON DELETE NO ACTION
-   ON UPDATE NO ACTION)
+   ON UPDATE NO ACTION);
