@@ -23,22 +23,33 @@ public class DB_Import {
             InputStream targetStream = new FileInputStream(f);
             Scanner s = new Scanner(targetStream);
             s.useDelimiter("(;(\r)?\n)|(--\n)");
-            st = conn.createStatement();
-            while (s.hasNext());
-            {
-                Logger.Log("Entering while loop");
-                String line = s.next();
-                if (line.startsWith("/*!") && line.endsWith("*/"))
-                {
-                    int i = line.indexOf(' ');
-                    line = line.substring(i + 1, line.length() - " */".length());
-                }
+            Logger.Log("Setup input stream.");
 
-                if (line.trim().length() > 0)
-                {
-                    st.execute(line);
+            st = conn.createStatement();
+            Logger.Log("Creating statement");
+
+            boolean test = true;
+            Logger.Log("Test is true?!");
+            while (test);
+            {
+                Logger.Log("Hello World");
+                if(s.hasNext() == true){
+                    String line = s.next();
+                    if (line.startsWith("/*!") && line.endsWith("*/"))
+                    {
+                        int i = line.indexOf(' ');
+                        line = line.substring(i + 1, line.length() - " */".length());
+                    }
+
+                    if (line.trim().length() > 0)
+                    {
+                        st.execute(line);
+                    }
+                } else {
+                   test = false;
                 }
             }
+            Logger.Log("Exiting while loop");
         } catch (FileNotFoundException e) {
             System.out.println("Error! Failed to open input stream for file.");
             e.printStackTrace();
