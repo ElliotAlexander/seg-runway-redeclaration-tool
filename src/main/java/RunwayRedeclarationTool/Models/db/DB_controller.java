@@ -6,11 +6,23 @@ import RunwayRedeclarationTool.Models.Airport;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.regex.Pattern;
 
 public class DB_controller
 {
@@ -205,14 +217,15 @@ public class DB_controller
     }
 
     private void rebuild_db(Connection connection){
+
+        // This presumes that maven has already moved resources into /target, so may not work in IDE - depending on your config.
+        //
+        InputStream in = DB_controller.class.getClassLoader().getResourceAsStream("db_config.sql");
         try {
-            File dir = new File(SCRIPTS_FOLDER);
-            for(File f : dir.listFiles()){
-                Logger.Log("Loading " + f.getName());
-                DB_Import.importSQL(connection, f);
-            }
+            DB_Import.importSQL(connection, in);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 }

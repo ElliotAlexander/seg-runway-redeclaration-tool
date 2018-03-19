@@ -9,19 +9,16 @@ import java.sql.Statement;
 
 public class DB_Import {
 
-    public static void importSQL(Connection c, File f) throws SQLException
+    public static void importSQL(Connection c, InputStream in) throws SQLException
     {
         String s = new String();
         StringBuffer sb = new StringBuffer();
 
 
-        Logger.Log("Importing file " + f.getName() + " into database.");
         try
         {
-            FileReader fr = new FileReader(f);
-            // be sure to not have line starting with "--" or "/*" or any other non aplhabetical character
-
-            BufferedReader br = new BufferedReader(fr);
+            // Wrapping the inputstream in a buffered reader because im psychopathic
+            BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
             while((s = br.readLine()) != null)
             {
