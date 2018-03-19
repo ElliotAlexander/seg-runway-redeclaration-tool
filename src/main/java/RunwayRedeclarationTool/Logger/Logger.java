@@ -6,14 +6,14 @@ public class Logger {
     private static final FileLogger fl = new FileLogger();
 
     public static void Log(Level l, String message){
-        System.out.println("[SERVER " + l + "] " + message);
+        System.out.println("[" + l + "] " + message);
         fl.Log("[" + l + "] \n" +  message + "\n");
     }
 
 
     // Defaults to info
     public static void Log(String message){
-        System.out.println("[SERVER INFO] " + message);
+        System.out.println("[INFO] " + message);
         fl.Log("[" + Level.INFO + "] " +  message + "\n");
     }
 }
