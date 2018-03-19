@@ -14,3 +14,16 @@ CREATE TABLE IF NOT EXISTS `runway` (
    REFERENCES `airport` (`airport_id`)
    ON DELETE NO ACTION
    ON UPDATE NO ACTION);
+CREATE TABLE IF NOT EXISTS `obstacle`(
+`obstacle_id` INT NOT NULL,
+`obstacle_name` VARCHAR(45) NULL,
+`length` INT NULL,
+`height` INT NULL,
+PRIMARY KEY(`obstacle_id`));
+CREATE TABLE IF NOT EXISTS `airport` (
+ `airport_id` VARCHAR(4) NOT NULL,
+ `airport_name` VARCHAR(45) NULL,
+ `no_runways` INT NULL,
+ PRIMARY KEY (`airport_id`));
+
+
