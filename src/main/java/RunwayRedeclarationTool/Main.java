@@ -25,14 +25,11 @@ public class Main extends Application{
 
         ConfigManager configManager = new ConfigManager();
 
-        // Note that this represents a file OUTSIDE of the classpath.
-        // We could just pass this config file around
-        // Everything should be finalised and most top level objects are called from main.
-        // Except that the singleton pattern prevents this, and I'd prefer this globally accesible
+        // Note that this represents a file OUTSIDE of the classpath
         this.config = configManager.load_config(new File(Config_File_Name));
-
         Logger.Log("Finished loading config file.");
 
+        new Logger(config);
         DB_controller dbc = new DB_controller(config);
 
 
