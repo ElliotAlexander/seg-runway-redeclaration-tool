@@ -93,8 +93,13 @@ public class ConfigManager {
             // Escape backslashes - essential for file paths.
             l = l.replace("\\", "/");
 
+            // This needs to be in a seperate block to the below.
+            if(l.equals("")){
+                continue;
+            }
+
             // Ignore start of line commenting
-            if(l.charAt(0) == '#' || l.equals("")){
+            if(l.charAt(0) == '#'){
                 continue;
             // Ignore end of line commenting
             } else if(l.split("#").length != 0) {
