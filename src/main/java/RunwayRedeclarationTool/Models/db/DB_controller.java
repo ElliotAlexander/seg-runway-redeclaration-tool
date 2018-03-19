@@ -1,7 +1,10 @@
 package RunwayRedeclarationTool.Models.db;
 
+import RunwayRedeclarationTool.Config.Configuration;
+import RunwayRedeclarationTool.Exceptions.ConfigurationKeyNotFound;
 import RunwayRedeclarationTool.Exceptions.MalformattedDataException;
 import RunwayRedeclarationTool.Logger.Logger;
+import RunwayRedeclarationTool.Main;
 import RunwayRedeclarationTool.Models.Airport;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
@@ -29,18 +32,38 @@ public class DB_controller
 
 
     // TODO - Config file?
-    private final String DB_NAME = "airports.db";
-    private final String SCRIPTS_FOLDER = "scripts/";
-    private final String DB_URL = "jdbc:sqlite:db/";
+    private final String DB_URL = "jdbc:sqlite:";
+    private String DB_NAME, DB_FOLDER;
 
     private int runway_id = 0;
     private int physical_runway_id = 0;
     private Connection conn;
-    public static final DB_controller instance = new DB_controller();
 
-    private DB_controller(){
-        init();
+    public DB_controller(Configuration config){
+
         Logger.Log("Running DB_Controller...");
+
+
+        // Setup config
+        try {
+            DB_NAME = config.getConfigurationValue("DatabaseName");
+            DB_FOLDER = config.getConfigurationValue("DatabaseFolder");
+
+            if(DB_FOLDER.charAt(DB_FOLDER.length() - 1) != '/'){
+                DB_FOLDER += "/";
+            }
+
+            Logger.Log("Using Database Folder name : " + DB_FOLDER);
+            Logger.Log("Using Database File Name : " + DB_NAME);
+            Logger.Log("DB URL : " + DB_URL + DB_FOLDER + DB_NAME);
+
+        } catch (ConfigurationKeyNotFound configurationKeyNotFound) {
+            configurationKeyNotFound.printStackTrace();
+            Logger.Log(Logger.Level.ERROR, "Failed to load configuration key!");
+        }
+
+        // init handles the heavy lifting.
+        init();
 
         for(Runway r : get_runways()){
             Logger.Log(r.toString());
@@ -51,12 +74,12 @@ public class DB_controller
         try {
 
             // Check the db folder exists
-            File db_folder = new File("db/");
+            File db_folder = new File(DB_FOLDER);
             db_folder.mkdir();
 
 
             // db parameters
-            String url = DB_URL + DB_NAME;
+            String url = DB_URL + DB_FOLDER + DB_NAME;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             Logger.Log("Attempting to open database at " + url);

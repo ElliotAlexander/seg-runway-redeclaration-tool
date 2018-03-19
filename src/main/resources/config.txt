@@ -1,2 +1,11 @@
-sqlite:
-    db_name:airports
+#sqlite:
+    Database Name : airports.db
+    # Not yet implemented
+    Load Airports From File : yes
+    # Changing this will modify where .db files are stored.
+    # Both an absolute and relative path is acceptable
+    # i.e. C:\Users\Elliot\Documents\Runway_Config or /db
+    # A folder will be created if one doesn't exist.
+    Database Folder : db/
+    # Developers only
+    sql config : db_config.sql
