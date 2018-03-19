@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Configuration {
 
-    private HashMap<String, String> configuration_values = new HashMap<String, String>();
+    private final HashMap<String, String> configuration_values;
 
     public Configuration(HashMap<String, String> map){
         this.configuration_values = map;

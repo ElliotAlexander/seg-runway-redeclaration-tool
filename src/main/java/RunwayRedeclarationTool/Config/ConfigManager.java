@@ -6,6 +6,7 @@ import RunwayRedeclarationTool.Logger.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ConfigManager {
@@ -83,48 +84,35 @@ public class ConfigManager {
         return null;
     }
 
-
-    // Note that we've already sorted
     private HashMap<String, String> parse_config_string(String[] line_arr) throws MalformattedConfigFile {
 
         HashMap<String, String> config_arr =  new HashMap<String, String>();
         int line_number = 0;
-        String current_section = "";
         for(String l : line_arr){
 
+            // strip whitespace and tabs
+            l = l.replaceAll("\\s+","");
+            // Escape backslashes - essential for file paths.
+            l = l.replace("\\", "/");
+
             // Ignore start of line commenting
-            if(l.charAt(0) == '#'){
+            if(l.charAt(0) == '#' || l == ""){
                 continue;
             // Ignore end of line commenting
             } else if(l.split("#").length != 0) {
                 l = l.split("#")[0];
             }
 
-            // Sections should still be terminated with a colon
             if(!l.contains(":")) {
                 throw new MalformattedConfigFile("Error parsing line: " + l);
             } else {
-                String[] key_pair = l.split(":");
+                String[] key_pair = l.split(":", 2);
 
-
-                if(key_pair.length > 2){
-                    Logger.Log(Logger.Level.WARNING, "Possible errors in config line (" + line_number + "). \nLine: " + l);
-                }
-
-                if (key_pair.length == 1){
-                    Logger.Log("Loading configuration section: " + l);
-                    current_section = key_pair[0];
-                    continue;
-                }
+                // We need to split on the first colon, as key : value, but then ignore all future colons.
+                // This is important for file paths - C:/ etc.
                 Logger.Log("Loading keypair as full configuration value.");
                 String key = key_pair[0];
                 String value = key_pair[1];
-
-                if(key.charAt(0) == '\t'){
-                    // Strip the tab from our key
-                    key.replaceAll("\\s+","");
-                    key = current_section + key;
-                }
 
                 config_arr.put(key ,value);
                 Logger.Log("Loaded config value: key : " + key + ", value : " + value);
