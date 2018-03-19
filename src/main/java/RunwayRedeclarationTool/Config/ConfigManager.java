@@ -114,7 +114,8 @@ public class ConfigManager {
                 String key = key_pair[0];
                 String value = key_pair[1];
 
-                config_arr.put(key ,value);
+                // We'll store all keys in lowercase
+                config_arr.put(key.toLowerCase() ,value);
                 Logger.Log("Loaded config value: key : " + key + ", value : " + value);
             }
 

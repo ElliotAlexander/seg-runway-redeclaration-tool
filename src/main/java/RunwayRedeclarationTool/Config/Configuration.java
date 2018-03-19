@@ -15,8 +15,8 @@ public class Configuration {
     }
 
     public String getConfigurationValue(String key) throws ConfigurationKeyNotFound {
-        if(configuration_values.keySet().contains(key)){
-            return configuration_values.get(key);
+        if(configuration_values.keySet().contains(key.toLowerCase())){
+            return configuration_values.get(key.toLowerCase());
         } else {
             throw new ConfigurationKeyNotFound("Failed to find configuration key: " + key);
         }
