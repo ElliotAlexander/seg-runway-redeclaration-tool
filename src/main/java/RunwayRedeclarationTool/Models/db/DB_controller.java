@@ -4,36 +4,22 @@ import RunwayRedeclarationTool.Config.Configuration;
 import RunwayRedeclarationTool.Exceptions.ConfigurationKeyNotFound;
 import RunwayRedeclarationTool.Exceptions.MalformattedDataException;
 import RunwayRedeclarationTool.Logger.Logger;
-import RunwayRedeclarationTool.Main;
 import RunwayRedeclarationTool.Models.Airport;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Set;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.regex.Pattern;
 
 public class DB_controller
 {
 
 
     // TODO - Config file?
-    private final String DB_URL = "jdbc:sqlite:";
-    private String DB_NAME, DB_FOLDER;
+    private String DB_NAME, DB_FOLDER, DB_URL;
 
     private int runway_id = 0;
     private int physical_runway_id = 0;
@@ -48,6 +34,7 @@ public class DB_controller
         try {
             DB_NAME = config.getConfigurationValue("DatabaseName");
             DB_FOLDER = config.getConfigurationValue("DatabaseFolder");
+            DB_URL =config.getConfigurationValue("DatabaseURL");
 
             if(DB_FOLDER.charAt(DB_FOLDER.length() - 1) != '/'){
                 DB_FOLDER += "/";
