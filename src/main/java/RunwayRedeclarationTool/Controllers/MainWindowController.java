@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.Controllers;
 
+import RunwayRedeclarationTool.Config.Configuration;
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 import RunwayRedeclarationTool.Models.*;
@@ -43,11 +44,18 @@ public class MainWindowController implements Initializable {
 
     Obstacle obstacle = new Obstacle("Demo obstacle", 12);
 
-    public void initialize(URL url, ResourceBundle bundle) {
-        DB_controller db_controller = DB_controller.instance;
+    private final DB_controller controller;
+    private final Configuration config;
 
-        runwayComboBox.getItems().addAll(db_controller.get_runways());
-        airportComboBox.getItems().addAll(db_controller.get_airports());
+    public MainWindowController(Configuration config, DB_controller controller){
+        this.config = config;
+        this.controller = controller;
+    }
+
+    public void initialize(URL url, ResourceBundle bundle) {
+
+        runwayComboBox.getItems().addAll(controller.get_runways());
+        airportComboBox.getItems().addAll(controller.get_airports());
         obstructionComboBox.getItems().add(obstacle);
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT);
     }
@@ -122,7 +130,7 @@ public class MainWindowController implements Initializable {
             runwayComboBox.setValue(newRunway);
 
             // TODO Move away from arbitrary airports.
-            DB_controller.instance.add_Runway(newRunway, "LGW");
+            controller.add_Runway(newRunway, "LGW");
             drawRunway();
         } catch (NullPointerException e){}
 
