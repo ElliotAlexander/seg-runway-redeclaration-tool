@@ -6,7 +6,6 @@ import RunwayRedeclarationTool.Logger.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class ConfigManager {
@@ -15,7 +14,7 @@ public class ConfigManager {
     private final String config_file_string = "config.txt";
 
     public ConfigManager(){
-        File f = new File(config_file_string);
+        File f = new File("config.txt");
         if(!f.exists()){
             try {
                 Logger.Log("Couldn't find " + config_file_string);
@@ -56,7 +55,7 @@ public class ConfigManager {
 
     public Configuration load_config(File f) throws ConfigurationFileNotFound {
         if(f.exists()){
-            ArrayList<String> file_String = new ArrayList<String>();
+            ArrayList<String> file_String = new ArrayList<>();
             FileReader fileReader = null;
             try {
                 fileReader = new FileReader(f);
@@ -86,8 +85,7 @@ public class ConfigManager {
 
     private HashMap<String, String> parse_config_string(String[] line_arr) throws MalformattedConfigFile {
 
-        HashMap<String, String> config_arr =  new HashMap<String, String>();
-        int line_number = 0;
+        HashMap<String, String> config_arr =  new HashMap<>();
         for(String l : line_arr){
 
             // strip whitespace and tabs
@@ -96,7 +94,7 @@ public class ConfigManager {
             l = l.replace("\\", "/");
 
             // Ignore start of line commenting
-            if(l.charAt(0) == '#' || l == ""){
+            if(l.charAt(0) == '#' || l.equals("")){
                 continue;
             // Ignore end of line commenting
             } else if(l.split("#").length != 0) {
