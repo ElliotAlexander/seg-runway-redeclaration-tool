@@ -5,6 +5,7 @@ import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.View.NewAirportPopup;
 import RunwayRedeclarationTool.View.NewObstaclePopup;
 import RunwayRedeclarationTool.View.NewRunwayPopup;
 import RunwayRedeclarationTool.View.TopDownView;
@@ -28,13 +29,13 @@ public class MainWindowController implements Initializable {
     @FXML
     Tab leftRunwayTab, rightRunwayTab;
     @FXML
+    ComboBox<Airport> airportComboBox;
+    @FXML
     ComboBox<Runway> runwayComboBox;
     @FXML
     ComboBox<Obstacle> obstructionComboBox;
     @FXML
     ComboBox<RunwaySide> runwaySideComboBox;
-    @FXML
-    ComboBox<Airport> airportComboBox;
     @FXML
     TextFlow declaredDistances, calculationsBreakdown;
     @FXML
@@ -42,7 +43,7 @@ public class MainWindowController implements Initializable {
     @FXML
     TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL;
 
-    Obstacle obstacle = new Obstacle("Demo obstacle", 12);
+    Obstacle obstacle = new Obstacle("Demo obstacle", 12);  // TODO remove this
 
     private final DB_controller controller;
     private final Configuration config;
@@ -122,15 +123,25 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
+    public void handleNewAirport() {
+        try {
+            Airport newAirport = NewAirportPopup.display();
+            airportComboBox.getItems().add(newAirport);
+            airportComboBox.setValue(newAirport);
+
+            controller.add_airport(newAirport);
+        } catch (NullPointerException e){}
+    }
+
+    @FXML
     public void handleNewRunway() {
         try {
-            Runway newRunway;
-            newRunway = NewRunwayPopup.display("Add a New Runway to <Airport>");
+            Airport currentAirport = airportComboBox.getValue();
+            Runway newRunway = NewRunwayPopup.display("Add a new runway to " + currentAirport.toString());
             runwayComboBox.getItems().addAll(newRunway);
             runwayComboBox.setValue(newRunway);
 
-            // TODO Move away from arbitrary airports.
-            controller.add_Runway(newRunway, "LGW");
+            controller.add_Runway(newRunway, currentAirport.getAirport_id());
             drawRunway();
         } catch (NullPointerException e){}
 

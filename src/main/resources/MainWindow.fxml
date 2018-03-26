@@ -24,6 +24,7 @@
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu text="File">
+                <MenuItem onAction="#handleNewAirport" text="New airport..."/>
                 <MenuItem fx:id="new_runway_button" onAction="#handleNewRunway" text="New runway..." />
                 <MenuItem onAction="#handleNewObstacle" text="New obstacle..." />
             </Menu>
