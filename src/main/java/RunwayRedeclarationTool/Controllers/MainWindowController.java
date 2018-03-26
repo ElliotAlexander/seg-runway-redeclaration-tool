@@ -43,7 +43,7 @@ public class MainWindowController implements Initializable {
     @FXML
     TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL;
 
-    Obstacle obstacle = new Obstacle("Demo obstacle", 12);  // TODO remove this
+    Obstacle obstacle = new Obstacle("Demo obstacle", 12);
 
     private final DB_controller controller;
     private final Configuration config;
