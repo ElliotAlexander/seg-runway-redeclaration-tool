@@ -151,11 +151,16 @@ public class DB_controller
     }
 
     public Runway[] get_runways(){
+        return get_runways("");
+    }
+
+    public Runway[] get_runways(String airport_id){
         ArrayList<Runway> return_array = new ArrayList<Runway>();
         HashMap<Integer, ArrayList<VirtualRunway>> runways = new HashMap<Integer, ArrayList<VirtualRunway>>();
         try {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from runway");
+            String query = airport_id=="" ? "SELECT * from runway" : "SELECT * from runway WHERE airport_id=\'"+airport_id+"\'";
+            ResultSet rs = stmt.executeQuery(query);
             while(rs.next()){
                 String designator = rs.getString("runway_designator");
                 int TORA = rs.getInt("tora");
