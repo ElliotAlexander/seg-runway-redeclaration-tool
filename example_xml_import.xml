@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<class>
+    <Airport airport_name="Heathrow">
+        <airport_id>LHR</airport_id>
+        <Runway>
+            <vr designator="09L">
+                <tora>1000</tora>
+                <toda>1000</toda>
+                <asda>1000</asda>
+                <lda>1000</lda>
+            </vr>
+            <vr designator="27R">
+                <tora>1000</tora>
+                <toda>1000</toda>
+                <asda>1000</asda>
+                <lda>1000</lda>
+            </vr>
+        </Runway>
+    </Airport>
+  <Airport airport_name="Los Angeles International Airport">
+    <airport_id>LAX</airport_id>
+    <Runway>
+      <vr designator="15L">
+        <tora>2000</tora>
+        <toda>2000</toda>
+        <asda>2000</asda>
+        <lda>2000</lda>
+      </vr>
+      <vr designator="33R">
+        <tora>2000</tora>
+        <toda>2000</toda>
+        <asda>2000</asda>
+        <lda>2000</lda>
+      </vr>
+    </Runway>
+  </Airport>
+ </class>
