@@ -14,6 +14,9 @@ import java.util.List;
 
 public class XML_File_Loader {
 
+
+    // TODO Obstacles!
+
     public XML_File_Loader(){
         // Setup
         Logger.Log("Loading XML parser. Opening File Chooser window...");

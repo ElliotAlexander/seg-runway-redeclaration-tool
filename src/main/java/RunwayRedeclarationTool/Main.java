@@ -24,7 +24,6 @@ public class Main extends Application{
         // Note that this represents a file OUTSIDE of the classpath
         this.config = configManager.load_config();
         Logger.Log("Finished loading config file.");
-
         new Logger(config);
 
         DB_controller dbc = new DB_controller(config);
