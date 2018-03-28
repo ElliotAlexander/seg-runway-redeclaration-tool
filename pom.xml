@@ -35,6 +35,12 @@
             <version>2.0.6</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.google.cloud/gcloud-java-nio -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>gcloud-java-nio</artifactId>
+            <version>0.2.8</version>
+        </dependency>
 
     </dependencies>
     <build>
@@ -56,6 +62,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
