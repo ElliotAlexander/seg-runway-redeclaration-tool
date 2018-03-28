@@ -16,9 +16,6 @@ import java.util.HashMap;
 
 public class DB_controller
 {
-
-
-    // TODO - Config file?
     private String DB_NAME, DB_FOLDER, DB_URL;
 
     private int runway_id = 0;
@@ -28,7 +25,6 @@ public class DB_controller
     public DB_controller(Configuration config){
 
         Logger.Log("Running DB_Controller...");
-
 
         // Setup config
         try {
@@ -40,7 +36,7 @@ public class DB_controller
                 DB_FOLDER += "/";
             }
 
-            Logger.Log("Using Database Folder name : " + DB_FOLDER);
+            Logger.Log("Using Database Folder: " + DB_FOLDER);
             Logger.Log("Using Database File Name : " + DB_NAME);
             Logger.Log("DB URL : " + DB_URL + DB_FOLDER + DB_NAME);
 
@@ -60,16 +56,21 @@ public class DB_controller
     private void init(){
         try {
 
-            // Check the db folder exists
-            File db_folder = new File(DB_FOLDER);
-            db_folder.mkdir();
 
+            File db_folder = new File(DB_FOLDER);
+
+            if(!db_folder.exists())
+            {
+                Logger.Log("Database folder doesn't exist, creating one.");
+                db_folder.mkdir();
+            }
 
             // db parameters
             String url = DB_URL + DB_FOLDER + DB_NAME;
+            Logger.Log("Attempting to open database at " + url);
+
             // create a connection to the database
             conn = DriverManager.getConnection(url);
-            Logger.Log("Attempting to open database at " + url);
             DatabaseMetaData md = conn.getMetaData();
             ResultSet rs = md.getTables(null, null, "%", null);
             Boolean not_null = false;

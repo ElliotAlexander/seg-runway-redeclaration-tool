@@ -11,13 +11,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
-
 public class Main extends Application{
 
 
-    public static final String Config_File_Name = "config.txt";
-    // Note that all fields inside config are final.
     private Configuration config;
 
     @Override
@@ -26,12 +22,12 @@ public class Main extends Application{
         Config_Manager configManager = new Config_Manager();
 
         // Note that this represents a file OUTSIDE of the classpath
-        this.config = configManager.load_config(new File(Config_File_Name));
+        this.config = configManager.load_config();
         Logger.Log("Finished loading config file.");
 
         new Logger(config);
-        DB_controller dbc = new DB_controller(config);
 
+        DB_controller dbc = new DB_controller(config);
 
         primaryStage.setTitle("Runway Re-declaration Tool");
 

@@ -11,10 +11,20 @@ import java.util.HashMap;
 public class Config_Manager {
 
 
-    private final String config_file_string = "config.txt";
+    private final String config_file_string;
+    private final String userdata_path;
 
     public Config_Manager(){
-        File f = new File("config.txt");
+        String user_home = System.getProperty("user.home");
+        user_home = user_home.replaceAll("\\\\", "/");
+        Logger.Log("User home : " + user_home);
+        userdata_path = user_home + "/" + "Runway_Redeclaration_Tool";
+        File dir = new File(userdata_path);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+        File f = new File(userdata_path + "/config.txt");
+        config_file_string = f.getAbsolutePath();
         if(!f.exists()){
             try {
                 Logger.Log("Couldn't find " + config_file_string);
@@ -53,7 +63,8 @@ public class Config_Manager {
         }
     }
 
-    public Configuration load_config(File f) throws ConfigurationFileNotFound {
+    public Configuration load_config() throws ConfigurationFileNotFound {
+        File f = new File(config_file_string);
         if(f.exists()){
             ArrayList<String> file_String = new ArrayList<>();
             FileReader fileReader = null;
@@ -111,11 +122,15 @@ public class Config_Manager {
             } else {
                 String[] key_pair = l.split(":", 2);
 
+
+
                 // We need to split on the first colon, as key : value, but then ignore all future colons.
                 // This is important for file paths - C:/ etc.
                 Logger.Log("Loading keypair as full configuration value.");
                 String key = key_pair[0];
                 String value = key_pair[1];
+
+                value = value.replace("%USERHOME%", userdata_path);
 
                 // We'll store all keys in lowercase
                 config_arr.put(key.toLowerCase() ,value);
