@@ -126,7 +126,6 @@ public class Config_Manager {
 
                 // We need to split on the first colon, as key : value, but then ignore all future colons.
                 // This is important for file paths - C:/ etc.
-                Logger.Log("Loading keypair as full configuration value.");
                 String key = key_pair[0];
                 String value = key_pair[1];
 
