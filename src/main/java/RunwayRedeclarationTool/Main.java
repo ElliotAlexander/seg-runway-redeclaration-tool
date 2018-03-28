@@ -1,6 +1,6 @@
 package RunwayRedeclarationTool;
 
-import RunwayRedeclarationTool.Config.ConfigManager;
+import RunwayRedeclarationTool.Config.Config_Manager;
 import RunwayRedeclarationTool.Config.Configuration;
 import RunwayRedeclarationTool.Controllers.MainWindowController;
 import RunwayRedeclarationTool.Logger.Logger;
@@ -23,7 +23,7 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        ConfigManager configManager = new ConfigManager();
+        Config_Manager configManager = new Config_Manager();
 
         // Note that this represents a file OUTSIDE of the classpath
         this.config = configManager.load_config(new File(Config_File_Name));

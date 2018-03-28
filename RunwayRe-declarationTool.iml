@@ -11,17 +11,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.21.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.reflections:reflections:0.9.5-RC2" level="project" />
-    <orderEntry type="library" name="Maven: com.google.collections:google-collections:1.0" level="project" />
-    <orderEntry type="library" name="Maven: javassist:javassist:3.8.0.GA" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.5.6" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: ch.qos.logback:logback-classic:0.9.9" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: ch.qos.logback:logback-core:0.9.9" level="project" />
-    <orderEntry type="library" name="Maven: dom4j:dom4j:1.6" level="project" />
-    <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.0.b2" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:1.4" level="project" />
-    <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.21.0.1" level="project" />
@@ -35,5 +24,6 @@
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.0.b2" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:1.4" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
+    <orderEntry type="library" name="Maven: org.jdom:jdom2:2.0.6" level="project" />
   </component>
 </module>
