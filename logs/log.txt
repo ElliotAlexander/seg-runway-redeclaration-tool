@@ -1,4 +1,0 @@
-[INFO] Attempting to open database at jdbc:sqlite:db/airports.db
-[INFO] Updated runway ID to reflect database. [new_id==1].
-[INFO] Updated physical runway ID to reflect database. [new_id==1].
-[INFO] Running DB_Controller...
