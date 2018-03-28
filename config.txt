@@ -6,11 +6,11 @@
     # Both an absolute and relative path is acceptable
     # i.e. C:\Users\Elliot\Documents\Runway_Config or /helloworld
     # A folder will be created if one doesn't exist.
-    Database Folder : db/
+    Database Folder : %USERHOME%/db
 
 # Logging
     Log File: logs.txt
-    Log Directory: log/
+    Log Directory: %USERHOME%/logs
 
 # Developers only
     SQL Config : db_config.sql
