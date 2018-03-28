@@ -1,0 +1,17 @@
+# database Setup:
+    Database Name : airports.db
+    # Not yet implemented
+    Load Airports From File : yes
+    # Changing this will modify where .db files are stored.
+    # Both an absolute and relative path is acceptable
+    # i.e. C:\Users\Elliot\Documents\Runway_Config or /helloworld
+    # A folder will be created if one doesn't exist.
+    Database Folder : db/
+
+# Logging
+    Log File: logs.txt
+    Log Directory: log/
+
+# Developers only
+    SQL Config : db_config.sql
+    Database Url : jdbc:sqlite:
