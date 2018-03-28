@@ -191,7 +191,16 @@ public class MainWindowController implements Initializable {
         if(parsed.keySet().size() == 0){
             return;
         } else {
+            keysetloop:
             for (Airport airport : parsed.keySet()) {
+                for(Airport x : controller.get_airports())
+                {
+                    if(x.getAirport_id().equalsIgnoreCase(airport.getAirport_id())){
+                        Logger.Log(Logger.Level.ERROR, "Airport " + airport.getAirport_id() + "/" + airport.getAirport_name() + " already exists in Database! Skipping.");
+                        continue keysetloop;
+                    }
+                }
+
                 controller.add_airport(airport);
                 airportComboBox.getItems().add(airport);
                 airportComboBox.setValue(airport);
