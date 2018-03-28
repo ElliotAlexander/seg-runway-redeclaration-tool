@@ -92,6 +92,17 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
+    public void updateRunways(){
+        Airport airport = airportComboBox.getValue();
+        runwayComboBox.getItems().clear();
+        Logger.Log("Using airport ID " + airport.getAirport_id());
+        for(Runway r : controller.get_runways(airport.getAirport_id())){
+            Logger.Log("Runway returned  = " + r.toString());
+            runwayComboBox.getItems().add(r);
+        }
+    }
+
+    @FXML
     public void recalculateDistances() {
 
         Calculator calculator = Calculator.getInstance();
