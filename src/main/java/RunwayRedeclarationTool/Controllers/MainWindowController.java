@@ -21,6 +21,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -186,7 +187,6 @@ public class MainWindowController implements Initializable {
     }
 
     // Aux method to avoid code duplication across folder + file imports.
-
     private void handle_parsed_xml(HashMap<Airport, List<Runway>> parsed){
         if(parsed.keySet().size() == 0){
             return;
@@ -197,6 +197,7 @@ public class MainWindowController implements Initializable {
                 {
                     if(x.getAirport_id().equalsIgnoreCase(airport.getAirport_id())){
                         Logger.Log(Logger.Level.ERROR, "Airport " + airport.getAirport_id() + "/" + airport.getAirport_name() + " already exists in Database! Skipping.");
+                        JOptionPane.showMessageDialog(null, "An airport with identifier "  + airport.getAirport_id() + "/" + airport.getAirport_name() + " already exists in the Database! Skipping.");
                         continue keysetloop;
                     }
                 }
