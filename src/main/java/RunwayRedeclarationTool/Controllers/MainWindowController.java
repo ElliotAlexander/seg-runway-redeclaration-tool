@@ -3,8 +3,10 @@ package RunwayRedeclarationTool.Controllers;
 import RunwayRedeclarationTool.Config.Configuration;
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
 import RunwayRedeclarationTool.View.NewAirportPopup;
 import RunwayRedeclarationTool.View.NewObstaclePopup;
 import RunwayRedeclarationTool.View.NewRunwayPopup;
@@ -20,6 +22,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
@@ -155,5 +159,38 @@ public class MainWindowController implements Initializable {
             obstructionComboBox.getItems().addAll(newObstacle);
             obstructionComboBox.setValue(newObstacle);
         } catch (NullPointerException e){}
+    }
+
+
+    @FXML
+    public void handleImportFile(){
+        handle_parsed_xml(new XML_File_Loader().load_file());
+    }
+
+
+    @FXML void handleImportFolder(){
+        for(HashMap<Airport, List<Runway>> parsed : new XML_File_Loader().load_directory()){
+            handle_parsed_xml(parsed);
+        }
+    }
+
+    // Aux method to avoid code duplication across folder + file imports.
+
+    private void handle_parsed_xml(HashMap<Airport, List<Runway>> parsed){
+        if(parsed.keySet().size() == 0){
+            return;
+        } else {
+            for (Airport airport : parsed.keySet()) {
+                controller.add_airport(airport);
+                airportComboBox.getItems().add(airport);
+                airportComboBox.setValue(airport);
+                for (Runway r : parsed.get(airport)) {
+                    runwayComboBox.getItems().addAll(r);
+                    runwayComboBox.setValue(r);
+                    Logger.Log("Added Runway " + r.toString() + " to " + airport.getAirport_id());
+                    controller.add_Runway(r, airport.getAirport_id());
+                }
+            }
+        }
     }
 }
