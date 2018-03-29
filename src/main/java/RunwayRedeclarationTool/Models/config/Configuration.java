@@ -1,4 +1,4 @@
-package RunwayRedeclarationTool.Config;
+package RunwayRedeclarationTool.Models.config;
 
 import RunwayRedeclarationTool.Exceptions.ConfigurationKeyNotFound;
 import RunwayRedeclarationTool.Logger.Logger;
