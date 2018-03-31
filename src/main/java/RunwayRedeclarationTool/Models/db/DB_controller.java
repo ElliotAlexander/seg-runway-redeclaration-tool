@@ -108,8 +108,6 @@ public class DB_controller
         }
     }
 
-
-    // TODO refactor into execute query methods.
     public boolean add_Runway(Runway runway, String airport_id){
         RunwayParameters R = runway.rightRunway.getOrigParams();
         RunwayParameters L = runway.leftRunway.getOrigParams();
@@ -154,7 +152,6 @@ public class DB_controller
     }
 
 
-    // TODO refactor into execute queries
     public Runway[] get_runways(String airport_id){
         ArrayList<Runway> return_array = new ArrayList<Runway>();
         HashMap<Integer, ArrayList<VirtualRunway>> runways = new HashMap<Integer, ArrayList<VirtualRunway>>();
