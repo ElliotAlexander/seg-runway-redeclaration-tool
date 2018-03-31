@@ -81,28 +81,35 @@ public class DB_controller
                 Logger.Log(Logger.Level.WARNING, DB_NAME + " is empty, rebuilding from included scripts.");
                 rebuild_db(conn);
             }
-            refresh_runway_id();
+            refresh_ids();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void refresh_runway_id(){
 
-        // TODO move queries into scripts for my own sanity.
+    // This method is important for maintaining an 'in memory' reference to the highest obstacle/runway id present in the databse.
+    // This allows us to give each new runway/obstacle a unique id.
+    public void refresh_ids(){
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT MAX(runway_id),MAX(physical_runway_id) FROM runway");
+            // Refresh unique runway ID's
+            ResultSet rs = execute_query("SELECT MAX(runway_id),MAX(physical_runway_id) FROM runway");
             runway_id = rs.getInt("MAX(runway_id)") + 1;
             physical_runway_id = rs.getInt("MAX(physical_runway_id)") + 1;
             Logger.Log("Updated runway ID to reflect database. [new_id=="+runway_id+"].");
             Logger.Log("Updated physical runway ID to reflect database. [new_id=="+physical_runway_id+"].");
+
+            // Refresh Obstacle ID's
+            rs = execute_query("SELECT MAX(obstacle_id) FROM obstacle");
+            obstacle_id = rs.getInt("MAX(obstacle_id)") + 1;
+            Logger.Log("Updated Obstacle ID to reflect database. [new_id=="+obstacle_id+"].");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
+
+    // TODO refactor into execute query methods.
     public boolean add_Runway(Runway runway, String airport_id){
         RunwayParameters R = runway.rightRunway.getOrigParams();
         RunwayParameters L = runway.leftRunway.getOrigParams();
@@ -134,19 +141,11 @@ public class DB_controller
                 ");";
 
         Logger.Log(query_left);
-
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(query_right);
-            stmt.execute(query_left);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        execute_query(query_left);
+        execute_query(query_right);
 
         runway_id += 2;
         physical_runway_id += 1;
-
         return true;
     }
 
@@ -154,13 +153,14 @@ public class DB_controller
         return get_runways("");
     }
 
+
+    // TODO refactor into execute queries
     public Runway[] get_runways(String airport_id){
         ArrayList<Runway> return_array = new ArrayList<Runway>();
         HashMap<Integer, ArrayList<VirtualRunway>> runways = new HashMap<Integer, ArrayList<VirtualRunway>>();
         try {
-            Statement stmt = conn.createStatement();
             String query = airport_id=="" ? "SELECT * from runway" : "SELECT * from runway WHERE airport_id=\'"+airport_id+"\'";
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = execute_query(query);
             while(rs.next()){
                 String designator = rs.getString("runway_designator");
                 int TORA = rs.getInt("tora");
