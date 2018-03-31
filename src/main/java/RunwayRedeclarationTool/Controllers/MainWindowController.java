@@ -1,6 +1,6 @@
 package RunwayRedeclarationTool.Controllers;
 
-import RunwayRedeclarationTool.Config.Configuration;
+import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Exceptions.NoRedeclarationNeededException;
 import RunwayRedeclarationTool.Logger.Logger;
@@ -48,8 +48,6 @@ public class MainWindowController implements Initializable {
     @FXML
     TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL;
 
-    Obstacle obstacle = new Obstacle("Demo obstacle", 12);
-
     private final DB_controller controller;
     private final Configuration config;
 
@@ -59,10 +57,7 @@ public class MainWindowController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle bundle) {
-
-        runwayComboBox.getItems().addAll(controller.get_runways());
-        airportComboBox.getItems().addAll(controller.get_airports());
-        obstructionComboBox.getItems().add(obstacle);
+        refresh_combobox();
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT);
     }
 
@@ -168,50 +163,34 @@ public class MainWindowController implements Initializable {
         try {
             Obstacle newObstacle;
             newObstacle = NewObstaclePopup.display("Add a New Obstacle");
-            obstructionComboBox.getItems().addAll(newObstacle);
-            obstructionComboBox.setValue(newObstacle);
+            controller.add_obstacle(newObstacle);
+            refresh_combobox();
         } catch (NullPointerException e){}
     }
 
 
     @FXML
     public void handleImportFile(){
-        handle_parsed_xml(new XML_File_Loader().load_file());
+        new XML_File_Loader(controller).load_file();
+        refresh_combobox();
     }
 
 
-    @FXML void handleImportFolder(){
-        for(HashMap<Airport, List<Runway>> parsed : new XML_File_Loader().load_directory()){
-            handle_parsed_xml(parsed);
-        }
+    @FXML void handleImportFolder() {
+        new XML_File_Loader(controller).load_directory();
+        refresh_combobox();
     }
 
-    // Aux method to avoid code duplication across folder + file imports.
-    private void handle_parsed_xml(HashMap<Airport, List<Runway>> parsed){
-        if(parsed.keySet().size() == 0){
-            return;
-        } else {
-            keysetloop:
-            for (Airport airport : parsed.keySet()) {
-                for(Airport x : controller.get_airports())
-                {
-                    if(x.getAirport_id().equalsIgnoreCase(airport.getAirport_id())){
-                        Logger.Log(Logger.Level.ERROR, "Airport " + airport.getAirport_id() + "/" + airport.getAirport_name() + " already exists in Database! Skipping.");
-                        JOptionPane.showMessageDialog(null, "An airport with identifier "  + airport.getAirport_id() + "/" + airport.getAirport_name() + " already exists in the Database! Skipping.");
-                        continue keysetloop;
-                    }
-                }
 
-                controller.add_airport(airport);
-                airportComboBox.getItems().add(airport);
-                airportComboBox.setValue(airport);
-                for (Runway r : parsed.get(airport)) {
-                    runwayComboBox.getItems().addAll(r);
-                    runwayComboBox.setValue(r);
-                    Logger.Log("Added Runway " + r.toString() + " to " + airport.getAirport_id());
-                    controller.add_Runway(r, airport.getAirport_id());
-                }
-            }
-        }
+    private void refresh_combobox(){
+        airportComboBox.getItems().clear();
+        airportComboBox.getItems().addAll(controller.get_airports());
+
+        runwayComboBox.getItems().clear();
+        runwayComboBox.getItems().addAll(controller.get_runways());
+
+        obstructionComboBox.getItems().clear();
+        obstructionComboBox.getItems().addAll(controller.get_obstacles());
+
     }
 }
