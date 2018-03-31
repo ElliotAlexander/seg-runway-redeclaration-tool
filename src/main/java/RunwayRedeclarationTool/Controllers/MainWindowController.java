@@ -11,6 +11,12 @@ import RunwayRedeclarationTool.View.NewAirportPopup;
 import RunwayRedeclarationTool.View.NewObstaclePopup;
 import RunwayRedeclarationTool.View.NewRunwayPopup;
 import RunwayRedeclarationTool.View.TopDownView;
+import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -23,9 +29,7 @@ import javafx.scene.text.TextFlow;
 
 import javax.swing.*;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MainWindowController implements Initializable {
 
@@ -61,13 +65,25 @@ public class MainWindowController implements Initializable {
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT);
     }
 
-    @FXML
+
+    //  --- FIXED - See below
+    // TODO - Theres a bug with the FXML combobox onaction calls - When selecting an airport, onaction for
+    // the runway combo box is also called, throwing null pointers and hanging the program
+    // Not quite sure how to fix this
     public void drawRunway() {
         leftTopDownViewContainer.getChildren().clear();
         rightTopDownViewContainer.getChildren().clear();
         declaredDistances.getChildren().clear();
 
         Runway runway = runwayComboBox.getValue();
+
+
+        // This is essential for the above TO-DO
+        // Without this, runway is null when the list is repopulated, and a null pointer is thrown.
+        // This will crash the gui thread after the second attempt.
+        if(runway == null){
+            runway = runwayComboBox.getItems().get(0);
+        }
         declaredDistances.getChildren().clear();
         declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
         declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n"));
@@ -84,18 +100,16 @@ public class MainWindowController implements Initializable {
 
         leftRunwayTab.setText("Runway " + runway.leftRunway.getDesignator());
         rightRunwayTab.setText("Runway " + runway.rightRunway.getDesignator());
-
     }
 
     @FXML
     public void updateRunways(){
         Airport airport = airportComboBox.getValue();
-        runwayComboBox.getItems().clear();
         Logger.Log("Using airport ID " + airport.getAirport_id());
-        for(Runway r : controller.get_runways(airport.getAirport_id())){
-            Logger.Log("Runway returned  = " + r.toString());
-            runwayComboBox.getItems().add(r);
-        }
+        ArrayList<Runway> runways = new ArrayList<>();
+        Collections.addAll(runways, controller.get_runways(airport.getAirport_id()));
+        ObservableList<Runway>observableList = FXCollections.observableList(runways);
+        runwayComboBox.setItems(observableList);
     }
 
     @FXML
@@ -139,7 +153,6 @@ public class MainWindowController implements Initializable {
             Airport newAirport = NewAirportPopup.display();
             airportComboBox.getItems().add(newAirport);
             airportComboBox.setValue(newAirport);
-
             controller.add_airport(newAirport);
         } catch (NullPointerException e){}
     }
@@ -151,9 +164,7 @@ public class MainWindowController implements Initializable {
             Runway newRunway = NewRunwayPopup.display("Add a new runway to " + currentAirport.toString());
             runwayComboBox.getItems().addAll(newRunway);
             runwayComboBox.setValue(newRunway);
-
             controller.add_Runway(newRunway, currentAirport.getAirport_id());
-            drawRunway();
         } catch (NullPointerException e){}
 
     }
@@ -163,8 +174,9 @@ public class MainWindowController implements Initializable {
         try {
             Obstacle newObstacle;
             newObstacle = NewObstaclePopup.display("Add a New Obstacle");
+            obstructionComboBox.getItems().add(newObstacle);
+            obstructionComboBox.setValue(newObstacle);
             controller.add_obstacle(newObstacle);
-            refresh_combobox();
         } catch (NullPointerException e){}
     }
 
@@ -181,16 +193,18 @@ public class MainWindowController implements Initializable {
         refresh_combobox();
     }
 
-
     private void refresh_combobox(){
         airportComboBox.getItems().clear();
         airportComboBox.getItems().addAll(controller.get_airports());
+        airportComboBox.setValue(airportComboBox.getItems().get(0));
 
         runwayComboBox.getItems().clear();
         runwayComboBox.getItems().addAll(controller.get_runways());
+        runwayComboBox.setValue(runwayComboBox.getItems().get(0));
 
         obstructionComboBox.getItems().clear();
         obstructionComboBox.getItems().addAll(controller.get_obstacles());
+        obstructionComboBox.setValue(obstructionComboBox.getItems().get(0));
 
     }
 }
