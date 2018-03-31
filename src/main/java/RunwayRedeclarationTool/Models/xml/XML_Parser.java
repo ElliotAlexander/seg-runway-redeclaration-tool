@@ -17,13 +17,13 @@ import java.util.List;
 
 public class XML_Parser {
 
-    public final DB_controller controller;
+    protected final DB_controller controller;
 
-    public XML_Parser(DB_controller controller){
+    protected XML_Parser(DB_controller controller){
         this.controller = controller;
     }
 
-    public void parse_xml(File xml_file){
+    protected void parse_xml(File xml_file){
         try {
 
             Logger.Log("Loaded file :"+ xml_file.getName() + " for parsing.");
