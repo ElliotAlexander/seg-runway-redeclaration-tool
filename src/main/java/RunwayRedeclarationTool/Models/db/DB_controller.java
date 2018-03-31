@@ -1,13 +1,11 @@
 package RunwayRedeclarationTool.Models.db;
 
-import RunwayRedeclarationTool.Config.Configuration;
+import RunwayRedeclarationTool.Models.*;
+import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Exceptions.ConfigurationKeyNotFound;
 import RunwayRedeclarationTool.Exceptions.MalformattedDataException;
 import RunwayRedeclarationTool.Logger.Logger;
-import RunwayRedeclarationTool.Models.Airport;
-import RunwayRedeclarationTool.Models.Runway;
-import RunwayRedeclarationTool.Models.RunwayParameters;
-import RunwayRedeclarationTool.Models.VirtualRunway;
+
 import java.io.File;
 import java.io.InputStream;
 import java.sql.*;
@@ -19,6 +17,7 @@ public class DB_controller
     private String DB_NAME, DB_FOLDER, DB_URL;
 
     private int runway_id = 0;
+    private int obstacle_id = 0;
     private int physical_runway_id = 0;
     private Connection conn;
 
@@ -197,39 +196,49 @@ public class DB_controller
         return return_array.toArray(new Runway[return_array.size()]);
     }
 
-    public boolean add_airport(Airport airport){
+    public void add_airport(Airport airport) {
         String airport_query = "INSERT INTO airport VALUES (\'" +
                 airport.airport_id + "\', \'" +
                 airport.airport_name + "\', " +
                 0 + ");";
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(airport_query);
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        execute_query(airport_query);
     }
 
     public Airport[] get_airports(){
-        Statement stmt = null;
         ArrayList<Airport> return_list = new ArrayList<Airport>();
+        ResultSet rs = execute_query("SELECT * from airport");
         try {
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from airport");
             while(rs.next()){
                 Airport new_airport = new Airport(rs.getString("airport_name"), rs.getString("airport_id"));
                 return_list.add(new_airport);
             }
-
-            return return_list.toArray(new Airport[return_list.size()]);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
 
+        return return_list.toArray(new Airport[return_list.size()]);
+    }
 
+    public void add_obstacle(Obstacle obstacle){
+        String add_query = "INSERT INTO obstacle VALUES (" +
+                obstacle_id + ", \'" +
+                obstacle.getName() + "\', " +
+                obstacle.getHeight() + ");";
+        execute_query(add_query);
+    }
+
+    public Obstacle[] get_obstacles(){
+        ArrayList<Obstacle> return_list = new ArrayList<Obstacle>();
+        ResultSet rs = execute_query("SELECT * from obstacle");
+        try {
+            while(rs.next()){
+                Obstacle new_obstacle = new Obstacle(rs.getString("obstacle_name"), rs.getInt("height"));
+                return_list.add(new_obstacle);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return return_list.toArray(new Obstacle[return_list.size()]);
     }
 
     private void rebuild_db(Connection connection){
@@ -243,5 +252,19 @@ public class DB_controller
             e.printStackTrace();
         }
 
+    }
+
+    private ResultSet execute_query(String query){
+        try {
+            Statement stmt = conn.createStatement();
+
+            // THIS MIGHT BREAK THINGS
+            // note to self, if this doesn't work use stmt.execute instead.
+            return stmt.executeQuery(query);
+        } catch (SQLException e) {
+            Logger.Log("Failed to execute query: \n " + query + "\nPrining exception:: \n");
+            e.printStackTrace();
+            return null;
+        }
     }
 }
