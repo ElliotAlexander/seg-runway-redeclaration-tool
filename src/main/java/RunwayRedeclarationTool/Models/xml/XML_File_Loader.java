@@ -15,10 +15,15 @@ import java.util.List;
 public class XML_File_Loader {
 
 
+    private final XML_Parser parser;
+
     // TODO Obstacles!
 
-    public XML_File_Loader(){
+    public XML_File_Loader(DB_controller controller){
         // Setup
+        // Note that controller is not stored outside the scope of the contructor.
+        parser = new XML_Parser(controller);
+
         Logger.Log("Loading XML parser. Opening File Chooser window...");
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -28,7 +33,7 @@ public class XML_File_Loader {
     }
 
 
-    public HashMap<Airport, List<Runway>> load_file(){
+    public void load_file(){
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Open a file");
         fc.setFileFilter(new FileFilter() {
@@ -49,28 +54,22 @@ public class XML_File_Loader {
 
         fc.showOpenDialog(null);
         File f = fc.getSelectedFile();
-        XML_Parser x = new XML_Parser();
-        HashMap<Airport, List<Runway>> parsed = x.parse_xml(f);
-        return parsed;
+        parser.parse_xml(f);
     }
 
-    public HashMap<Airport, List<Runway>>[] load_directory(){
+    public void load_directory(){
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.setApproveButtonText("Open Folder");
         fc.setDialogTitle("Open a folder");
 
-        ArrayList<HashMap<Airport, List<Runway>>> return_list = new ArrayList<>();
-
         fc.showOpenDialog(null);
         File dir = fc.getSelectedFile();
         Logger.Log("Loaded directory :"+ dir.getName() + " for parsing.");
-        XML_Parser xml_parser = new XML_Parser();
         for(File f : dir.listFiles()){
             if(f.getName().endsWith(".xml")){
-                return_list.add(xml_parser.parse_xml(f));
+                parser.parse_xml(f);
             }
         }
-        return return_list.toArray(new HashMap[return_list.size()]);
     }
 }
