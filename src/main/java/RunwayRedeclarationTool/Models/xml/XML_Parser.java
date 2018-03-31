@@ -30,7 +30,10 @@ public class XML_Parser {
             SAXBuilder saxBuilder = new SAXBuilder();
             Document document = saxBuilder.build(xml_file);
             Element rootElement = document.getRootElement();
+            Logger.Log("Parsing airports elements...");
             parse_airports(rootElement.getChildren("Airport").toArray(new Element[rootElement.getChildren("Airport").size()]));
+
+            Logger.Log("Parsing Obstacle elements...");
             parse_obstacles(rootElement.getChildren("Obstacle").toArray(new Element[rootElement.getChildren("Obstacle").size()]));
         } catch (JDOMException e1) {
             e1.printStackTrace();
@@ -102,16 +105,22 @@ public class XML_Parser {
 
 
     private void parse_obstacles(Element[] obstacle_nodes){
+        nodeloop:
         for(Element child : obstacle_nodes) {
             // Build airport object
             String obstacle_name = child.getAttribute("obstacle_name").getValue();
-            List<Element> obstacle_xml = child.getChildren("Obstacle");
-            for (Element obstacle_element : obstacle_xml) {
-
-                int Height = Integer.parseInt(obstacle_element.getChild("Height").getValue());
-                Obstacle obstacle = new Obstacle(obstacle_name, Height);
-                controller.add_obstacle(obstacle);
+            Logger.Log("Loaded obstacle with name " + obstacle_name);
+            for(Obstacle o : controller.get_obstacles()){
+                if(o.getName().equalsIgnoreCase(obstacle_name)){
+                    Logger.Log("Ignoring obstacle with parameters [Name=\'"+obstacle_name+"\'], already exists in database.");
+                    JOptionPane.showMessageDialog(null, "An obstacle with identifier "  + obstacle_name + " already exists in the Database! Skipping.");
+                    continue nodeloop;
+                }
             }
+            int Height = Integer.parseInt(child.getChild("Height").getValue());
+            Obstacle obstacle = new Obstacle(obstacle_name, Height);
+            controller.add_obstacle(obstacle);
+
         }
     }
 
