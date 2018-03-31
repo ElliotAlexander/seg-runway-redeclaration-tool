@@ -30,10 +30,9 @@ public class XML_Parser {
             SAXBuilder saxBuilder = new SAXBuilder();
             Document document = saxBuilder.build(xml_file);
             Element rootElement = document.getRootElement();
-            Logger.Log("Parsing airports elements...");
+            Logger.Log("Found " + rootElement.getChildren("Airport").size() + " Airport Elements.");
             parse_airports(rootElement.getChildren("Airport").toArray(new Element[rootElement.getChildren("Airport").size()]));
-
-            Logger.Log("Parsing Obstacle elements...");
+            Logger.Log("Found " + rootElement.getChildren("Obstacle").size() + " Obstacle Elements.");
             parse_obstacles(rootElement.getChildren("Obstacle").toArray(new Element[rootElement.getChildren("Obstacle").size()]));
         } catch (JDOMException e1) {
             e1.printStackTrace();
@@ -117,10 +116,10 @@ public class XML_Parser {
                     continue nodeloop;
                 }
             }
-            int Height = Integer.parseInt(child.getChild("Height").getValue());
-            Obstacle obstacle = new Obstacle(obstacle_name, Height);
+            int height = Integer.parseInt(child.getChild("height").getValue());
+            Obstacle obstacle = new Obstacle(obstacle_name, height);
+            Logger.Log("Adding obstacle with parameters [Name='"+obstacle_name+"\', Height=" + height + "].");
             controller.add_obstacle(obstacle);
-
         }
     }
 
