@@ -92,15 +92,18 @@ public class DB_controller
     // This allows us to give each new runway/obstacle a unique id.
     public void refresh_ids(){
         try {
-            // Refresh unique runway ID's
-            ResultSet rs = execute_query("SELECT MAX(runway_id),MAX(physical_runway_id) FROM runway");
+            // Refresh unique runway ID'
+            Statement stmt = null;
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT MAX(runway_id),MAX(physical_runway_id) FROM runway");
             runway_id = rs.getInt("MAX(runway_id)") + 1;
             physical_runway_id = rs.getInt("MAX(physical_runway_id)") + 1;
             Logger.Log("Updated runway ID to reflect database. [new_id=="+runway_id+"].");
             Logger.Log("Updated physical runway ID to reflect database. [new_id=="+physical_runway_id+"].");
 
             // Refresh Obstacle ID's
-            rs = execute_query("SELECT MAX(obstacle_id) FROM obstacle");
+
+            rs = stmt.executeQuery("SELECT MAX(obstacle_id) FROM obstacle");
             obstacle_id = rs.getInt("MAX(obstacle_id)") + 1;
             Logger.Log("Updated Obstacle ID to reflect database. [new_id=="+obstacle_id+"].");
         } catch (SQLException e) {
@@ -139,8 +142,15 @@ public class DB_controller
                 ");";
 
         Logger.Log(query_left);
-        execute_query(query_left);
-        execute_query(query_right);
+
+        try {
+            Statement stmt = null;
+            stmt = conn.createStatement();
+            stmt.execute(query_left);
+            stmt.execute(query_right);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         runway_id += 2;
         physical_runway_id += 1;
@@ -157,7 +167,9 @@ public class DB_controller
         HashMap<Integer, ArrayList<VirtualRunway>> runways = new HashMap<Integer, ArrayList<VirtualRunway>>();
         try {
             String query = airport_id=="" ? "SELECT * from runway" : "SELECT * from runway WHERE airport_id=\'"+airport_id+"\'";
-            ResultSet rs = execute_query(query);
+            Statement stmt = null;
+                stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
             while(rs.next()){
                 String designator = rs.getString("runway_designator");
                 int TORA = rs.getInt("tora");
@@ -198,13 +210,22 @@ public class DB_controller
                 airport.airport_id + "\', \'" +
                 airport.airport_name + "\', " +
                 0 + ");";
-        execute_query(airport_query);
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            stmt.execute(airport_query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Airport[] get_airports(){
         ArrayList<Airport> return_list = new ArrayList<Airport>();
-        ResultSet rs = execute_query("SELECT * from airport");
+        Statement stmt = null;
         try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * from airport");
+
             while(rs.next()){
                 Airport new_airport = new Airport(rs.getString("airport_name"), rs.getString("airport_id"));
                 return_list.add(new_airport);
@@ -221,13 +242,21 @@ public class DB_controller
                 obstacle_id + ", \'" +
                 obstacle.getName() + "\', " +
                 obstacle.getHeight() + ");";
-        execute_query(add_query);
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            stmt.execute(add_query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public Obstacle[] get_obstacles(){
         ArrayList<Obstacle> return_list = new ArrayList<Obstacle>();
-        ResultSet rs = execute_query("SELECT * from obstacle");
+        Statement stmt = null;
         try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * from obstacle");
             while(rs.next()){
                 Obstacle new_obstacle = new Obstacle(rs.getString("obstacle_name"), rs.getInt("height"));
                 return_list.add(new_obstacle);
@@ -249,19 +278,5 @@ public class DB_controller
             e.printStackTrace();
         }
 
-    }
-
-    private ResultSet execute_query(String query){
-        try {
-            Statement stmt = conn.createStatement();
-
-            // THIS MIGHT BREAK THINGS
-            // note to self, if this doesn't work use stmt.execute instead.
-            return stmt.executeQuery(query);
-        } catch (SQLException e) {
-            Logger.Log("Failed to execute query: \n " + query + "\nPrining exception:: \n");
-            e.printStackTrace();
-            return null;
-        }
     }
 }
