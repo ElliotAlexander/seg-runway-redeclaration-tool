@@ -206,5 +206,8 @@ public class MainWindowController implements Initializable {
         obstructionComboBox.getItems().addAll(controller.get_obstacles());
         obstructionComboBox.setValue(obstructionComboBox.getItems().get(0));
 
+        // Make sure that only the correct runways are shown for the selected airport.
+        updateRunways();
+
     }
 }
