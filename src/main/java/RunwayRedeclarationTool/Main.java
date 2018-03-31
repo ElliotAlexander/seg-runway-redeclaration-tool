@@ -1,7 +1,7 @@
 package RunwayRedeclarationTool;
 
-import RunwayRedeclarationTool.Config.Config_Manager;
-import RunwayRedeclarationTool.Config.Configuration;
+import RunwayRedeclarationTool.Models.config.Config_Manager;
+import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Controllers.MainWindowController;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.db.DB_controller;
@@ -37,8 +37,6 @@ public class Main extends Application{
             return new MainWindowController(config, dbc);
         });
         Parent root = loader.load();
-
-
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();

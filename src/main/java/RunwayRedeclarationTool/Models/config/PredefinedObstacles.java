@@ -14,21 +14,6 @@ public class PredefinedObstacles {
 
 
     public void addDefaults(DB_controller dbc, Configuration configuration){
-        XML_Parser parser = new XML_Parser();
-
-        try {
-            if(configuration.getConfigurationValue("loadobstaclesfromfile").equalsIgnoreCase("yes")){
-                parser.parse_xml(new File(Default_Obstacles_File));
-            }
-
-            if(configuration.getConfigurationValue("loadairportsfromfile").equalsIgnoreCase("yes")){
-                parser.parse_xml(new File(Default_Airports_File));
-            }
-
-        } catch (ConfigurationKeyNotFound configurationKeyNotFound) {
-            configurationKeyNotFound.printStackTrace();
-        }
-
 
     }
 

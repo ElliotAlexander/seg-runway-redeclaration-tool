@@ -34,4 +34,10 @@
       </vr>
     </Runway>
   </Airport>
+  <Obstacle obstacle_name="Crashed 747-400">
+    <height>100</height>
+  </Obstacle>
+  <Obstacle obstacle_name="Sixteen Spitfire Mk IX">
+        <height>100</height>
+  </Obstacle>
  </class>

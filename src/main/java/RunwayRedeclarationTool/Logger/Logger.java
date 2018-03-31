@@ -1,6 +1,6 @@
 package RunwayRedeclarationTool.Logger;
 
-import RunwayRedeclarationTool.Config.Configuration;
+import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Exceptions.ConfigurationKeyNotFound;
 
 public class Logger {
