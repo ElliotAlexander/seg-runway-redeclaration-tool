@@ -87,7 +87,6 @@ public class DB_controller
         }
     }
 
-
     // This method is important for maintaining an 'in memory' reference to the highest obstacle/runway id present in the databse.
     // This allows us to give each new runway/obstacle a unique id.
     public void refresh_ids(){
@@ -160,7 +159,6 @@ public class DB_controller
     public Runway[] get_runways(){
         return get_runways("");
     }
-
 
     public Runway[] get_runways(String airport_id){
         ArrayList<Runway> return_array = new ArrayList<Runway>();
