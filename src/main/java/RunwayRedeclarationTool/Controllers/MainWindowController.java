@@ -110,6 +110,7 @@ public class MainWindowController implements Initializable {
         Collections.addAll(runways, controller.get_runways(airport.getAirport_id()));
         ObservableList<Runway>observableList = FXCollections.observableList(runways);
         runwayComboBox.setItems(observableList);
+        runwayComboBox.setValue(runwayComboBox.getItems().get(0));
     }
 
     @FXML
