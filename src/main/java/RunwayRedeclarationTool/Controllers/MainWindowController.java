@@ -61,8 +61,12 @@ public class MainWindowController implements Initializable {
     }
 
     public void initialize(URL url, ResourceBundle bundle) {
-        refresh_combobox();
+
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT);
+        if(controller.get_airports().length > 0) {
+            refresh_combobox();
+            drawRunway();
+        }
     }
 
 
@@ -76,14 +80,15 @@ public class MainWindowController implements Initializable {
         declaredDistances.getChildren().clear();
 
         Runway runway = runwayComboBox.getValue();
-
-
-        // This is essential for the above TO-DO
-        // Without this, runway is null when the list is repopulated, and a null pointer is thrown.
-        // This will crash the gui thread after the second attempt.
-        if(runway == null){
-            runway = runwayComboBox.getItems().get(0);
+        try {
+            if(runway == null){
+                runway = runwayComboBox.getItems().get(0);
+            }
+        } catch (ArrayIndexOutOfBoundsException e){
+            // There is no runway yet
+            return;
         }
+
         declaredDistances.getChildren().clear();
         declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
         declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n"));
@@ -105,17 +110,17 @@ public class MainWindowController implements Initializable {
     @FXML
     public void updateRunways(){
         Airport airport = airportComboBox.getValue();
-        Logger.Log("Using airport ID " + airport.getAirport_id());
+        Logger.Log("Switching to airport: " + airport.getAirport_id());
         ArrayList<Runway> runways = new ArrayList<>();
         Collections.addAll(runways, controller.get_runways(airport.getAirport_id()));
         ObservableList<Runway>observableList = FXCollections.observableList(runways);
         runwayComboBox.setItems(observableList);
-        runwayComboBox.setValue(runwayComboBox.getItems().get(0));
     }
 
     @FXML
     public void recalculateDistances() {
 
+        Logger.Log("Attempting to recalculate distances.");
         Calculator calculator = Calculator.getInstance();
         try {
 
@@ -141,7 +146,7 @@ public class MainWindowController implements Initializable {
             calculationsBreakdown.getChildren().add(new Text(runway.leftRunway.getRecalcBreakdown() + "\n\n"));
             calculationsBreakdown.getChildren().add(new Text(runway.rightRunway.getRecalcBreakdown()));
         } catch (NoRedeclarationNeededException e) {
-            System.out.println(e.getMessage());
+            Logger.Log(Logger.Level.ERROR, e.getStackTrace().toString());
             declaredDistances.getChildren().add(new Text("\n\n" + e.getMessage()));
         } catch (AttributeNotAssignedException e) {
             //TODO
@@ -205,15 +210,21 @@ public class MainWindowController implements Initializable {
     private void refresh_combobox(){
         airportComboBox.getItems().clear();
         airportComboBox.getItems().addAll(controller.get_airports());
-        airportComboBox.setValue(airportComboBox.getItems().get(0));
+        if(airportComboBox.getItems().size() > 0){
+            airportComboBox.setValue(airportComboBox.getItems().get(0));
+        }
 
         runwayComboBox.getItems().clear();
         runwayComboBox.getItems().addAll(controller.get_runways());
-        runwayComboBox.setValue(runwayComboBox.getItems().get(0));
+        if(runwayComboBox.getItems().size() > 0){
+            runwayComboBox.setValue(runwayComboBox.getItems().get(0));
+        }
 
         obstructionComboBox.getItems().clear();
         obstructionComboBox.getItems().addAll(controller.get_obstacles());
-        obstructionComboBox.setValue(obstructionComboBox.getItems().get(0));
+        if(obstructionComboBox.getItems().size() > 0){
+            obstructionComboBox.setValue(obstructionComboBox.getItems().get(0));
+        }
 
         // Make sure that only the correct runways are shown for the selected airport.
         updateRunways();
