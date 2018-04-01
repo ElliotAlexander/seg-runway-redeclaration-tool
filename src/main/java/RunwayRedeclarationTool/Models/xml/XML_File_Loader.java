@@ -17,8 +17,6 @@ public class XML_File_Loader {
 
     private final XML_Parser parser;
 
-    // TODO Obstacles!
-
     public XML_File_Loader(DB_controller controller){
         // Setup
         // Note that controller is not stored outside the scope of the contructor.
