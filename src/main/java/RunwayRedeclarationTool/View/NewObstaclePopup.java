@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.View;
 
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,7 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 
 public class NewObstaclePopup {
 
@@ -48,9 +52,16 @@ public class NewObstaclePopup {
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 // TODO catch Number Format here.
-                Obstacle newObstacle = new Obstacle(designatorField.getText(), Integer.parseInt(heightField.getText()));
-                obstacle = newObstacle;
-                window.close();
+                try {
+                    Obstacle newObstacle = new Obstacle(designatorField.getText(), Integer.parseInt(heightField.getText()));
+                    obstacle = newObstacle;
+                    window.close();
+                } catch (NumberFormatException e){
+                    Logger.Log(Logger.Level.WARNING, "Failed to parse Integer from \'"+heightField.getText()+"\'.");
+                    JOptionPane.showMessageDialog( null, "Failed to parse an Integer from the Height value!");
+                    return;
+                }
+
             }
         });
         grid.add(button, 0, 6);
