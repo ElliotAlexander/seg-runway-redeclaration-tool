@@ -1,7 +1,6 @@
 # database Setup:
     Database Name : airports.db
-    # Not yet implemented
-    Load Airports from file: yes
+    Load predefined Airports from file: yes
     Load predefined Obstacles from file: yes
     # Changing this will modify where .db files are stored.
     # Both an absolute and relative path is acceptable
