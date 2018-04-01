@@ -30,11 +30,6 @@ public class Config_Manager {
                 Logger.Log("Couldn't find " + config_file_string);
                 Logger.Log("Creating a new config file...");
                 f.createNewFile();
-
-                // Now let's copy our default config file into the new file
-                // If anyone knows a better way to copy a file out of the jar then TODO?
-
-                Logger.Log("Copying default config file out of classpath.");
                 // First let's setup a bufferedwriter for our output file
                 BufferedWriter writer = new BufferedWriter(new FileWriter(f));
 
@@ -71,7 +66,6 @@ public class Config_Manager {
             try {
                 fileReader = new FileReader(f);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
-                StringBuffer stringBuffer = new StringBuffer();
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     file_String.add(line);
@@ -84,6 +78,7 @@ public class Config_Manager {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                Logger.Log(Logger.Level.ERROR, "IOException when writing config file into filesystem.");
                 e.printStackTrace();
             } catch (MalformattedConfigFile malformattedConfigFile) {
                 malformattedConfigFile.printStackTrace();
