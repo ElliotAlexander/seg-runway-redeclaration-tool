@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class DB_Import {
 
-    public static void importSQL(Connection c, InputStream in) throws SQLException
+    protected static void importSQL(Connection c, InputStream in) throws SQLException
     {
         String s = new String();
         StringBuffer sb = new StringBuffer();
