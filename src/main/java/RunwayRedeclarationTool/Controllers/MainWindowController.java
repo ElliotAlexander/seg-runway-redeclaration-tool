@@ -151,6 +151,8 @@ public class MainWindowController implements Initializable {
     public void handleNewAirport() {
         try {
             Airport newAirport = NewAirportPopup.display();
+            // This stops select an airport being added to the combobox.
+            if(newAirport == null){ return; }
             airportComboBox.getItems().add(newAirport);
             airportComboBox.setValue(newAirport);
             controller.add_airport(newAirport);
@@ -162,6 +164,8 @@ public class MainWindowController implements Initializable {
         try {
             Airport currentAirport = airportComboBox.getValue();
             Runway newRunway = NewRunwayPopup.display("Add a new runway to " + currentAirport.toString());
+            // This stops select a runway being added to the combo box.
+            if(newRunway == null) { return; }
             runwayComboBox.getItems().addAll(newRunway);
             runwayComboBox.setValue(newRunway);
             controller.add_Runway(newRunway, currentAirport.getAirport_id());
@@ -174,6 +178,10 @@ public class MainWindowController implements Initializable {
         try {
             Obstacle newObstacle;
             newObstacle = NewObstaclePopup.display("Add a New Obstacle");
+            // This stops 'select an obstacle' being added as an option on the combo box.
+            if(newObstacle == null){
+                return;
+            }
             obstructionComboBox.getItems().add(newObstacle);
             obstructionComboBox.setValue(newObstacle);
             controller.add_obstacle(newObstacle);
