@@ -4,6 +4,7 @@ import RunwayRedeclarationTool.Models.config.Config_Manager;
 import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Controllers.MainWindowController;
 import RunwayRedeclarationTool.Logger.Logger;
+import RunwayRedeclarationTool.Models.config.PredefinedObstacles;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +28,7 @@ public class Main extends Application{
         new Logger(config);
 
         DB_controller dbc = new DB_controller(config);
+        new PredefinedObstacles().addDefaults(dbc, config);
 
         primaryStage.setTitle("Runway Re-declaration Tool");
 
