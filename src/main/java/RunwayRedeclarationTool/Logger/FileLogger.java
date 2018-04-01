@@ -28,11 +28,12 @@ public class FileLogger {
             File f = new File(log_dir.getAbsolutePath() + "/" + logstr);
 
             if(f.exists()){
-                Logger.Log("Log file already exists, building a new one.");
+
                 BasicFileAttributes attr = Files.readAttributes(f.toPath(), BasicFileAttributes.class);
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
                 String dateCreated = dtf.format(LocalDateTime.ofInstant(attr.lastAccessTime().toInstant(), ZoneId.systemDefault()));
                 Files.move(f.toPath(), f.toPath().resolveSibling("Logfile - " + dateCreated + ".txt"));
+                Logger.Log("Log file already exists, renaming to \'Logfile - " + dateCreated + ".txt\'");
                 f.createNewFile();
             } else {
                 f.createNewFile();
