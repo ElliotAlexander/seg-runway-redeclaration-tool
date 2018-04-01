@@ -169,6 +169,10 @@ public class MainWindowController implements Initializable {
     public void handleNewRunway() {
         try {
             Airport currentAirport = airportComboBox.getValue();
+            if(currentAirport == null){
+                JOptionPane.showMessageDialog(null, "You need to add or import an airport prior to adding a runway.");
+                return;
+            }
             Runway newRunway = NewRunwayPopup.display("Add a new runway to " + currentAirport.toString());
             // This stops select a runway being added to the combo box.
             if(newRunway == null) { return; }
