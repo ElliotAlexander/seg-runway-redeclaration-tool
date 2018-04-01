@@ -108,7 +108,6 @@ public class XML_Parser {
         for(Element child : obstacle_nodes) {
             // Build airport object
             String obstacle_name = child.getAttribute("obstacle_name").getValue();
-            Logger.Log("Loaded obstacle with name " + obstacle_name);
             for(Obstacle o : controller.get_obstacles()){
                 if(o.getName().equalsIgnoreCase(obstacle_name)){
                     Logger.Log("Ignoring obstacle with parameters [Name=\'"+obstacle_name+"\'], already exists in database.");
@@ -118,7 +117,7 @@ public class XML_Parser {
             }
             int height = Integer.parseInt(child.getChild("height").getValue());
             Obstacle obstacle = new Obstacle(obstacle_name, height);
-            Logger.Log("Adding obstacle with parameters [Name='"+obstacle_name+"\', Height=" + height + "].");
+            Logger.Log("Loaded obstacle from XML with parameters [Name='"+obstacle_name+"\', Height=" + height + "].");
             controller.add_obstacle(obstacle);
         }
     }
