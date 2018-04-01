@@ -122,18 +122,21 @@ public class Config_Manager {
             } else {
                 String[] key_pair = l.split(":", 2);
 
-
-
                 // We need to split on the first colon, as key : value, but then ignore all future colons.
                 // This is important for file paths - C:/ etc.
-                String key = key_pair[0];
-                String value = key_pair[1];
+                try {
+                    String key = key_pair[0];
+                    String value = key_pair[1];
+                    value = value.replace("%USERHOME%", userdata_path);
 
-                value = value.replace("%USERHOME%", userdata_path);
-
-                // We'll store all keys in lowercase
-                config_arr.put(key.toLowerCase() ,value);
-                Logger.Log("Loaded config value: key : " + key + ", value : " + value);
+                    // We'll store all keys in lowercase
+                    config_arr.put(key.toLowerCase() ,value);
+                    Logger.Log("Loaded config value: key : " + key + ", value : " + value);
+                } catch (ArrayIndexOutOfBoundsException e){
+                    Logger.Log(Logger.Level.ERROR, "Missing value for configuration pair \'" + String.valueOf(key_pair)+"\'.");
+                    Logger.Log(Logger.Level.ERROR, "Skipping!");
+                    continue;
+                }
             }
 
         }
