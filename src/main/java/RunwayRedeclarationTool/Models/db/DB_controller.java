@@ -46,10 +46,6 @@ public class DB_controller
 
         // init handles the heavy lifting.
         init();
-
-        for(Runway r : get_runways()){
-            Logger.Log(r.toString());
-        }
     }
 
     private void init(){
@@ -127,8 +123,6 @@ public class DB_controller
                 R.getLDA() + ", \'None\'" +
                 ");";
 
-        Logger.Log(query_right);
-
         String query_left = "INSERT INTO runway VALUES (" +
                 (runway_id + 1) + ", \'" +
                 airport_id + "\', " +
@@ -140,7 +134,8 @@ public class DB_controller
                 L.getLDA() + ",\' None\' " +
                 ");";
 
-        Logger.Log(query_left);
+        Logger.Log("Adding VR " + useful.split("/")[1] + " with Params [TODA=\'" + L.getTODA()+"\', TORA="+L.getTORA()+"\', ASDA=\'"+L.getASDA()+"\', LDA=\'"+L.getLDA()+"\'].");
+        Logger.Log("Adding VR " + useful.split("/")[0] + " with Params [TODA=\'" + R.getTODA()+"\', TORA="+R.getTORA()+"\', ASDA=\'"+R.getASDA()+"\', LDA=\'"+R.getLDA()+"\'].");
 
         try {
             Statement stmt = null;
@@ -188,7 +183,6 @@ public class DB_controller
                 if(vrs.size() > 2){
                     throw new MalformattedDataException("Found > 2 virtual runways with the same physical ID.");
                 } else {
-                    Logger.Log("Building new runway...");
                     Runway new_runway = new Runway(vrs.get(0), vrs.get(1));
                     return_array.add(new_runway);
                 }
@@ -210,6 +204,7 @@ public class DB_controller
                 0 + ");";
         Statement stmt = null;
         try {
+            Logger.Log("Adding airport to Database with values [Name=\'" + airport.getAirport_name() + "\', ID=\'" + airport.getAirport_id() + "\'].");
             stmt = conn.createStatement();
             stmt.execute(airport_query);
         } catch (SQLException e) {
@@ -242,8 +237,10 @@ public class DB_controller
                 obstacle.getHeight() + ");";
         Statement stmt = null;
         try {
+            Logger.Log("Adding obstacle to DB [Name=\'"+obstacle.getName()+"\', Height=\'" + obstacle.getHeight() + "\'].");
             stmt = conn.createStatement();
             stmt.execute(add_query);
+            obstacle_id += 1;
         } catch (SQLException e) {
             e.printStackTrace();
         }
