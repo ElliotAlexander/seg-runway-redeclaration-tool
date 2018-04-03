@@ -11,12 +11,9 @@ import RunwayRedeclarationTool.View.NewAirportPopup;
 import RunwayRedeclarationTool.View.NewObstaclePopup;
 import RunwayRedeclarationTool.View.NewRunwayPopup;
 import RunwayRedeclarationTool.View.TopDownView;
-import com.sun.javafx.collections.ObservableListWrapper;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -26,12 +23,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 import javax.swing.*;
+import javafx.scene.image.Image ;
 import java.net.URL;
 import java.util.*;
 
-public class MainWindowController implements Initializable {
+public class MainWindowController extends Application implements Initializable {
 
     @FXML
     FlowPane leftTopDownViewContainer, rightTopDownViewContainer;
@@ -60,14 +59,23 @@ public class MainWindowController implements Initializable {
         this.controller = controller;
     }
 
-    public void initialize(URL url, ResourceBundle bundle) {
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT);
+
         if(controller.get_airports().length > 0) {
+            Logger.Log("Loaded airports: c" + controller.get_airports().toString());
             refresh_combobox();
             drawRunway();
         }
     }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        // Cheesy workaround for javafx not properly supporting taskbar items.
+    }
+
 
 
     //  --- FIXED - See below

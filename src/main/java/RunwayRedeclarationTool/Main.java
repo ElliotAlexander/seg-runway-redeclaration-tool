@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application{
@@ -31,13 +32,14 @@ public class Main extends Application{
         new PredefinedObstacles().addDefaults(dbc, config);
 
         primaryStage.setTitle("Runway Re-declaration Tool");
+        Image icon  = new Image(this.getClass().getClassLoader().getResourceAsStream("icon.png"));
+        primaryStage.getIcons().add(icon);
 
-        // This is better explained here
-        // https://www.reddit.com/r/javahelp/comments/4pnbuk/javafx_constructor_parameters_for_controller/
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
         loader.setControllerFactory( c -> {
             return new MainWindowController(config, dbc);
         });
+
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
