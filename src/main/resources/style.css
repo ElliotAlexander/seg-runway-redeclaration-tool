@@ -22,23 +22,18 @@
 }
 
 .tab-pane .tab {
-    -fx-background-color: #999;
+    -fx-background-color: #bbb;
 }
 
 .tab .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #afb1b3;
-    -fx-font-size: 12px;
+    -fx-text-fill: #eee;
     -fx-font-weight: bold;
 }
 
-.tab:selected .tab-label {
-    -fx-alignment: CENTER;
-    -fx-text-fill: #fff;
-}
 
 .tab-pane .tab:selected {
-    -fx-background-color: #ddd;
+    -fx-background-color: #eee;
     -fx-text-fill: #000;
 }
 
@@ -91,9 +86,25 @@
 
 
 #calculationsBreakdown {
-    -fx-background-color: #ddd;
+    -fx-background-color: #eee;
 }
 
 #declaredDistances {
-    -fx-background-color: #ddd;
+    -fx-background-color: #eee;
+}
+
+.tab-pane.runway .tab:selected  {
+    -fx-background-color: #333;
+}
+
+.tab-pane.runway .tab:selected .tab-label {
+-fx-text-fill: #fff;
+}
+
+.tab-pane.view .tab:selected  {
+    -fx-background-color: #eee;
+}
+
+.tab-pane.view .tab:selected .tab-label {
+    -fx-text-fill: #007bff;
 }

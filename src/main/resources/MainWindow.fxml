@@ -9,7 +9,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -49,42 +48,37 @@
         </MenuBar>
     </top>
     <center>
-        <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-            <!--<Tab text="Top-down view">-->
-            <!--<TabPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffffff;"-->
-            <!--tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">-->
-            <!--<Tab fx:id="leftRunwayTab" text="Runway 1">-->
-            <!--<FlowPane fx:id="leftTopDownViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0"-->
-            <!--prefWidth="0.0" style="-fx-background-color: #ffffff;"/>-->
-            <!--</Tab>-->
-            <!--<Tab fx:id="rightRunwayTab" text="Runway 2">-->
-            <!--<FlowPane fx:id="rightTopDownViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0"-->
-            <!--prefWidth="0.0"/>-->
-            <!--</Tab>-->
-            <!--</TabPane>-->
-            <!--</Tab>-->
-            <!--<Tab text="Side view"/>-->
+        <TabPane prefHeight="200.0" prefWidth="200.0" styleClass="runway" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <Tab fx:id="leftRunwayTab" text="Virtual runway 1">
-                <TabPane tabClosingPolicy="UNAVAILABLE">
+                <TabPane style="-fx-background-color: #333;" styleClass="view" tabClosingPolicy="UNAVAILABLE">
                     <Tab text="Top-down view">
                         <FlowPane fx:id="leftTopDownViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" />
                     </Tab>
-                    <Tab text="Side-on view" />
+                    <Tab text="Side-on view">
+                  <content>
+                     <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                  </content></Tab>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
                 </TabPane>
             </Tab>
             <Tab fx:id="rightRunwayTab" text="Virtual runway 2 ">
-                <TabPane tabClosingPolicy="UNAVAILABLE">
+                <TabPane style="-fx-background-color: #333;" styleClass="view" tabClosingPolicy="UNAVAILABLE">
                     <Tab style="-fx-tab-header-background: transparent;" text="Top-down view">
                         <FlowPane fx:id="rightTopDownViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" />
                     </Tab>
                     <Tab text="Side-on view" />
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
                 </TabPane>
             </Tab>
         </TabPane>
     </center>
     <right>
         <VBox fx:id="controls" prefHeight="768.0" prefWidth="375.0" BorderPane.alignment="CENTER">
-            <GridPane hgap="5.0" vgap="5.0">
+            <GridPane hgap="5.0" minHeight="110.0" vgap="5.0">
                 <columnConstraints>
                     <ColumnConstraints halignment="RIGHT" prefWidth="100.0" />
                     <ColumnConstraints prefWidth="250.0" />
@@ -101,25 +95,8 @@
                 <ComboBox fx:id="airportComboBox" onAction="#updateRunways" prefWidth="325.0" promptText="Select an airport..." GridPane.columnIndex="1" />
                 <ComboBox fx:id="runwayComboBox" onAction="#drawRunway" prefWidth="325.0" promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <ComboBox fx:id="obstructionComboBox" prefWidth="325.0" promptText="Add an obstacle..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <padding>
-               <Insets top="10.0" />
-            </padding>
             </GridPane>
-            <!--<GridPane hgap="5.0">-->
-                <!--<columnConstraints>-->
-                    <!--<ColumnConstraints halignment="RIGHT" prefWidth="100.0" />-->
-                    <!--<ColumnConstraints prefWidth="250.0" />-->
-                <!--</columnConstraints>-->
-                <!--<rowConstraints>-->
-                    <!--<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />-->
-                <!--</rowConstraints>-->
-                <!--<Label text="Obstacle:" />-->
-                <!--<ComboBox fx:id="obstructionComboBox" prefWidth="325.0" promptText="Add an obstacle..." GridPane.columnIndex="1" />-->
-                <!--<padding>-->
-                    <!--<Insets bottom="10.0" top="20.0" />-->
-                <!--</padding>-->
-            <!--</GridPane>-->
-            <GridPane hgap="5.0" vgap="5.0">
+            <GridPane hgap="5.0" minHeight="160.0" vgap="5.0">
                 <columnConstraints>
                     <ColumnConstraints halignment="RIGHT" maxWidth="237.0" minWidth="225.0" prefWidth="233.0" />
                     <ColumnConstraints maxWidth="104.0" minWidth="86.0" prefWidth="98.0" />
@@ -153,22 +130,26 @@
             </Button>
             <TabPane prefHeight="500.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                 <Tab text="Declared distances">
-                    <ScrollPane>
-                        <TextFlow fx:id="declaredDistances" prefHeight="465.0" prefWidth="380.0" style="-fx-font-family:'Consolas'">
+                        <TextFlow fx:id="declaredDistances" prefHeight="465.0" prefWidth="380.0" style="-fx-font-family: 'Consolas'; -fx-border-color: #eee;">
                             <padding>
                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </padding>
                         </TextFlow>
-                    </ScrollPane>
                 </Tab>
                 <Tab text="Calculation breakdown">
-                    <TextFlow fx:id="calculationsBreakdown" style="-fx-font-family:'Consolas'">
+                    <TextFlow fx:id="calculationsBreakdown" style="-fx-font-family: 'Consolas'; -fx-border-color: #eee;">
                         <padding>
                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                         </padding>
                     </TextFlow>
                 </Tab>
             </TabPane>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
         </VBox>
     </right>
 
