@@ -30,7 +30,7 @@ import javafx.scene.image.Image ;
 import java.net.URL;
 import java.util.*;
 
-public class MainWindowController extends Application implements Initializable {
+public class MainWindowController  implements Initializable {
 
     @FXML
     FlowPane leftTopDownViewContainer, rightTopDownViewContainer;
@@ -69,11 +69,6 @@ public class MainWindowController extends Application implements Initializable {
             refresh_combobox();
             drawRunway();
         }
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        // Cheesy workaround for javafx not properly supporting taskbar items.
     }
 
 
