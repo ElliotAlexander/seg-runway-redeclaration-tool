@@ -212,6 +212,35 @@ public class DB_controller
         }
     }
 
+    public void remove_Runway(Runway runway){
+        String useful = runway.toString().replace("Runway ", "");
+        String add_query = "DELETE FROM runway WHERE runway_id=\'" + useful.split("/")[0] + "\';";
+        Logger.Log("Executnig: " + add_query);
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            stmt.execute(add_query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void remove_Airport(Airport airport){
+        String remove_airport = "DELETE FROM airport WHERE airport_id=\'" + airport.getAirport_id() + "\';";
+        String remove_runways = "DELETE FROM runway WHERE airport_id=\'" + airport.getAirport_id() + "\';";
+        Logger.Log("Removing all Runways with Airport ID " + airport.getAirport_id());
+        Logger.Log("Removing airport " + airport.getAirport_name());
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            stmt.execute(remove_airport);
+            stmt = conn.createStatement();
+            stmt.execute(remove_runways);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Airport[] get_airports(){
         ArrayList<Airport> return_list = new ArrayList<Airport>();
         Statement stmt = null;

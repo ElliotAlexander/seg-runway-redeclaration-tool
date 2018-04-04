@@ -20,10 +20,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 
 import javax.swing.*;
-import javafx.scene.image.Image ;
 import java.net.URL;
 import java.util.*;
 
@@ -124,6 +122,9 @@ public class MainWindowController  implements Initializable {
     @FXML
     public void updateRunways(){
         Airport airport = airportComboBox.getValue();
+        if(airport == null){
+            return;
+        }
         Logger.Log("Switching to airport: " + airport.getAirport_id());
         ArrayList<Runway> runways = new ArrayList<>();
         Collections.addAll(runways, controller.get_runways(airport.getAirport_id()));
@@ -228,6 +229,13 @@ public class MainWindowController  implements Initializable {
         refresh_combobox();
     }
 
+    @FXML
+    public void handleRemoveAirport(){
+        RemoveAirportPopup.display(controller);
+        refresh_combobox();
+    }
+
+
     private void refresh_combobox(){
         airportComboBox.getItems().clear();
         airportComboBox.getItems().addAll(controller.get_airports());
@@ -248,7 +256,11 @@ public class MainWindowController  implements Initializable {
         }
 
         // Make sure that only the correct runways are shown for the selected airport.
-        updateRunways();
-
+        if(airportComboBox.getItems().size() > 0){
+            updateRunways();
+        }
     }
+
+
+
 }

@@ -27,6 +27,11 @@
                 <MenuItem onAction="#handleNewAirport" text="New airport..." />
                 <MenuItem fx:id="new_runway_button" onAction="#handleNewRunway" text="New runway..." />
                 <MenuItem onAction="#handleNewObstacle" text="New obstacle..." />
+                <Menu mnemonicParsing="false" text="Remove">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleRemoveAirport" text="Airport" />
+                    </items>
+                </Menu>
                 <Menu mnemonicParsing="false" text="Import">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleImportFile" text="File" />
