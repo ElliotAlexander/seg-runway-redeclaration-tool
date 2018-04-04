@@ -7,10 +7,7 @@ import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
-import RunwayRedeclarationTool.View.NewAirportPopup;
-import RunwayRedeclarationTool.View.NewObstaclePopup;
-import RunwayRedeclarationTool.View.NewRunwayPopup;
-import RunwayRedeclarationTool.View.TopDownView;
+import RunwayRedeclarationTool.View.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,7 +30,7 @@ import java.util.*;
 public class MainWindowController  implements Initializable {
 
     @FXML
-    FlowPane leftTopDownViewContainer, rightTopDownViewContainer;
+    FlowPane leftTopDownViewContainer, rightTopDownViewContainer, leftSideOnViewContainer, rightSideOnViewContainer;
     @FXML
     Tab leftRunwayTab, rightRunwayTab;
     @FXML
@@ -53,6 +50,8 @@ public class MainWindowController  implements Initializable {
 
     private final DB_controller controller;
     private final Configuration config;
+
+    TopDownView leftTopDownView;/////
 
     public MainWindowController(Configuration config, DB_controller controller){
         this.config = config;
@@ -80,6 +79,8 @@ public class MainWindowController  implements Initializable {
     public void drawRunway() {
         leftTopDownViewContainer.getChildren().clear();
         rightTopDownViewContainer.getChildren().clear();
+        leftSideOnViewContainer.getChildren().clear();
+        rightSideOnViewContainer.getChildren().clear();
         declaredDistances.getChildren().clear();
 
         Runway runway = runwayComboBox.getValue();
@@ -96,15 +97,25 @@ public class MainWindowController  implements Initializable {
         declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
         declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n"));
 
-        TopDownView leftView = new TopDownView(runway.leftRunway);
-        leftView.widthProperty().bind(leftTopDownViewContainer.widthProperty());
-        leftView.heightProperty().bind(leftTopDownViewContainer.heightProperty());
-        leftTopDownViewContainer.getChildren().add(leftView);
+        leftTopDownView = new TopDownView(runway.leftRunway); ////
+        leftTopDownView.widthProperty().bind(leftTopDownViewContainer.widthProperty());
+        leftTopDownView.heightProperty().bind(leftTopDownViewContainer.heightProperty());
+        leftTopDownViewContainer.getChildren().add(leftTopDownView);
 
-        TopDownView rightView = new TopDownView(runway.rightRunway);
-        rightView.widthProperty().bind(rightTopDownViewContainer.widthProperty());
-        rightView.heightProperty().bind(rightTopDownViewContainer.heightProperty());
-        rightTopDownViewContainer.getChildren().add(rightView);
+        TopDownView rightTopDownView = new TopDownView(runway.rightRunway);
+        rightTopDownView.widthProperty().bind(rightTopDownViewContainer.widthProperty());
+        rightTopDownView.heightProperty().bind(rightTopDownViewContainer.heightProperty());
+        rightTopDownViewContainer.getChildren().add(rightTopDownView);
+
+        SideOnView leftSideOnView = new SideOnView(runway.leftRunway);
+        leftSideOnView.widthProperty().bind(leftSideOnViewContainer.widthProperty());
+        leftSideOnView.heightProperty().bind(leftSideOnViewContainer.heightProperty());
+        leftSideOnViewContainer.getChildren().add(leftSideOnView);
+
+        SideOnView rightSideOnView = new SideOnView(runway.rightRunway);
+        rightSideOnView.widthProperty().bind(rightSideOnViewContainer.widthProperty());
+        rightSideOnView.heightProperty().bind(rightSideOnViewContainer.heightProperty());
+        rightSideOnViewContainer.getChildren().add(rightSideOnView);
 
         leftRunwayTab.setText("Runway " + runway.leftRunway.getDesignator());
         rightRunwayTab.setText("Runway " + runway.rightRunway.getDesignator());
@@ -148,6 +159,9 @@ public class MainWindowController  implements Initializable {
             calculationsBreakdown.getChildren().clear();
             calculationsBreakdown.getChildren().add(new Text(runway.leftRunway.getRecalcBreakdown() + "\n\n"));
             calculationsBreakdown.getChildren().add(new Text(runway.rightRunway.getRecalcBreakdown()));
+
+            leftTopDownView.drawObstacle(obstaclePosition);
+
         } catch (NoRedeclarationNeededException e) {
             Logger.Log(Logger.Level.ERROR, e.getStackTrace().toString());
             declaredDistances.getChildren().add(new Text("\n\n" + e.getMessage()));

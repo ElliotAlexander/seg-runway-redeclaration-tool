@@ -45,30 +45,9 @@ public class SideOnView extends Canvas {
         gc.setFill(Color.web("eee"));
         gc.fillRect(0, 0, width, height);
 
-        // Cleared and graded areas
-        gc.setFill(Color.web("ccc"));
-        gc.fillPolygon(
-                new double[]{0, scale_x(210), scale_x(360), scale_x(runway.getOrigParams().getTORA() - 240), scale_x(runway.getOrigParams().getTORA() - 90), scale_x(runway.getOrigParams().getTORA() + 120), scale_x(runway.getOrigParams().getTORA() + 120), scale_x(runway.getOrigParams().getTORA() - 90), scale_x(runway.getOrigParams().getTORA() - 240), scale_x(360), scale_x(210), 0},
-                new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)}, 12);
-
         // Runway and outline
-
         gc.setFill(Color.web("333333"));
-        scaledFillRect(60, 125, runway.getOrigParams().getTORA(), 50);
-
-        // Threshold markers
-        gc.setStroke(Color.WHITE);
-        gc.setLineWidth(scale_y(2));
-        for (int i = 130; i < 175; i += 5) {
-            scaledStrokeLine(120, i, 520, i);
-            scaledStrokeLine(runway.getOrigParams().getTORA(), i, runway.getOrigParams().getTORA() - 400, i);
-        }
-
-        // C/L
-        gc.setLineWidth(scale_y(1));
-        gc.setLineDashes(15);
-        scaledStrokeLine(850, 150, runway.getOrigParams().getTORA() - 730, 150);
-        gc.setLineDashes(0);
+        scaledFillRect(60, 148, runway.getOrigParams().getTORA(), 4);
 
         // Designator
         drawDesignators(gc);
@@ -84,11 +63,11 @@ public class SideOnView extends Canvas {
         gc.setTextAlign(TextAlignment.LEFT);
         gc.fillText("500m", scale_x(60), scale_y(285));
 
-//        // TORA
-//        scaledStrokeLine(60, 195, runway.getOrigParams().getTORA()+60, 195);
-//        scaledStrokeLine(60, 193, 60, 197);
-//        scaledStrokeLine(runway.getOrigParams().getTORA()+60, 193, runway.getOrigParams().getTORA()+60, 197);
-//        gc.fillText("TORA: " + runway.getOrigParams().getTORA() + "m", scale_x(60), scale_y(191));
+        // TORA
+        scaledStrokeLine(60, 195, runway.getOrigParams().getTORA()+60, 195);
+        scaledStrokeLine(60, 193, 60, 197);
+        scaledStrokeLine(runway.getOrigParams().getTORA()+60, 193, runway.getOrigParams().getTORA()+60, 197);
+        gc.fillText("TORA: " + runway.getOrigParams().getTORA() + "m", scale_x(60), scale_y(191));
 
     }
 
@@ -103,7 +82,6 @@ public class SideOnView extends Canvas {
     }
 
     private void drawDesignators(GraphicsContext gc) {
-        gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Consolas", 24));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
@@ -127,11 +105,11 @@ public class SideOnView extends Canvas {
         }
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) < 36 - Integer.parseInt(runway.getDesignator().substring(0, 2))) {
-            gc.fillText(designator1, scale_x(685), scale_y(150));
-            gc.fillText(designator2, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(150));
+            gc.fillText(designator1, scale_x(685), scale_y(180));
+            gc.fillText(designator2, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(180));
         } else {
-            gc.fillText(designator2, scale_x(685), scale_y(150));
-            gc.fillText(designator1, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(150));
+            gc.fillText(designator2, scale_x(685), scale_y(180));
+            gc.fillText(designator1, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(180));
         }
     }
 
