@@ -35,7 +35,7 @@ public class TopDownView extends Canvas {
         GraphicsContext gc = getGraphicsContext2D();
 
         // Fill canvas with grey
-        gc.setFill(Color.web("eee"));
+        gc.setFill(Color.web("ddd"));
         gc.fillRect(0, 0, width, height);
 
         drawClearedAndGradedArea(gc);
@@ -53,7 +53,7 @@ public class TopDownView extends Canvas {
 
     private void drawClearedAndGradedArea(GraphicsContext gc){
         // Cleared and graded areas
-        gc.setFill(Color.web("ddd"));
+        gc.setFill(Color.web("ccc"));
         gc.fillPolygon(
                 new double[]{0, scale_x(210), scale_x(360), scale_x(runway.getOrigParams().getTORA() - 240), scale_x(runway.getOrigParams().getTORA() - 90), scale_x(runway.getOrigParams().getTORA() + 120), scale_x(runway.getOrigParams().getTORA() + 120), scale_x(runway.getOrigParams().getTORA() - 90), scale_x(runway.getOrigParams().getTORA() - 240), scale_x(360), scale_x(210), 0},
                 new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)}, 12);

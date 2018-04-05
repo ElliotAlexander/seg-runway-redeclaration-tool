@@ -3,12 +3,12 @@
     -fx-faint-focus-color: transparent;
 }
 
-.tab-pane .tab-header-area .tab-header-background {
-    -fx-opacity: 0;
-}
-
 .headers-region {
     -fx-effect: null;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
 }
 
 .tab-pane {
@@ -16,8 +16,8 @@
     -fx-background-color: #fff;
 }
 
-.tab{
-    -fx-background-insets: 0 1 0 1,0,0;
+.tab {
+    -fx-background-insets: 0 1 0 1, 0, 0;
     -fx-padding: 4px 10px;
 }
 
@@ -26,15 +26,13 @@
 }
 
 .tab .tab-label {
-    -fx-alignment: CENTER;
     -fx-text-fill: #eee;
+    -fx-alignment: CENTER;
     -fx-font-weight: bold;
 }
 
-
 .tab-pane .tab:selected {
-    -fx-background-color: #eee;
-    -fx-text-fill: #000;
+    -fx-background-color: #ddd;
 }
 
 .tab:selected .tab-label {
@@ -46,9 +44,6 @@
     -fx-background-color: #fff;
 }
 
-#controls.label, #controls.combo-box {
-}
-
 #controls .button {
     -fx-background-color: #007bff;
     -fx-text-fill: #fff;
@@ -57,10 +52,9 @@
 
 .combo-box {
     -fx-background-color: #ddd;
-    -fx-border-radius: 0px;
 }
 
-.combo-box-base{
+.combo-box-base {
     -fx-padding: 0;
 }
 
@@ -69,42 +63,16 @@
     -fx-padding: 0;
 }
 
-.combo-box .arrow, .combo-box .arrow-button{
-}
-
-.combo-box .list-cell {
+.combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
+    -fx-background-color: #ddd;
     -fx-text-fill: #000;
 }
-.combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
-    -fx-background-color: #ddd ;
-    -fx-text-fill: #000 ;
-}
+
 .combo-box .combo-box-popup .list-cell:hover {
-    -fx-text-fill: #fff ;
-    -fx-background-color: #007bff ;
+    -fx-text-fill: #fff;
+    -fx-background-color: #007bff;
 }
 
-
-#calculationsBreakdown {
-    -fx-background-color: #eee;
-}
-
-#declaredDistances {
-    -fx-background-color: #eee;
-}
-
-.tab-pane.runway .tab:selected  {
-    -fx-background-color: #333;
-}
-
-.tab-pane.runway .tab:selected .tab-label {
--fx-text-fill: #fff;
-}
-
-.tab-pane.view .tab:selected  {
-    -fx-background-color: #eee;
-}
-
-.tab-pane.view .tab:selected .tab-label {
-    -fx-text-fill: #007bff;
+#calculationsBreakdown, #declaredDistances {
+    -fx-background-color: #ddd;
 }
