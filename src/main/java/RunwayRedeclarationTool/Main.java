@@ -25,7 +25,7 @@ public class Main extends Application{
     private DB_controller controller;
 
     @Override
-    public void init(){
+    public void init() throws ClassNotFoundException {
         Config_Manager configManager = new Config_Manager();
 
         // Note that this represents a file OUTSIDE of the classpath
@@ -61,5 +61,8 @@ public class Main extends Application{
 
     public static void main(String[] args) {
         LauncherImpl.launchApplication(Main.class, SplashScreen.class, args);
+        //launch(args);
+
+
     }
 }

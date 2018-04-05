@@ -111,7 +111,7 @@ public class MainWindowController implements Initializable {
     @FXML
     public void updateRunways() {
         Airport airport = airportComboBox.getValue();
-        if (airport == null) {
+        if (airport == null || controller.get_runways(airport.getAirport_id()).length==0) {
             return;
         }
         Logger.Log("Switching to airport: " + airport.getAirport_id());
@@ -124,6 +124,7 @@ public class MainWindowController implements Initializable {
     @FXML
     public void updateVirtualRunways() {
         Runway runway = runwayComboBox.getValue();
+        if(runway == null) { return; }
         Logger.Log("Switching to runway: " + runway.toString());
         ArrayList<VirtualRunway> virtualRunways = new ArrayList<>();
         Collections.addAll(virtualRunways, runway.leftRunway, runway.rightRunway);
@@ -242,18 +243,19 @@ public class MainWindowController implements Initializable {
         refresh_combobox();
     }
 
-    // TODO - setting default comboBox items doesn't seem to work despite the IF being triggered. No idea how to fix.
     private void refresh_combobox() {
         airportComboBox.getItems().clear();
         airportComboBox.getItems().addAll(controller.get_airports());
         if (airportComboBox.getItems().size() > 0) {
             airportComboBox.setValue(airportComboBox.getItems().get(0));
-        }
-
-        runwayComboBox.getItems().clear();
-        runwayComboBox.getItems().addAll(controller.get_runways());
-        if (runwayComboBox.getItems().size() > 0) {
-            runwayComboBox.setValue(runwayComboBox.getItems().get(0));
+            if(controller.get_runways(airportComboBox.getValue().getAirport_id()).length > 0){
+                runwayComboBox.getItems().clear();
+                runwayComboBox.getItems().addAll(controller.get_runways());
+                if (runwayComboBox.getItems().size() > 0) {
+                    runwayComboBox.setValue(runwayComboBox.getItems().get(0));
+                    updateVirtualRunways();
+                }
+            }
         }
 
         obstructionComboBox.getItems().clear();
