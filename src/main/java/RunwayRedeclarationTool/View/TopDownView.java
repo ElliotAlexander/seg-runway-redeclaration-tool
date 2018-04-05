@@ -1,6 +1,7 @@
 package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Models.ObstaclePosition;
+import RunwayRedeclarationTool.Models.RunwaySide;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -130,14 +131,32 @@ public class TopDownView extends Canvas {
     }
 
     public void drawObstacle(ObstaclePosition obstaclePosition){
+        draw();
         double width = getWidth();
         double height = getHeight();
 
         GraphicsContext gc = getGraphicsContext2D();
 
+        int obstacle_x = obstaclePosition.getDistLeftTSH() + 60;
+        int obstacle_y;
+
+        if(Integer.parseInt(runway.getDesignator().substring(0, 2)) > 18){
+            if (obstaclePosition.getRunwaySide() == RunwaySide.LEFT){
+                obstacle_y = 150 + obstaclePosition.getDistFromCL();
+            } else {
+                obstacle_y = 150 - obstaclePosition.getDistFromCL();
+            }
+        } else {
+            if (obstaclePosition.getRunwaySide() == RunwaySide.LEFT){
+                obstacle_y = 150 - obstaclePosition.getDistFromCL();
+            } else {
+                obstacle_y = 150 + obstaclePosition.getDistFromCL();
+            }
+        }
+
         gc.setFill(Color.RED);
         gc.setGlobalAlpha(0.5);
-        scaledFillRect(obstaclePosition.getDistLeftTSH(), obstaclePosition.getDistFromCL(), 80, 20);
+        scaledFillRect(obstacle_x, obstacle_y, 80, 20);
         gc.setGlobalAlpha(1.0);
     }
 
