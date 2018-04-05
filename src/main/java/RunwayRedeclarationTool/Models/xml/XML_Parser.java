@@ -3,16 +3,16 @@ package RunwayRedeclarationTool.Models.xml;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class XML_Parser {
@@ -45,6 +45,8 @@ public class XML_Parser {
 
 
     private void parse_airports(Element[] airport_nodes){
+        ArrayList<Airport> duplicates = new ArrayList<>();
+
         nodeloop:
         for(Element child : airport_nodes) {
 
@@ -57,8 +59,8 @@ public class XML_Parser {
             for(Airport x : controller.get_airports())
             {
                 if(x.getAirport_id().equalsIgnoreCase(airport_id)){
-                    Logger.Log(Logger.Level.ERROR, "Airport " + airport_id + "/" + airport_name + " already exists in Database! Skipping.");
-                    JOptionPane.showMessageDialog(null, "An airport with identifier "  + airport_id + "/" + airport_name + " already exists in the Database! Skipping.");
+                    Logger.Log("Ignoring Airport with parameters [Name=\'"+airport_name+"\', ID=\'"+airport_id+"\'], already exists in database.");
+                    duplicates.add(x);
                     continue nodeloop;
                 }
             }
@@ -100,10 +102,24 @@ public class XML_Parser {
                 controller.add_Runway(new Runway(vr1, vr2), airport_id);
             }
         }
+
+        if(duplicates.size() > 0){
+            String list_str = "";
+            for(Airport a : duplicates){
+                list_str += "\t" + a.getAirport_name() + "/" + a.getAirport_id() + "\n ";
+            }
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Skipping airports already imported into database. Duplicate Airports::\n "  + list_str, ButtonType.CLOSE);
+            alert.setTitle("Duplicate Airport");
+            alert.showAndWait();
+        }
+
+
     }
 
 
     private void parse_obstacles(Element[] obstacle_nodes){
+
+        ArrayList<Obstacle> duplicates = new ArrayList<>();
         nodeloop:
         for(Element child : obstacle_nodes) {
             // Build airport object
@@ -111,7 +127,7 @@ public class XML_Parser {
             for(Obstacle o : controller.get_obstacles()){
                 if(o.getName().equalsIgnoreCase(obstacle_name)){
                     Logger.Log("Ignoring obstacle with parameters [Name=\'"+obstacle_name+"\'], already exists in database.");
-                    JOptionPane.showMessageDialog(null, "An obstacle with identifier "  + obstacle_name + " already exists in the Database! Skipping.");
+                    duplicates.add(o);
                     continue nodeloop;
                 }
             }
@@ -120,6 +136,17 @@ public class XML_Parser {
             Logger.Log("Loaded obstacle from XML with parameters [Name='"+obstacle_name+"\', Height=" + height + "].");
             controller.add_obstacle(obstacle);
         }
+
+        if(duplicates.size() > 0){
+            String list_str = "";
+            for(Obstacle o : duplicates){
+                list_str += "\t" + o.getName() + "\n ";
+            }
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Skipping obstacles already imported into database. Duplicate Obstacles:\n "  + list_str, ButtonType.CLOSE);
+            alert.setTitle("Duplicate obstacle");
+            alert.showAndWait();
+        }
+
     }
 
 }
