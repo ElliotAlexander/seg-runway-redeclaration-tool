@@ -14,6 +14,10 @@ public class VirtualRunway {
         this.origParams = parameters;
     }
 
+    public String toString(){
+        return "Runway " + designator;
+    }
+
     public String getDesignator() {
         return designator;
     }
