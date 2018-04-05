@@ -14,17 +14,21 @@ import javafx.scene.text.TextAlignment;
 
 public class TopDownView extends Canvas {
     private VirtualRunway runway;
+    private ObstaclePosition obstaclePosition;
 
-    public TopDownView(VirtualRunway runway) {
+    public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         this.runway = runway;
+        this.obstaclePosition = obstaclePosition;
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
+                drawObstacle(obstaclePosition);
             }
         });
         heightProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
+                drawObstacle(obstaclePosition);
             }
         });
         draw();
@@ -52,7 +56,7 @@ public class TopDownView extends Canvas {
         //drawScaleMarkings(gc);
     }
 
-    private void drawClearedAndGradedArea(GraphicsContext gc){
+    private void drawClearedAndGradedArea(GraphicsContext gc) {
         // Cleared and graded areas
         gc.setFill(Color.web("ccc"));
         gc.fillPolygon(
@@ -61,7 +65,7 @@ public class TopDownView extends Canvas {
 
     }
 
-    private void drawThresholdMarkers(GraphicsContext gc){
+    private void drawThresholdMarkers(GraphicsContext gc) {
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(scale_y(2));
         for (int i = 130; i < 175; i += 5) {
@@ -70,7 +74,7 @@ public class TopDownView extends Canvas {
         }
     }
 
-    private void drawCentreLine(GraphicsContext gc){
+    private void drawCentreLine(GraphicsContext gc) {
         gc.setLineWidth(scale_y(1));
         gc.setLineDashes(30);
         scaledStrokeLine(850, 150, runway.getOrigParams().getTORA() - 730, 150);
@@ -110,7 +114,7 @@ public class TopDownView extends Canvas {
         }
     }
 
-    private void drawMapScale(GraphicsContext gc){
+    private void drawMapScale(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(scale_y(0.5));
@@ -122,47 +126,51 @@ public class TopDownView extends Canvas {
         gc.fillText("500m", scale_x(60), scale_y(285));
     }
 
-    private void drawScaleMarkings(GraphicsContext gc){
+    private void drawScaleMarkings(GraphicsContext gc) {
         // TORA
-        scaledStrokeLine(60, 195, runway.getOrigParams().getTORA()+60, 195);
+        scaledStrokeLine(60, 195, runway.getOrigParams().getTORA() + 60, 195);
         scaledStrokeLine(60, 193, 60, 197);
-        scaledStrokeLine(runway.getOrigParams().getTORA()+60, 193, runway.getOrigParams().getTORA()+60, 197);
+        scaledStrokeLine(runway.getOrigParams().getTORA() + 60, 193, runway.getOrigParams().getTORA() + 60, 197);
         gc.fillText("TORA: " + runway.getOrigParams().getTORA() + "m", scale_x(60), scale_y(191));
     }
 
-    public void drawObstacle(ObstaclePosition obstaclePosition){
-        draw();
-        double width = getWidth();
-        double height = getHeight();
+    public void drawObstacle(ObstaclePosition obstaclePosition) {
+        try {
+            draw();
+            double width = getWidth();
+            double height = getHeight();
 
-        GraphicsContext gc = getGraphicsContext2D();
+            GraphicsContext gc = getGraphicsContext2D();
 
-        int obstacle_x = obstaclePosition.getDistLeftTSH() + 60;
-        int obstacle_y;
+            int obstacle_x = obstaclePosition.getDistLeftTSH() + 60;
+            int obstacle_y;
 
-        if(Integer.parseInt(runway.getDesignator().substring(0, 2)) > 18){
-            if (obstaclePosition.getRunwaySide() == RunwaySide.LEFT){
-                obstacle_y = 150 + obstaclePosition.getDistFromCL();
+            if (Integer.parseInt(runway.getDesignator().substring(0, 2)) > 18) {
+                if (obstaclePosition.getRunwaySide() == RunwaySide.LEFT) {
+                    obstacle_y = 150 + obstaclePosition.getDistFromCL();
+                } else {
+                    obstacle_y = 150 - obstaclePosition.getDistFromCL();
+                }
             } else {
-                obstacle_y = 150 - obstaclePosition.getDistFromCL();
+                if (obstaclePosition.getRunwaySide() == RunwaySide.LEFT) {
+                    obstacle_y = 150 - obstaclePosition.getDistFromCL();
+                } else {
+                    obstacle_y = 150 + obstaclePosition.getDistFromCL();
+                }
             }
-        } else {
-            if (obstaclePosition.getRunwaySide() == RunwaySide.LEFT){
-                obstacle_y = 150 - obstaclePosition.getDistFromCL();
-            } else {
-                obstacle_y = 150 + obstaclePosition.getDistFromCL();
-            }
+
+            gc.setFill(Color.RED);
+            gc.setGlobalAlpha(0.5);
+            scaledFillRect(obstacle_x, obstacle_y, 80, 20);
+            gc.setGlobalAlpha(1.0);
+        } catch (NullPointerException e) {
         }
-
-        gc.setFill(Color.RED);
-        gc.setGlobalAlpha(0.5);
-        scaledFillRect(obstacle_x, obstacle_y, 80, 20);
-        gc.setGlobalAlpha(1.0);
     }
 
     private double scale_x(double length) {
         return length / (runway.getOrigParams().getTORA() + 120) * getWidth();
     }
+
     private double scale_y(double length) {
         return length / 300 * getHeight();
     }
@@ -171,6 +179,7 @@ public class TopDownView extends Canvas {
         GraphicsContext gc = getGraphicsContext2D();
         gc.strokeLine(scale_x(x1), scale_y(y1), scale_x(x2), scale_y(y2));
     }
+
     private void scaledFillRect(double x, double y, double w, double h) {
         GraphicsContext gc = getGraphicsContext2D();
         gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
