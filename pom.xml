@@ -7,10 +7,90 @@
     <groupId>SEG</groupId>
     <artifactId>RunwayRe-declarationTool</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <properties>
         <mainClass>RunwayRedeclarationTool.Main</mainClass>
     </properties>
+    <profiles>
+        <profile>
+            <id>User.Build.exe</id>
+            <properties>
+                <build.target>gui</build.target>
+            </properties>
+        </profile>
+        <profile>
+            <id>Development.Build.exe</id>
+            <properties>
+                <build.target>console</build.target>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <shadedArtifactAttached>true</shadedArtifactAttached> <!-- Make the shaded artifact not the main one -->
+                    <shadedClassifierName>shaded</shadedClassifierName> <!-- set the suffix to the shaded jar -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <executions>
+                    <!-- Command-line exe -->
+                    <execution>
+                        <id>l4j-cli</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>${build.target}</headerType>
+                            <stayAlive>true</stayAlive>
+                            <outfile>target/RunwayRedeclarationTool.exe</outfile>
+                            <icon>icon.ico</icon>
+                            <jar>target/RunwayRe-declarationTool-1.0-SNAPSHOT-shaded.jar</jar> <!-- 'shaded' is the value set on shadedClassifierName above -->
+                            <classPath>
+                                <mainClass>${mainClass}</mainClass>
+                            </classPath>
+                            <jre>
+                                <minVersion>1.5.0</minVersion>
+                                <initialHeapSize>128</initialHeapSize>
+                                <maxHeapSize>1024</maxHeapSize>
+                            </jre>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
@@ -46,62 +126,5 @@
         </dependency>
 
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <shadedArtifactAttached>true</shadedArtifactAttached> <!-- Make the shaded artifact not the main one -->
-                    <shadedClassifierName>shaded</shadedClassifierName> <!-- set the suffix to the shaded jar -->
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.akathist.maven.plugins.launch4j</groupId>
-                <artifactId>launch4j-maven-plugin</artifactId>
-                <executions>
-                    <!-- Command-line exe -->
-                    <execution>
-                        <id>l4j-cli</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>launch4j</goal>
-                        </goals>
-                        <configuration>
-                            <!-- CHANGE THIS TO gui to run without stdout appearing :) -->
-                            <headerType>console</headerType>
-                            <outfile>target/RunwayRedeclarationTool.exe</outfile>
-                            <icon>icon.ico</icon>
-                            <jar>target/RunwayRe-declarationTool-1.0-SNAPSHOT-shaded.jar</jar> <!-- 'shaded' is the value set on shadedClassifierName above -->
-                            <classPath>
-                                <mainClass>${mainClass}</mainClass>
-                            </classPath>
-                            <jre>
-                                <minVersion>1.5.0</minVersion>
-                                <initialHeapSize>128</initialHeapSize>
-                                <maxHeapSize>1024</maxHeapSize>
-                            </jre>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+
 </project>
