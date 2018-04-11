@@ -293,6 +293,8 @@ public class MainWindowController implements Initializable {
                     updateVirtualRunways();
                 }
             }
+        } else {
+            runwayComboBox.getItems().clear();
         }
 
         obstructionComboBox.getItems().clear();
