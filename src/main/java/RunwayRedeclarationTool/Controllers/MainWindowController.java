@@ -12,14 +12,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 
 import javax.swing.*;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,10 +73,6 @@ public class MainWindowController implements Initializable {
     }
 
 
-    //  --- FIXED - See below
-    // TODO - Theres a bug with the FXML combobox onaction calls - When selecting an airport, onaction for
-    // the runway combo box is also called, throwing null pointers and hanging the program
-    // Not quite sure how to fix this
     public void drawRunway() {
         topDownViewContainer.getChildren().clear();
         sideOnViewContainer.getChildren().clear();
@@ -111,14 +111,12 @@ public class MainWindowController implements Initializable {
     }
 
     // TODO - Clear the text fields
-    @FXML
-    public void clearFields() {
+    @FXML void clearFields() {
         this.obstaclePosition = null;
         drawRunway();
     }
 
-    @FXML
-    public void updateRunways() {
+    @FXML void updateRunways() {
         Airport airport = airportComboBox.getValue();
         if (airport == null || controller.get_runways(airport.getAirport_id()).length == 0) {
             return;
@@ -128,6 +126,34 @@ public class MainWindowController implements Initializable {
         Collections.addAll(runways, controller.get_runways(airport.getAirport_id()));
         ObservableList<Runway> observableList = FXCollections.observableList(runways);
         runwayComboBox.setItems(observableList);
+    }
+
+    @FXML void handleTopDownImageExport(){
+        Logger.Log("Running Image Export for top down view.");
+        new ImageExport().export(topDownView);
+    }
+
+    @FXML void handleSideOnImageExport(){
+        Logger.Log("Running Image Export for side on view.");
+        new ImageExport().export(sideOnView);
+    }
+
+    @FXML
+    public void handleExportAsText(){
+        String outputString = "";
+
+        for(Node n : declaredDistances.getChildren()){
+            if(n instanceof Text){
+                outputString += ((Text) n).getText();
+            }
+        }
+
+        for(Node n : calculationsBreakdown.getChildren()){
+            if( n instanceof Text){
+                outputString += ((Text) n).getText();
+            }
+        }
+        ExportToTextWindow.display(outputString);
     }
 
     @FXML
@@ -280,6 +306,4 @@ public class MainWindowController implements Initializable {
             updateRunways();
         }
     }
-
-
 }

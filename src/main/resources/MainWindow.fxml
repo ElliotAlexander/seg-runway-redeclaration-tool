@@ -1,51 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css"
-            xmlns="http://javafx.com/javafx/8.0.121"
-            fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<BorderPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu text="File">
-                <MenuItem onAction="#handleNewAirport" text="New airport..."/>
-                <MenuItem fx:id="new_runway_button" onAction="#handleNewRunway" text="New runway..."/>
-                <MenuItem onAction="#handleNewObstacle" text="New obstacle..."/>
+                <MenuItem onAction="#handleNewAirport" text="New airport..." />
+                <MenuItem fx:id="new_runway_button" onAction="#handleNewRunway" text="New runway..." />
+                <MenuItem onAction="#handleNewObstacle" text="New obstacle..." />
                 <Menu mnemonicParsing="false" text="Remove">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleRemoveAirport" text="Airport"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleRemoveAirport" text="Airport" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Import">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#handleImportFile" text="File"/>
-                        <MenuItem mnemonicParsing="false" onAction="#handleImportFolder" text="Folder"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleImportFile" text="File" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleImportFolder" text="Folder" />
                     </items>
                 </Menu>
+            <Menu mnemonicParsing="false" text="Export">
+              <items>
+                  <Menu mnemonicParsing="false" text="Image">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#handleSideOnImageExport" text="Side On View" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleTopDownImageExport" text="Top Down View" />
+                    </items>
+                  </Menu>
+                <MenuItem mnemonicParsing="false" onAction="#handleExportAsText" text="Text" />
+              </items>
+            </Menu>
             </Menu>
             <Menu text="View">
-                <CheckMenuItem text="Clearway"/>
-                <CheckMenuItem text="Stopway"/>
-                <CheckMenuItem text="Cleared and graded areas"/>
+                <CheckMenuItem text="Clearway" />
+                <CheckMenuItem text="Stopway" />
+                <CheckMenuItem text="Cleared and graded areas" />
             </Menu>
             <Menu text="About">
-                <MenuItem text="About"/>
+                <MenuItem text="About" />
             </Menu>
             <Menu text="Help">
-                <MenuItem text="Help"/>
+                <MenuItem text="Help" />
             </Menu>
         </MenuBar>
     </top>
     <center>
         <TabPane tabClosingPolicy="UNAVAILABLE">
             <Tab text="Top-down view">
-                <FlowPane fx:id="topDownViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0"/>
+                <FlowPane fx:id="topDownViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" />
             </Tab>
             <Tab text="Side-on view">
-                <FlowPane fx:id="sideOnViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0"/>
+                <FlowPane fx:id="sideOnViewContainer" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" />
             </Tab>
         </TabPane>
     </center>
@@ -53,103 +77,94 @@
         <VBox fx:id="controls" prefHeight="768.0" prefWidth="375.0" BorderPane.alignment="CENTER">
             <GridPane hgap="5.0" minHeight="145.0" vgap="5.0">
                 <columnConstraints>
-                    <ColumnConstraints halignment="RIGHT" prefWidth="100.0"/>
-                    <ColumnConstraints prefWidth="250.0"/>
+                    <ColumnConstraints halignment="RIGHT" prefWidth="100.0" />
+                    <ColumnConstraints prefWidth="250.0" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints />
                 </rowConstraints>
-                <Label text="Airport:"/>
-                <Label text="Runway:" GridPane.rowIndex="1"/>
-                <Label text="Runway in use:" GridPane.rowIndex="2"/>
-                <Label text="Obstacle:" GridPane.rowIndex="3"/>
-                <ComboBox fx:id="airportComboBox" onAction="#updateRunways" prefWidth="325.0"
-                          promptText="Select an airport..." GridPane.columnIndex="1"/>
-                <ComboBox fx:id="runwayComboBox" onAction="#updateVirtualRunways" prefWidth="325.0"
-                          promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <ComboBox fx:id="virtualRunwayComboBox" onAction="#drawRunway" prefWidth="325.0"
-                          promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-                <ComboBox fx:id="obstructionComboBox" prefWidth="325.0" promptText="Add an obstacle..."
-                          GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Label text="Airport:" />
+                <Label text="Runway:" GridPane.rowIndex="1" />
+                <Label text="Runway in use:" GridPane.rowIndex="2" />
+                <Label text="Obstacle:" GridPane.rowIndex="3" />
+                <ComboBox fx:id="airportComboBox" onAction="#updateRunways" prefWidth="325.0" promptText="Select an airport..." GridPane.columnIndex="1" />
+                <ComboBox fx:id="runwayComboBox" onAction="#updateVirtualRunways" prefWidth="325.0" promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <ComboBox fx:id="virtualRunwayComboBox" onAction="#drawRunway" prefWidth="325.0" promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <ComboBox fx:id="obstructionComboBox" prefWidth="325.0" promptText="Add an obstacle..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
             </GridPane>
             <GridPane hgap="5.0" minHeight="160.0" vgap="5.0">
                 <columnConstraints>
-                    <ColumnConstraints halignment="RIGHT" maxWidth="237.0" minWidth="225.0" prefWidth="233.0"/>
-                    <ColumnConstraints maxWidth="104.0" minWidth="86.0" prefWidth="98.0"/>
-                    <ColumnConstraints maxWidth="22.0" minWidth="9.0" prefWidth="15.0"/>
+                    <ColumnConstraints halignment="RIGHT" maxWidth="237.0" minWidth="225.0" prefWidth="233.0" />
+                    <ColumnConstraints maxWidth="104.0" minWidth="86.0" prefWidth="98.0" />
+                    <ColumnConstraints maxWidth="22.0" minWidth="9.0" prefWidth="15.0" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 </rowConstraints>
-                <Label text="Obstacle distance from THR LEFT:"/>
-                <Label text="Obstacle distance from THR RIGHT:" GridPane.rowIndex="1"/>
-                <Label text="Obstacle distance from C/L:" GridPane.rowIndex="3"/>
-                <TextField fx:id="distanceFromTHRLeft" GridPane.columnIndex="1"/>
-                <TextField fx:id="distanceFromTHRRight" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-                <TextField fx:id="distanceFromCL" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-                <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
-                <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <Label text="m" GridPane.columnIndex="2"/>
-                <Label text="Obstacle side of C/L:" GridPane.rowIndex="2"/>
-                <ComboBox fx:id="runwaySideComboBox" prefHeight="31.0" prefWidth="101.0" promptText="Select..."
-                          GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label text="Obstacle distance from THR LEFT:" />
+                <Label text="Obstacle distance from THR RIGHT:" GridPane.rowIndex="1" />
+                <Label text="Obstacle distance from C/L:" GridPane.rowIndex="3" />
+                <TextField fx:id="distanceFromTHRLeft" GridPane.columnIndex="1" />
+                <TextField fx:id="distanceFromTHRRight" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="distanceFromCL" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label text="m" GridPane.columnIndex="2" />
+                <Label text="Obstacle side of C/L:" GridPane.rowIndex="2" />
+                <ComboBox fx:id="runwaySideComboBox" prefHeight="31.0" prefWidth="101.0" promptText="Select..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <padding>
-                    <Insets bottom="10.0" top="10.0"/>
+                    <Insets bottom="10.0" top="10.0" />
                 </padding>
             </GridPane>
             <GridPane minHeight="30.0">
                 <columnConstraints>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 </columnConstraints>
                 <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 </rowConstraints>
                 <children>
-                    <Button fx:id="calculateButton" alignment="CENTER" onAction="#recalculateDistances"
-                            prefHeight="25.0" prefWidth="150.0" text="Calculate" GridPane.columnIndex="1"/>
-                    <Button fx:id="clearAllButton" onAction="#clearFields" mnemonicParsing="false" prefHeight="25.0"
-                            prefWidth="150.0" style="-fx-background-color: #777;" text="Clear"/>
+                    <Button fx:id="calculateButton" alignment="CENTER" onAction="#recalculateDistances" prefHeight="25.0" prefWidth="150.0" text="Calculate" GridPane.columnIndex="1" />
+                    <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearFields" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #777;" text="Clear" />
                 </children>
                 <VBox.margin>
-                    <Insets bottom="10.0" left="10.0" right="10.0"/>
+                    <Insets bottom="10.0" left="10.0" right="10.0" />
                 </VBox.margin>
             </GridPane>
             <TabPane prefHeight="500.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                 <Tab text="Declared distances">
-                    <TextFlow fx:id="declaredDistances" prefHeight="465.0" prefWidth="380.0"
-                              style="-fx-font-family: 'Consolas'; -fx-border-color: #ddd;">
+                    <TextFlow fx:id="declaredDistances" prefHeight="465.0" prefWidth="380.0" style="-fx-font-family: 'Consolas'; -fx-border-color: #ddd;">
                         <padding>
-                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                         </padding>
                     </TextFlow>
                 </Tab>
                 <Tab text="Calculation breakdown">
-                    <TextFlow fx:id="calculationsBreakdown"
-                              style="-fx-font-family: 'Consolas'; -fx-border-color: #ddd;">
+                    <TextFlow fx:id="calculationsBreakdown" style="-fx-font-family: 'Consolas'; -fx-border-color: #ddd;">
                         <padding>
-                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                         </padding>
                     </TextFlow>
                 </Tab>
             </TabPane>
             <opaqueInsets>
-                <Insets/>
+                <Insets />
             </opaqueInsets>
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
         </VBox>
     </right>
 
     <stylesheets>
-        <URL value="@style.css"/>
+        <URL value="@style.css" />
     </stylesheets>
 </BorderPane>
