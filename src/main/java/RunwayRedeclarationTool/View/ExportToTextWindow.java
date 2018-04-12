@@ -38,10 +38,6 @@ public class ExportToTextWindow {
         window.setScene(scene);
 
 
-        // Top Panel
-        Label topLabel = new Label("Select Airports to remove:");
-        grid.setTop(topLabel);
-
         TextArea textarea = new TextArea();
         textarea.setText(export_string);
         grid.setCenter(textarea);
