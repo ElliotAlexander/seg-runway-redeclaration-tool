@@ -23,6 +23,11 @@ public class ImageExport {
             fileChooser.getExtensionFilters().add(extFilter);
             //Show save file dialog
             File file = fileChooser.showSaveDialog(null);
+            if(file == null){
+                Logger.Log("Closing file chooser window without saving.");
+                return;
+            }
+
             RunwayRedeclarationTool.Logger.Logger.Log("Selected file ["+file.getName() + "].");
 
             WritableImage writableImage = canvas.snapshot(new SnapshotParameters(), null);
