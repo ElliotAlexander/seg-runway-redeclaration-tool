@@ -153,6 +153,9 @@ public class MainWindowController implements Initializable {
                 outputString += ((Text) n).getText();
             }
         }
+
+        outputString +=  "\n\nCurrent Obstacle: \n" + obstructionComboBox.getSelectionModel().getSelectedItem();
+        outputString += "\n" + obstaclePosition;
         ExportToTextWindow.display(outputString);
     }
 
