@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.View;
 
+import RunwayRedeclarationTool.Logger.Logger;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.application.Preloader;
@@ -30,6 +31,13 @@ public class SplashScreen extends Preloader {
         // This roughly keeps the window in the ratio of the image, without delay causing reprocessing of the image
         double width = display.width * 0.4;
         double height = width / 2.1;
+
+        if(width > 1278){
+            width = 1278;
+            height = 607;
+            Logger.Log("Limiting splashscreen size for high resolution displays.");
+        }
+
         preloaderStage.initStyle(StageStyle.UNDECORATED);
         BorderPane flowPane = new BorderPane();
         Scene scene = new Scene(flowPane, width, height);
@@ -50,7 +58,7 @@ public class SplashScreen extends Preloader {
 
     @Override
     public void handleStateChangeNotification(StateChangeNotification stateChangeNotification) {
-        if (stateChangeNotification.getType() == StateChangeNotification.Type.BEFORE_START) {
+        if (stateChangeNotification.getType() == StateChangeNotification.Type.BEFORE_LOAD) {
             if (preloaderStage.isShowing()) {
                 //fade out, hide stage at the end of animation
                 FadeTransition ft = new FadeTransition(
