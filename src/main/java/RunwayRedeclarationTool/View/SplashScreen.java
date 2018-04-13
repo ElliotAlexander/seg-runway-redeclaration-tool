@@ -58,24 +58,9 @@ public class SplashScreen extends Preloader {
 
     @Override
     public void handleStateChangeNotification(StateChangeNotification stateChangeNotification) {
-        if (stateChangeNotification.getType() == StateChangeNotification.Type.BEFORE_LOAD) {
-            if (preloaderStage.isShowing()) {
-                //fade out, hide stage at the end of animation
-                FadeTransition ft = new FadeTransition(
-                        Duration.millis(1000), preloaderStage.getScene().getRoot());
-                ft.setFromValue(1.0);
-                ft.setToValue(0.0);
-                final Stage s = preloaderStage;
-                EventHandler<ActionEvent> eh = new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent t) {
-                        s.hide();
-                    }
-                };
-                ft.setOnFinished(eh);
-                ft.play();
-            } else {
-                preloaderStage.hide();
-            }
+        if(stateChangeNotification.getType() == StateChangeNotification.Type.BEFORE_START){
+            Logger.Log("Hiding Splashscreen");
+            preloaderStage.hide();
         }
     }
 }
