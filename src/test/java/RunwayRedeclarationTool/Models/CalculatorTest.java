@@ -26,7 +26,7 @@ public class CalculatorTest {
 
     @Test
     public void scenario1() {
-        ObstaclePosition o = new ObstaclePosition( new Obstacle("scenario1", 12), -50, 3646, 0, RunwaySide.LEFT);
+        ObstaclePosition o = new ObstaclePosition( new Obstacle("scenario1", 12), -50, 3646, 10, 10, RunwaySide.LEFT);
 
         try {
             Runway r = runways.get(1); // Runway 09L/27R
@@ -57,7 +57,7 @@ public class CalculatorTest {
 
     @Test
     public void scenario2() {
-        ObstaclePosition o = new ObstaclePosition(new Obstacle("scenario2", 25), 2853, 500, 20, RunwaySide.RIGHT);
+        ObstaclePosition o = new ObstaclePosition(new Obstacle("scenario2", 25), 2853, 500, 10, 20, RunwaySide.RIGHT);
 
         try {
             Runway r = runways.get(0); // Runway 09R/27L
@@ -88,7 +88,7 @@ public class CalculatorTest {
 
     @Test
     public void scenario3() {
-        ObstaclePosition o = new ObstaclePosition(new Obstacle("scenario3", 15), 150, 3203, 60, RunwaySide.RIGHT);
+        ObstaclePosition o = new ObstaclePosition(new Obstacle("scenario3", 15), 150, 3203, 10,60, RunwaySide.RIGHT);
 
         try {
             Runway r = runways.get(0); // Runway 09R/27L
@@ -119,7 +119,7 @@ public class CalculatorTest {
 
     @Test
     public void scenario4() {
-        ObstaclePosition o = new ObstaclePosition(new Obstacle("scenario4", 20), 3546, 50, 20, RunwaySide.RIGHT);
+        ObstaclePosition o = new ObstaclePosition(new Obstacle("scenario4", 20), 3546, 50, 10,20, RunwaySide.RIGHT);
 
         try {
             Runway r = runways.get(1); // Runway 09L/27R
@@ -151,9 +151,9 @@ public class CalculatorTest {
     @Test
     public void outsideInstrumentStrip() {
         ArrayList<ObstaclePosition> obstaclePositions = new ArrayList<ObstaclePosition>();
-        obstaclePositions.add(new ObstaclePosition(new Obstacle("outside", 5), -70, 3730, 1, RunwaySide.LEFT));
-        obstaclePositions.add(new ObstaclePosition(new Obstacle("outside", 5), 3730, -100, 1, RunwaySide.LEFT));
-        obstaclePositions.add(new ObstaclePosition(new Obstacle("outside", 5), 50, 3600, 76, RunwaySide.LEFT));
+        obstaclePositions.add(new ObstaclePosition(new Obstacle("outside", 5), -70, 3730, 10,1, RunwaySide.LEFT));
+        obstaclePositions.add(new ObstaclePosition(new Obstacle("outside", 5), 3730, -100, 10,1, RunwaySide.LEFT));
+        obstaclePositions.add(new ObstaclePosition(new Obstacle("outside", 5), 50, 3600, 10,76, RunwaySide.LEFT));
 
         for (Runway r : runways) {
             for (ObstaclePosition o : obstaclePositions) {

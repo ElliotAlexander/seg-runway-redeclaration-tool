@@ -50,7 +50,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private Button calculateButton, clearAllButton;
     @FXML
-    private TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL;
+    private TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL, obstacleWidth;
     private TopDownView topDownView;
     private SideOnView sideOnView;
     private ObstaclePosition obstaclePosition;
@@ -183,7 +183,7 @@ public class MainWindowController implements Initializable {
             // Can copy code from NewRunwayWindow probs.
             Runway runway = runwayComboBox.getValue();
             Obstacle obstacle = obstructionComboBox.getValue();
-            obstaclePosition = new ObstaclePosition(obstacle, Integer.parseInt(distanceFromTHRLeft.getText()), Integer.parseInt(distanceFromTHRRight.getText()), Integer.parseInt(distanceFromCL.getText()), runwaySideComboBox.getValue());
+            obstaclePosition = new ObstaclePosition(obstacle, Integer.parseInt(distanceFromTHRLeft.getText()), Integer.parseInt(distanceFromTHRRight.getText()), Integer.parseInt(obstacleWidth.getText()), Integer.parseInt(distanceFromCL.getText()), runwaySideComboBox.getValue());
 
             declaredDistances.getChildren().clear();
             //declaredDistances.getChildren().add(new Text(obstaclePosition.toString()));

@@ -3,13 +3,14 @@ package RunwayRedeclarationTool.Models;
 // Holds values about the dimension and positioning of the runway obstruction
 public class ObstaclePosition {
     private Obstacle obstacle;
-    private int distLeftTSH, distRightTSH, distFromCL;
+    private int distLeftTSH, distRightTSH, width, distFromCL;
     private RunwaySide runwaySide; // needed for display, but not for calculations
 
-    public ObstaclePosition(Obstacle obstacle, int distLeftTSH, int distRightTSH, int distFromCL, RunwaySide runwaySide) {
+    public ObstaclePosition(Obstacle obstacle, int distLeftTSH, int distRightTSH, int width, int distFromCL, RunwaySide runwaySide) {
         this.obstacle = obstacle;
         this.distLeftTSH = distLeftTSH;
         this.distRightTSH = distRightTSH;
+        this.width = width;
         this.distFromCL = distFromCL;
         this.runwaySide = runwaySide;
     }
@@ -26,6 +27,8 @@ public class ObstaclePosition {
         return distRightTSH;
     }
 
+    public int getWidth(){return width;}
+
     public int getDistFromCL() {
         return distFromCL;
     }
@@ -41,6 +44,7 @@ public class ObstaclePosition {
                 ", height=" + obstacle.getHeight() +
                 ", distLeftTSH=" + distLeftTSH +
                 ", distRightTSH=" + distRightTSH +
+                ", width=" + width +
                 ", distFromCL=" + distFromCL +
                 ", runwaySide=" + runwaySide +
                 '}';

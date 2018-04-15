@@ -161,7 +161,7 @@ public class TopDownView extends Canvas {
 
             gc.setFill(Color.RED);
             gc.setGlobalAlpha(0.5);
-            scaledFillRect(obstacle_x, obstacle_y, 80, 20);
+            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth()/2, runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
             gc.setGlobalAlpha(1.0);
         } catch (NullPointerException e) {
         }
