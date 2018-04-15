@@ -16,6 +16,7 @@ public class SideOnView extends Canvas {
     private ObstaclePosition obstaclePosition;
 
     private int TORA, ASDA, TODA, LDA;
+    private boolean leftRunway = true;
     private int leftSpace = 60;
 
     public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
@@ -54,12 +55,14 @@ public class SideOnView extends Canvas {
         // Draw runway surface
         gc.setFill(Color.web("333"));
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) > 18) {
+            leftRunway = false;
             leftSpace = Math.max(60, TODA-TORA);
         }
 
         scaledFillRect(leftSpace, 149, TORA, 2);
 
         drawDesignators(gc);
+        drawStopwayClearway(gc);
         drawMapScale(gc);
     }
 
@@ -93,6 +96,28 @@ public class SideOnView extends Canvas {
         } else {
             gc.fillText(designator2, scale_x(TORA / 7 + leftSpace), scale_y(170));
             gc.fillText(designator1, scale_x(TORA * 6 / 7 + leftSpace), scale_y(170));
+        }
+    }
+
+    private void drawStopwayClearway(GraphicsContext gc) {
+        int stopway = ASDA - TORA;
+        int clearway = TODA - TORA;
+
+        if (stopway != 0) {
+            if (leftRunway) {
+                drawMeasuringLine(gc, TORA + 60, 180, TORA + 60 + stopway, 180, "stopway");
+            } else {
+                drawMeasuringLine(gc, clearway - stopway, 180, clearway, 180, "stopway");
+            }
+
+            // Assumption: clearway >= stopway (Heathrow slides)
+            if (clearway != stopway) {
+                if (leftRunway) {
+                    drawMeasuringLine(gc, TORA + 60, 190, TORA+60 +clearway, 190, "clearway");
+                } else {
+                    drawMeasuringLine(gc, 0, 190, clearway, 190, "clearway");
+                }
+            }
         }
     }
 
@@ -145,7 +170,7 @@ public class SideOnView extends Canvas {
     }
 
     private double scale_x(double length) {
-        return length / (runway.getOrigParams().getTORA() + 120) * getWidth();
+        return length / (TODA + 60) * getWidth();
     }
 
     private double scale_y(double length) {
