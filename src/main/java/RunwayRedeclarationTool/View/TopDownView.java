@@ -84,9 +84,9 @@ public class TopDownView extends Canvas {
         // Cleared and graded areas
         gc.setFill(Color.web("ccc"));
         gc.fillPolygon(
-                new double[]{0, scale_x(210), scale_x(360), scale_x(runway.getOrigParams().getTORA() - 240), scale_x(runway.getOrigParams().getTORA() - 90), scale_x(runway.getOrigParams().getTORA() + 120), scale_x(runway.getOrigParams().getTORA() + 120), scale_x(runway.getOrigParams().getTORA() - 90), scale_x(runway.getOrigParams().getTORA() - 240), scale_x(360), scale_x(210), 0},
-                new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)}, 12);
-
+            new double[]{0, scale_x(210), scale_x(360), scale_x(TORA - 240), scale_x(TORA - 90), scale_x(TORA + 120), scale_x(TORA + 120), scale_x(TORA - 90), scale_x(TORA - 240), scale_x(360), scale_x(210), 0},
+            new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)},
+            12);
     }
 
     private void drawThresholdMarkers(GraphicsContext gc) {
@@ -102,7 +102,7 @@ public class TopDownView extends Canvas {
     private void drawCentreLine(GraphicsContext gc) {
         gc.setLineWidth(scale_y(1));
         gc.setLineDashes(30);
-        scaledStrokeLine(850, 150, runway.getOrigParams().getTORA() - 730, 150);
+        scaledStrokeLine(TORA/6 + leftSpace, 150, TORA*5/6 +leftSpace, 150);
         gc.setLineDashes(0);
     }
 
