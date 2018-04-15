@@ -17,9 +17,22 @@ public class TopDownView extends Canvas {
     private VirtualRunway runway;
     private ObstaclePosition obstaclePosition;
 
+    private boolean leftRunway;
+    private int leftSpace = 60;     // either 60 if leftRunway, or clearway if it's a right virtual runway
+    private int TORA;
+    private int ASDA;
+    private int TODA;
+    private int LDA;
+
     public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
+
+        this.TORA = runway.getOrigParams().getTORA();
+        this.ASDA = runway.getOrigParams().getASDA();
+        this.TODA = runway.getOrigParams().getTODA();
+        this.LDA = runway.getOrigParams().getLDA();
+
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
@@ -48,7 +61,16 @@ public class TopDownView extends Canvas {
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
-        scaledFillRect(60, 125, runway.getOrigParams().getTORA(), 50);
+        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
+            leftRunway = true;
+            scaledFillRect(60, 125, TORA, 50);
+
+        } else {    // right virtual runway
+            leftRunway = false;
+            int clearway = TODA - TORA;
+            leftSpace = Math.max(60, clearway);
+            scaledFillRect(leftSpace, 125, TORA, 50);
+        }
 
         drawThresholdMarkers(gc);
         drawCentreLine(gc);
@@ -70,9 +92,10 @@ public class TopDownView extends Canvas {
     private void drawThresholdMarkers(GraphicsContext gc) {
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(scale_y(2));
+
         for (int i = 130; i < 175; i += 5) {
-            scaledStrokeLine(120, i, 520, i);
-            scaledStrokeLine(runway.getOrigParams().getTORA(), i, runway.getOrigParams().getTORA() - 400, i);
+            scaledStrokeLine(TORA / 30 + leftSpace, i, TORA * 3 / 30 + leftSpace, i);
+            scaledStrokeLine(TORA * 27 / 30 + leftSpace, i, TORA * 29 / 30 + leftSpace, i);
         }
     }
 
@@ -107,12 +130,12 @@ public class TopDownView extends Canvas {
             designator2 += "\n" + letter;
         }
 
-        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) < 36 - Integer.parseInt(runway.getDesignator().substring(0, 2))) {
-            gc.fillText(designator1, scale_x(685), scale_y(150));
-            gc.fillText(designator2, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(150));
+        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {
+            gc.fillText(designator1, scale_x(TORA / 7 + leftSpace), scale_y(150));
+            gc.fillText(designator2, scale_x(TORA * 6 / 7 + leftSpace), scale_y(150));
         } else {
-            gc.fillText(designator2, scale_x(685), scale_y(150));
-            gc.fillText(designator1, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(150));
+            gc.fillText(designator2, scale_x(TORA / 7 + leftSpace), scale_y(150));
+            gc.fillText(designator1, scale_x(TORA * 6 / 7 + leftSpace), scale_y(150));
         }
     }
 
@@ -138,8 +161,6 @@ public class TopDownView extends Canvas {
 
     private void drawStopwayClearway(GraphicsContext gc) {
         RunwayParameters params = runway.getOrigParams();
-        int stopway = params.getASDA() - params.getTORA();
-        int clearway = params.getTODA() - params.getTORA();
 
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
@@ -147,18 +168,35 @@ public class TopDownView extends Canvas {
         gc.setFont(Font.font("Consolas", 14));
         gc.setTextAlign(TextAlignment.CENTER);
 
+        int stopway = params.getASDA() - params.getTORA();
+        int clearway = params.getTODA() - params.getTORA();
+
         if (stopway != 0) {
-            scaledStrokeLine(params.getTORA()+60, 200, params.getASDA()+60, 200);
-            scaledStrokeLine(params.getTORA()+60,198,params.getTORA()+60,202);
-            scaledStrokeLine(params.getASDA()+60,198,params.getASDA()+60,202);
-            gc.fillText("stopway", scale_x(params.getTORA()+60+stopway/2), scale_y(205));
+            if (leftRunway) {
+                scaledStrokeLine(params.getTORA() + 60, 200, params.getASDA() + 60, 200);
+                scaledStrokeLine(params.getTORA() + 60, 198, params.getTORA() + 60, 202);
+                scaledStrokeLine(params.getASDA() + 60, 198, params.getASDA() + 60, 202);
+                gc.fillText("stopway", scale_x(params.getTORA() + 60 + stopway / 2), scale_y(205));
+            } else {
+                scaledStrokeLine(clearway - stopway, 200, clearway, 200);
+                scaledStrokeLine(clearway - stopway, 198, clearway - stopway, 202);
+                scaledStrokeLine(clearway, 198, clearway, 202);
+                gc.fillText("stopway", scale_x(clearway - stopway / 2), scale_y(205));
+            }
         }
 
         if (clearway != 0 && clearway != stopway) {
-            scaledStrokeLine(params.getTORA()+60, 210, params.getTODA()+60, 210);
-            scaledStrokeLine(params.getTORA()+60,208,params.getTORA()+60,212);
-            scaledStrokeLine(params.getTODA()+60,208,params.getTODA()+60,212);
-            gc.fillText("clearway", scale_x(params.getTORA()+60+clearway/2), scale_y(215));
+            if (leftRunway) {
+                scaledStrokeLine(params.getTORA() + 60, 210, params.getTODA() + 60, 210);
+                scaledStrokeLine(params.getTORA() + 60, 208, params.getTORA() + 60, 212);
+                scaledStrokeLine(params.getTODA() + 60, 208, params.getTODA() + 60, 212);
+                gc.fillText("clearway", scale_x(params.getTORA() + 60 + clearway / 2), scale_y(215));
+            } else {
+                scaledStrokeLine(0, 210, clearway, 210);
+                scaledStrokeLine(0, 208, 0, 212);
+                scaledStrokeLine(clearway, 208, clearway, 212);
+                gc.fillText("clearway", scale_x(clearway / 2), scale_y(215));
+            }
         }
     }
 
@@ -189,14 +227,14 @@ public class TopDownView extends Canvas {
 
             gc.setFill(Color.RED);
             gc.setGlobalAlpha(0.5);
-            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth()/2, runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
+            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
             gc.setGlobalAlpha(1.0);
         } catch (NullPointerException e) {
         }
     }
 
     private double scale_x(double length) {
-        return length / (runway.getOrigParams().getTODA() + 120) * getWidth();
+        return length / (runway.getOrigParams().getTODA() + 60) * getWidth();
     }
 
     private double scale_y(double length) {
