@@ -38,22 +38,21 @@
                         <MenuItem mnemonicParsing="false" onAction="#handleImportFolder" text="Folder" />
                     </items>
                 </Menu>
-            <Menu mnemonicParsing="false" text="Export">
-              <items>
-                  <Menu mnemonicParsing="false" text="Image">
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#handleSideOnImageExport" text="Side On View" />
-                        <MenuItem mnemonicParsing="false" onAction="#handleTopDownImageExport" text="Top Down View" />
-                    </items>
-                  </Menu>
-                <MenuItem mnemonicParsing="false" onAction="#handleExportAsText" text="Text" />
-              </items>
-            </Menu>
+                <Menu mnemonicParsing="false" text="Export">
+                  <items>
+                      <Menu mnemonicParsing="false" text="Image">
+                        <items>
+                          <MenuItem mnemonicParsing="false" onAction="#handleSideOnImageExport" text="Side On View" />
+                            <MenuItem mnemonicParsing="false" onAction="#handleTopDownImageExport" text="Top Down View" />
+                        </items>
+                      </Menu>
+                    <MenuItem mnemonicParsing="false" onAction="#handleExportAsText" text="Text" />
+                  </items>
+                </Menu>
             </Menu>
             <Menu text="View">
-                <CheckMenuItem text="Clearway" />
-                <CheckMenuItem text="Stopway" />
-                <CheckMenuItem text="Cleared and graded areas" />
+                <CheckMenuItem fx:id="clearwayStopwayCheck" onAction="#drawRunway" text="Clearway/Stopway" />
+                <CheckMenuItem fx:id="clearedGradedCheck" onAction="#drawRunway" text="Cleared and graded areas" />
             </Menu>
             <Menu text="About">
                 <MenuItem text="About" />

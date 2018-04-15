@@ -1,6 +1,7 @@
 package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Models.ObstaclePosition;
+import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.RunwaySide;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.beans.InvalidationListener;
@@ -54,6 +55,7 @@ public class TopDownView extends Canvas {
         drawDesignators(gc);
         drawMapScale(gc);
         //drawScaleMarkings(gc);
+        drawStopwayClearway(gc);
     }
 
     private void drawClearedAndGradedArea(GraphicsContext gc) {
@@ -134,6 +136,32 @@ public class TopDownView extends Canvas {
         gc.fillText("TORA: " + runway.getOrigParams().getTORA() + "m", scale_x(60), scale_y(191));
     }
 
+    private void drawStopwayClearway(GraphicsContext gc) {
+        RunwayParameters params = runway.getOrigParams();
+        int stopway = params.getASDA() - params.getTORA();
+        int clearway = params.getTODA() - params.getTORA();
+
+        gc.setFill(Color.BLACK);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(scale_y(0.5));
+        gc.setFont(Font.font("Consolas", 14));
+        gc.setTextAlign(TextAlignment.CENTER);
+
+        if (stopway != 0) {
+            scaledStrokeLine(params.getTORA()+60, 200, params.getASDA()+60, 200);
+            scaledStrokeLine(params.getTORA()+60,198,params.getTORA()+60,202);
+            scaledStrokeLine(params.getASDA()+60,198,params.getASDA()+60,202);
+            gc.fillText("stopway", scale_x(params.getTORA()+60+stopway/2), scale_y(205));
+        }
+
+        if (clearway != 0 && clearway != stopway) {
+            scaledStrokeLine(params.getTORA()+60, 210, params.getTODA()+60, 210);
+            scaledStrokeLine(params.getTORA()+60,208,params.getTORA()+60,212);
+            scaledStrokeLine(params.getTODA()+60,208,params.getTODA()+60,212);
+            gc.fillText("clearway", scale_x(params.getTORA()+60+clearway/2), scale_y(215));
+        }
+    }
+
     public void drawObstacle(ObstaclePosition obstaclePosition) {
         try {
             draw();
@@ -168,7 +196,7 @@ public class TopDownView extends Canvas {
     }
 
     private double scale_x(double length) {
-        return length / (runway.getOrigParams().getTORA() + 120) * getWidth();
+        return length / (runway.getOrigParams().getTODA() + 120) * getWidth();
     }
 
     private double scale_y(double length) {
