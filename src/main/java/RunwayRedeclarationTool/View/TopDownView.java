@@ -19,10 +19,7 @@ public class TopDownView extends Canvas {
 
     private boolean leftRunway;
     private int leftSpace = 60;     // either 60 if leftRunway, or clearway if it's a right virtual runway
-    private int TORA;
-    private int ASDA;
-    private int TODA;
-    private int LDA;
+    private int TORA, ASDA, TODA, LDA;
 
     public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         this.runway = runway;
@@ -155,28 +152,26 @@ public class TopDownView extends Canvas {
         // TORA
         scaledStrokeLine(60, 195, runway.getOrigParams().getTORA() + 60, 195);
         scaledStrokeLine(60, 193, 60, 197);
-        scaledStrokeLine(runway.getOrigParams().getTORA() + 60, 193, runway.getOrigParams().getTORA() + 60, 197);
-        gc.fillText("TORA: " + runway.getOrigParams().getTORA() + "m", scale_x(60), scale_y(191));
+        scaledStrokeLine(TORA + 60, 193, TORA + 60, 197);
+        gc.fillText("TORA: " + TORA + "m", scale_x(60), scale_y(191));
     }
 
     private void drawStopwayClearway(GraphicsContext gc) {
-        RunwayParameters params = runway.getOrigParams();
-
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(scale_y(0.5));
         gc.setFont(Font.font("Consolas", 14));
         gc.setTextAlign(TextAlignment.CENTER);
 
-        int stopway = params.getASDA() - params.getTORA();
-        int clearway = params.getTODA() - params.getTORA();
+        int stopway = ASDA - TORA;
+        int clearway = TODA - TORA;
 
         if (stopway != 0) {
             if (leftRunway) {
-                scaledStrokeLine(params.getTORA() + 60, 200, params.getASDA() + 60, 200);
-                scaledStrokeLine(params.getTORA() + 60, 198, params.getTORA() + 60, 202);
-                scaledStrokeLine(params.getASDA() + 60, 198, params.getASDA() + 60, 202);
-                gc.fillText("stopway", scale_x(params.getTORA() + 60 + stopway / 2), scale_y(205));
+                scaledStrokeLine(TORA + 60, 200, ASDA + 60, 200);
+                scaledStrokeLine(TORA + 60, 198, TORA + 60, 202);
+                scaledStrokeLine(ASDA + 60, 198, ASDA + 60, 202);
+                gc.fillText("stopway", scale_x(TORA + 60 + stopway / 2), scale_y(205));
             } else {
                 scaledStrokeLine(clearway - stopway, 200, clearway, 200);
                 scaledStrokeLine(clearway - stopway, 198, clearway - stopway, 202);
@@ -187,10 +182,10 @@ public class TopDownView extends Canvas {
 
         if (clearway != 0 && clearway != stopway) {
             if (leftRunway) {
-                scaledStrokeLine(params.getTORA() + 60, 210, params.getTODA() + 60, 210);
-                scaledStrokeLine(params.getTORA() + 60, 208, params.getTORA() + 60, 212);
-                scaledStrokeLine(params.getTODA() + 60, 208, params.getTODA() + 60, 212);
-                gc.fillText("clearway", scale_x(params.getTORA() + 60 + clearway / 2), scale_y(215));
+                scaledStrokeLine(TORA + 60, 210, TODA + 60, 210);
+                scaledStrokeLine(TORA + 60, 208, TORA + 60, 212);
+                scaledStrokeLine(TODA + 60, 208, TODA + 60, 212);
+                gc.fillText("clearway", scale_x(TORA + 60 + clearway / 2), scale_y(215));
             } else {
                 scaledStrokeLine(0, 210, clearway, 210);
                 scaledStrokeLine(0, 208, 0, 212);
@@ -227,14 +222,14 @@ public class TopDownView extends Canvas {
 
             gc.setFill(Color.RED);
             gc.setGlobalAlpha(0.5);
-            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
+            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
             gc.setGlobalAlpha(1.0);
         } catch (NullPointerException e) {
         }
     }
 
     private double scale_x(double length) {
-        return length / (runway.getOrigParams().getTODA() + 60) * getWidth();
+        return length / (TODA + 60) * getWidth();
     }
 
     private double scale_y(double length) {

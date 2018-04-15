@@ -15,9 +15,18 @@ public class SideOnView extends Canvas {
     private VirtualRunway runway;
     private ObstaclePosition obstaclePosition;
 
+    private int TORA, ASDA, TODA, LDA;
+    private int leftSpace = 60;
+
     public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
+
+        this.TORA = runway.getOrigParams().getTORA();
+        this.ASDA = runway.getOrigParams().getASDA();
+        this.TODA = runway.getOrigParams().getTODA();
+        this.LDA = runway.getOrigParams().getLDA();
+
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
@@ -44,7 +53,11 @@ public class SideOnView extends Canvas {
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
-        scaledFillRect(60, 149, runway.getOrigParams().getTORA(), 2);
+        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) > 18) {
+            leftSpace = Math.max(60, TODA-TORA);
+        }
+
+        scaledFillRect(leftSpace, 149, TORA, 2);
 
         drawDesignators(gc);
         drawMapScale(gc);
@@ -74,12 +87,12 @@ public class SideOnView extends Canvas {
             designator2 += "\n" + letter;
         }
 
-        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) < 36 - Integer.parseInt(runway.getDesignator().substring(0, 2))) {
-            gc.fillText(designator1, scale_x(685), scale_y(170));
-            gc.fillText(designator2, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(170));
+        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {
+            gc.fillText(designator1, scale_x(TORA / 7 + leftSpace), scale_y(170));
+            gc.fillText(designator2, scale_x(TORA * 6 / 7 + leftSpace), scale_y(170));
         } else {
-            gc.fillText(designator2, scale_x(685), scale_y(170));
-            gc.fillText(designator1, scale_x(runway.getOrigParams().getTORA() - 565), scale_y(170));
+            gc.fillText(designator2, scale_x(TORA / 7 + leftSpace), scale_y(170));
+            gc.fillText(designator1, scale_x(TORA * 6 / 7 + leftSpace), scale_y(170));
         }
     }
 
