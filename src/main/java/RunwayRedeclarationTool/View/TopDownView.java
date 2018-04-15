@@ -178,19 +178,20 @@ public class TopDownView extends Canvas {
                 scaledStrokeLine(clearway, 198, clearway, 202);
                 gc.fillText("stopway", scale_x(clearway - stopway / 2), scale_y(205));
             }
-        }
 
-        if (clearway != 0 && clearway != stopway) {
-            if (leftRunway) {
-                scaledStrokeLine(TORA + 60, 210, TODA + 60, 210);
-                scaledStrokeLine(TORA + 60, 208, TORA + 60, 212);
-                scaledStrokeLine(TODA + 60, 208, TODA + 60, 212);
-                gc.fillText("clearway", scale_x(TORA + 60 + clearway / 2), scale_y(215));
-            } else {
-                scaledStrokeLine(0, 210, clearway, 210);
-                scaledStrokeLine(0, 208, 0, 212);
-                scaledStrokeLine(clearway, 208, clearway, 212);
-                gc.fillText("clearway", scale_x(clearway / 2), scale_y(215));
+            // Assumption: clearway >= stopway (Heathrow slides)
+            if (clearway != stopway) {
+                if (leftRunway) {
+                    scaledStrokeLine(TORA + 60, 210, TODA + 60, 210);
+                    scaledStrokeLine(TORA + 60, 208, TORA + 60, 212);
+                    scaledStrokeLine(TODA + 60, 208, TODA + 60, 212);
+                    gc.fillText("clearway", scale_x(TORA + 60 + clearway / 2), scale_y(215));
+                } else {
+                    scaledStrokeLine(0, 210, clearway, 210);
+                    scaledStrokeLine(0, 208, 0, 212);
+                    scaledStrokeLine(clearway, 208, clearway, 212);
+                    gc.fillText("clearway", scale_x(clearway / 2), scale_y(215));
+                }
             }
         }
     }
