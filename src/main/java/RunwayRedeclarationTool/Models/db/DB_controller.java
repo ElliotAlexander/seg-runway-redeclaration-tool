@@ -12,6 +12,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static jdk.nashorn.internal.objects.NativeString.substring;
+
 public class DB_controller
 {
     private String DB_NAME, DB_FOLDER, DB_URL;
@@ -183,7 +185,12 @@ public class DB_controller
                 if(vrs.size() > 2){
                     throw new MalformattedDataException("Found > 2 virtual runways with the same physical ID.");
                 } else {
-                    Runway new_runway = new Runway(vrs.get(0), vrs.get(1));
+                    Runway new_runway;
+                    if(Integer.parseInt(substring(vrs.get(0).getDesignator(), 0, 2)) < Integer.parseInt(substring(vrs.get(1).getDesignator(), 0, 2))){
+                        new_runway = new Runway(vrs.get(0), vrs.get(1));
+                    } else {
+                        new_runway = new Runway(vrs.get(1), vrs.get(0));
+                    }
                     return_array.add(new_runway);
                 }
             }
