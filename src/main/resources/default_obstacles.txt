@@ -1,3 +1,6 @@
-Crashed 757:500
-Stripper on runway:1000
-The entire african continent:600
+Boeing 737:12
+Boeing 747:19
+Airbus A320: 13
+Cessna 172: 3
+Cessna 152: 5
+Gulfstream G650: 8
