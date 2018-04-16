@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.View;
 
+import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.beans.InvalidationListener;
@@ -31,13 +32,13 @@ public class SideOnView extends Canvas {
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
-                drawObstacle(obstaclePosition);
+                drawObstacle();
             }
         });
         heightProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
-                drawObstacle(obstaclePosition);
+                drawObstacle();
             }
         });
         draw();
@@ -133,7 +134,7 @@ public class SideOnView extends Canvas {
         gc.fillText("500m", scale_x(60), scale_y(285));
     }
 
-    public void drawObstacle(ObstaclePosition obstaclePosition) {
+    public void drawObstacle() {
         try {
             draw();
             double width = getWidth();
@@ -147,13 +148,44 @@ public class SideOnView extends Canvas {
             scaledFillRect(obstaclePosition.getDistLeftTSH() + 60, 149 - obstaclePosition.getObstacle().getHeight(), obstacleLength, obstaclePosition.getObstacle().getHeight());
             gc.setGlobalAlpha(1.0);
 
-            drawMeasuringLine(gc, 60, 200, obstaclePosition.getDistLeftTSH() + 60, 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
-            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60, 200, obstaclePosition.getDistLeftTSH() + 60 + obstacleLength, 200, "Obstacle");
-            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60 + obstacleLength, 200, obstaclePosition.getDistLeftTSH() + 60 + obstacleLength + obstaclePosition.getDistRightTSH(), 200, Integer.toString(obstaclePosition.getDistRightTSH()) + "m");
-
+            drawBrokenDownDistances(obstacleLength);
 
         } catch (NullPointerException e) {
         }
+
+    }
+
+    public void drawBrokenDownDistances(int oLength) {
+        GraphicsContext gc = getGraphicsContext2D();
+        int slopecalc = 0;
+
+        try {
+            slopecalc = runway.getRecalcParams().getSlopeCalculation();
+        } catch (AttributeNotAssignedException e) {
+            // Shouldn't happen
+            System.err.println("Recalculated parameters not assigned!");;
+        }
+
+        if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
+            if (leftRunway) {
+                // __|=|__->______
+
+
+            } else {
+                // __|=|__<-______
+            }
+        } else {
+            if (leftRunway) {
+                // ______->__|=|__
+            } else {
+                // ______<-__|=|__
+            }
+        }
+
+//            drawMeasuringLine(gc, 60, 200, obstaclePosition.getDistLeftTSH() + 60, 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
+//            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60, 200, obstaclePosition.getDistLeftTSH() + 60 + oLength, 200, "Obstacle");
+//            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60 + oLength, 200, obstaclePosition.getDistLeftTSH() + 60 + oLength + slopecalc, 200, "slope");
+//            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60 + oLength, 200, obstaclePosition.getDistLeftTSH() + 60 + oLength + obstaclePosition.getDistRightTSH(), 200, Integer.toString(obstaclePosition.getDistRightTSH()) + "m");
 
     }
 

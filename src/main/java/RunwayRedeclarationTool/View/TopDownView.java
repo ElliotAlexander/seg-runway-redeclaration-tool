@@ -33,13 +33,13 @@ public class TopDownView extends Canvas {
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
-                drawObstacle(obstaclePosition);
+                drawObstacle();
             }
         });
         heightProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
                 draw();
-                drawObstacle(obstaclePosition);
+                drawObstacle();
             }
         });
         draw();
@@ -196,7 +196,7 @@ public class TopDownView extends Canvas {
         }
     }
 
-    public void drawObstacle(ObstaclePosition obstaclePosition) {
+    public void drawObstacle() {
         try {
             draw();
             double width = getWidth();
