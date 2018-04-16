@@ -1,3 +1,3 @@
 package RunwayRedeclarationTool.Models;
 
-public enum RunwaySide { LEFT, RIGHT }
+public enum RunwaySide { LEFT, RIGHT, CENTER }

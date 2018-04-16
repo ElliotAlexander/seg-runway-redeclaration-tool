@@ -63,7 +63,9 @@ public class Calculator {
         }
         int rLDA = params.LDA - distFromTSH - slopeCalc - visual_strip_end;
 
-        vRunway.setRecalcParams(new RunwayParameters(rTORA, rTODA, rASDA, rLDA));
+        RunwayParameters recalcParams = new RunwayParameters(rTORA, rTODA, rASDA, rLDA);
+        recalcParams.setSlopeCalculation(slopeCalc);
+        vRunway.setRecalcParams(recalcParams);
         Logger.Log("Calculated parameters for " + vRunway.getDesignator() + " taking off away and landing over.");
         takeoffAwayLandOverBreakdown(vRunway, distFromTSH, o.getHeight());
     }
@@ -113,7 +115,9 @@ public class Calculator {
         // Landing distances
         int rLDA = distFromTSH - RESA - visual_strip_end;
 
-        vRunway.setRecalcParams(new RunwayParameters(rTORA, rTORA, rTORA, rLDA));
+        RunwayParameters recalcParams = new RunwayParameters(rTORA, rTORA, rTORA, rLDA);
+        recalcParams.setSlopeCalculation(slopeCalc);
+        vRunway.setRecalcParams(recalcParams);
         Logger.Log("Calculated parameters for " + vRunway.getDesignator() + " taking off towards and landing towards.");
         takeoffTowardsLandTowardsBreakdown(vRunway, distFromTSH, o.getHeight());
     }

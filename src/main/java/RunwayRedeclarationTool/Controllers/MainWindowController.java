@@ -106,8 +106,8 @@ public class MainWindowController implements Initializable {
         sideOnView.heightProperty().bind(sideOnViewContainer.heightProperty());
         sideOnViewContainer.getChildren().add(sideOnView);
 
-        topDownView.drawObstacle(obstaclePosition);
-        sideOnView.drawObstacle(obstaclePosition);
+        topDownView.drawObstacle();
+        sideOnView.drawObstacle();
     }
 
     // TODO - Clear the text fields
@@ -183,7 +183,14 @@ public class MainWindowController implements Initializable {
             // Can copy code from NewRunwayWindow probs.
             Runway runway = runwayComboBox.getValue();
             Obstacle obstacle = obstructionComboBox.getValue();
-            obstaclePosition = new ObstaclePosition(obstacle, Integer.parseInt(distanceFromTHRLeft.getText()), Integer.parseInt(distanceFromTHRRight.getText()), Integer.parseInt(obstacleWidth.getText()), Integer.parseInt(distanceFromCL.getText()), runwaySideComboBox.getValue());
+
+            int distFromCL;
+            if (runwaySideComboBox.getValue() == RunwaySide.CENTER) {
+                distFromCL = 0;
+            } else {
+                distFromCL = Integer.parseInt(distanceFromCL.getText());
+            }
+            obstaclePosition = new ObstaclePosition(obstacle, Integer.parseInt(distanceFromTHRLeft.getText()), Integer.parseInt(distanceFromTHRRight.getText()), Integer.parseInt(obstacleWidth.getText()), distFromCL, runwaySideComboBox.getValue());
 
             declaredDistances.getChildren().clear();
             //declaredDistances.getChildren().add(new Text(obstaclePosition.toString()));
