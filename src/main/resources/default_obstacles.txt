@@ -1,6 +1,6 @@
 Boeing 737:12
 Boeing 747:19
-Airbus A320: 13
-Cessna 172: 3
-Cessna 152: 5
-Gulfstream G650: 8
+Airbus A320:13
+Cessna 172:3
+Cessna 152:5
+Gulfstream G650:8

@@ -62,10 +62,10 @@ public class PredefinedObstacles {
                     e.printStackTrace();
                 } catch (ArrayIndexOutOfBoundsException e ){
                     Logger.Log(Logger.Level.ERROR, "Error Loading predefined obstacles file!\nArrayIndexOutOfBoundsException");
-                    Logger.Log(Logger.Level.ERROR, e.getStackTrace().toString());
+                    e.printStackTrace();
                 } catch (NumberFormatException e){
                     Logger.Log(Logger.Level.ERROR, "NumberFormatException when processing default_obstacles file.");
-                    Logger.Log(Logger.Level.ERROR, e.getStackTrace().toString());
+                    e.printStackTrace();
                 }
             } else {
                 Logger.Log(Logger.Level.ERROR, "Failed to load default obstacles file! [Filename=\'"+default_obstacles_file+"\'].");
