@@ -1,6 +1,5 @@
 package RunwayRedeclarationTool.View;
 
-
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.geometry.VPos;
@@ -11,9 +10,10 @@ import javafx.scene.text.TextAlignment;
 
 public class Canvas extends javafx.scene.canvas.Canvas{
     protected VirtualRunway runway;
+    protected boolean leftRunway;
     protected int TORA, ASDA, TODA, LDA;
 
-    private GraphicsContext gc;
+    protected GraphicsContext gc;
 
     public Canvas (VirtualRunway runway) {
         this.runway = runway;
@@ -23,6 +23,12 @@ public class Canvas extends javafx.scene.canvas.Canvas{
         this.ASDA = p.getASDA();
         this.TODA = p.getTODA();
         this.LDA = p.getLDA();
+
+        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
+            leftRunway = true;
+        } else {
+            leftRunway = false;
+        }
 
         gc = getGraphicsContext2D();
     }
@@ -60,6 +66,24 @@ public class Canvas extends javafx.scene.canvas.Canvas{
         }
     }
 
+    protected void drawTakeOffLandingDirection() {
+        gc.setFill(Color.BLACK);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(scale_y(0.5));
+        gc.setFont(Font.font("Consolas", 14));
+
+        scaledStrokeLine(60, 20, 560, 20);
+        if (!leftRunway) {
+            scaledStrokeLine(60, 20, 100, 16);
+            scaledStrokeLine(60, 20, 100, 24);
+        } else {
+            scaledStrokeLine(560, 20, 520, 16);
+            scaledStrokeLine(560, 20, 520, 24);
+        }
+        gc.setTextAlign(TextAlignment.LEFT);
+        gc.fillText("Take-off/landing direction", scale_x(60), scale_y(10));
+    }
+
     protected void drawMapScale() {
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
@@ -72,17 +96,17 @@ public class Canvas extends javafx.scene.canvas.Canvas{
         gc.fillText("500m", scale_x(60), scale_y(285));
     }
 
-    protected void drawMeasuringLine(int x1, int x2, int y, String text) {
+    protected void drawMeasuringLine(int x, int length, int y, String text) {
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(scale_y(0.5));
         gc.setFont(Font.font("Consolas", 16));
         gc.setTextAlign(TextAlignment.CENTER);
 
-        scaledStrokeLine(x1, y, x2, y);
-        scaledStrokeLine(x1, y + 2, x1, y - 2);
-        scaledStrokeLine(x2, y + 2, x2, y - 2);
-        gc.fillText(text, scale_x((x1 + x2) / 2), scale_y(y - 5));
+        scaledStrokeLine(x, y, x + length, y);
+        scaledStrokeLine(x, y + 2, x, y - 2);
+        scaledStrokeLine(x + length, y + 2, x + length, y - 2);
+        gc.fillText(text, scale_x(x + length / 2), scale_y(y - 5));
     }
 
     protected double scale_x(double length) {

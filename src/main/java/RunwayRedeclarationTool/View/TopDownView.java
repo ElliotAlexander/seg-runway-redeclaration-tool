@@ -5,16 +5,12 @@ import RunwayRedeclarationTool.Models.RunwaySide;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 
 public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
     private ObstaclePosition obstaclePosition;
 
-    private boolean leftRunway;
     private int leftSpace = 60;     // either 60 if leftRunway, or clearway if it's a right virtual runway
 
     public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
@@ -54,12 +50,9 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
-        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
-            leftRunway = true;
+        if (leftRunway) {
             scaledFillRect(60, 125, TORA, 50);
-
-        } else {    // right virtual runway
-            leftRunway = false;
+        } else {
             int clearway = TODA - TORA;
             leftSpace = Math.max(60, clearway);
             scaledFillRect(leftSpace, 125, TORA, 50);
@@ -69,7 +62,7 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
         drawCentreLine(gc);
         drawDesignators(leftSpace, 150);
         drawMapScale();
-        drawTakeOffLandingDirection(gc);
+        drawTakeOffLandingDirection();
         //drawScaleMarkings(gc);
         drawStopwayClearway(gc);
     }
@@ -100,23 +93,6 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
         gc.setLineDashes(0);
     }
 
-    private void drawTakeOffLandingDirection(GraphicsContext gc){
-        gc.setFill(Color.BLACK);
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(scale_y(0.5));
-        gc.setFont(Font.font("Consolas", 14));
-        scaledStrokeLine(60, 20, 560, 20);
-        if(!leftRunway){
-            scaledStrokeLine(60, 20, 100, 16);
-            scaledStrokeLine(60, 20, 100, 24);
-        } else {
-            scaledStrokeLine(560, 20, 520, 16);
-            scaledStrokeLine(560, 20, 520, 24);
-        }
-        gc.setTextAlign(TextAlignment.LEFT);
-        gc.fillText("Take-off/landing direction", scale_x(60), scale_y(10));
-    }
-
     private void drawScaleMarkings(GraphicsContext gc) {
         // TORA
         scaledStrokeLine(60, 195, runway.getOrigParams().getTORA() + 60, 195);
@@ -131,15 +107,15 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
 
         if (stopway != 0) {
             if (leftRunway) {
-                drawMeasuringLine(TORA+60, ASDA + 60, 200, "stopway");
+                drawMeasuringLine(TORA + 60, stopway, 200, "stopway");
             } else {
-                drawMeasuringLine(clearway - stopway, clearway, 200, "stopway");
+                drawMeasuringLine(clearway - stopway, stopway, 200, "stopway");
             }
 
             // Assumption: clearway >= stopway (Heathrow slides)
-            if (clearway != stopway) {
+            if (clearway > stopway) {
                 if (leftRunway) {
-                    drawMeasuringLine(TORA+60, TODA+60+clearway, 210, "clearway");
+                    drawMeasuringLine(TORA + 60, clearway, 210, "clearway");
                 } else {
                     drawMeasuringLine(0, clearway, 210, "clearway");
                 }
@@ -150,8 +126,6 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
     public void drawObstacle() {
         try {
             draw();
-            double width = getWidth();
-            double height = getHeight();
 
             GraphicsContext gc = getGraphicsContext2D();
 

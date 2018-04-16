@@ -2,18 +2,16 @@ package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
+import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 
 public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
     private ObstaclePosition obstaclePosition;
 
-    private boolean leftRunway = true;
     private int leftSpace = 60;
 
     public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
@@ -39,7 +37,6 @@ public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
     private void draw() {
         double width = getWidth();
         double height = getHeight();
-        GraphicsContext gc = getGraphicsContext2D();
 
         // Fill canvas with grey
         gc.setFill(Color.web("ddd"));
@@ -47,8 +44,7 @@ public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
-        if (Integer.parseInt(runway.getDesignator().substring(0, 2)) > 18) {
-            leftRunway = false;
+        if (!leftRunway) {
             leftSpace = Math.max(60, TODA-TORA);
         }
 
@@ -57,6 +53,7 @@ public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
         drawDesignators(leftSpace, 170);
         drawStopwayClearway(gc);
         drawMapScale();
+        drawTakeOffLandingDirection();
     }
 
     private void drawStopwayClearway(GraphicsContext gc) {
@@ -65,15 +62,15 @@ public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
 
         if (stopway != 0) {
             if (leftRunway) {
-                drawMeasuringLine(TORA + 60, TORA + 60 + stopway, 180,"stopway");
+                drawMeasuringLine(TORA + 60, stopway, 180, "stopway");
             } else {
-                drawMeasuringLine(clearway - stopway, clearway, 180, "stopway");
+                drawMeasuringLine(clearway - stopway, stopway, 180, "stopway");
             }
 
             // Assumption: clearway >= stopway (Heathrow slides)
             if (clearway != stopway) {
                 if (leftRunway) {
-                    drawMeasuringLine(TORA + 60,TORA+60 +clearway, 190, "clearway");
+                    drawMeasuringLine(TORA + 60, clearway, 190, "clearway");
                 } else {
                     drawMeasuringLine(0, clearway, 190, "clearway");
                 }
@@ -84,9 +81,6 @@ public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
     public void drawObstacle() {
         try {
             draw();
-            double width = getWidth();
-
-            GraphicsContext gc = getGraphicsContext2D();
 
             int obstacleLength = runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH();
 
@@ -98,40 +92,74 @@ public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
             drawBrokenDownDistances(obstacleLength);
 
         } catch (NullPointerException e) {
+            // TODO: this is bad practice. Make sure that there is an object when this method is called
+        } catch (AttributeNotAssignedException e) {
+            e.printStackTrace();
+            System.err.println("Recalculated parameters have not been assigned!");
         }
 
     }
 
-    public void drawBrokenDownDistances(int oLength) {
-        GraphicsContext gc = getGraphicsContext2D();
-        int slopecalc = 0;
+    public void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
+        RunwayParameters params = runway.getRecalcParams();
 
-        try {
-            slopecalc = runway.getRecalcParams().getSlopeCalculation();
-        } catch (AttributeNotAssignedException e) {
-            // Shouldn't happen
-            System.err.println("Recalculated parameters not assigned!");;
-        }
+        int rTORA = params.getTORA();
+        int rLDA = params.getLDA();
+        // maybe use distFromRightTSH() instead of recalculated values?
+        int slopecalc = params.getSlopeCalculation();
+        int displacedThs = TORA - LDA; //original values
+
+
 
         if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
+            drawMeasuringLine(60, obstaclePosition.getDistLeftTSH(), 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
+            int endObstacle = 60 + obstaclePosition.getDistLeftTSH() + oLength;
+            drawMeasuringLine(obstaclePosition.getDistLeftTSH() + 60, oLength, 200, "Obstacle");
+
             if (leftRunway) {
                 // __|=|__->______
+                drawMeasuringLine(endObstacle, 300, 200, "blast protection");
+                drawMeasuringLine(endObstacle + 300, rTORA, 200, "TORA " + rTORA + "m");
 
-
+                drawMeasuringLine(endObstacle, slopecalc, 210, "slope offset");
+                drawMeasuringLine(endObstacle + slopecalc, rLDA, 210, "LDA " + rLDA + "m");
             } else {
                 // __|=|__<-______
+                drawMeasuringLine(endObstacle, slopecalc, 200, "slope offset");
+                drawMeasuringLine(endObstacle + slopecalc, rTORA, 200, "TORA " + rTORA + "m");
+
+                drawMeasuringLine(endObstacle, 300, 210, "RESA + strip end");
+                drawMeasuringLine(endObstacle + 300, rLDA, 210, "LDA " + rLDA + "m");
             }
         } else {
+            int startObstacle = leftSpace + obstaclePosition.getDistLeftTSH();
+
             if (leftRunway) {
                 // ______->__|=|__
+                drawMeasuringLine(60, rTORA, 200, "TORA " + rTORA + "m");
+                drawMeasuringLine(60 + rTORA, slopecalc, 200, "slope offset");
+
+                if (displacedThs > 0) {
+                    drawMeasuringLine(60, displacedThs, 210, "displaced TSH");
+                }
+                drawMeasuringLine(60 + displacedThs, rLDA, 210, "LDA " + rLDA + "m");
+                drawMeasuringLine(60 + displacedThs + rLDA, 300, 210, "strip end + RESA");
             } else {
                 // ______<-__|=|__
+                drawMeasuringLine(leftSpace, rTORA, 200, "TORA " + rTORA + "m");
+                drawMeasuringLine(leftSpace + rTORA, 300, 200, "blast protection");
+
+                drawMeasuringLine(leftSpace, rLDA, 210, "LDA " + rLDA + "m");
+                drawMeasuringLine(leftSpace + rLDA, slopecalc, 210, "slope offset");
             }
+
+            drawMeasuringLine(startObstacle, oLength, 200, "Obstacle");
+            drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), 200, obstaclePosition.getDistRightTSH() + "m");
         }
 
-//            drawMeasuringLine(gc, 60, 200, obstaclePosition.getDistLeftTSH() + 60, 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
-//            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60, 200, obstaclePosition.getDistLeftTSH() + 60 + oLength, 200, "Obstacle");
-//            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60 + oLength, 200, obstaclePosition.getDistLeftTSH() + 60 + oLength + slopecalc, 200, "slope");
+//
+//
+//
 //            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60 + oLength, 200, obstaclePosition.getDistLeftTSH() + 60 + oLength + obstaclePosition.getDistRightTSH(), 200, Integer.toString(obstaclePosition.getDistRightTSH()) + "m");
 
     }
