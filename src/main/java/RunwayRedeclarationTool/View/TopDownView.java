@@ -54,7 +54,11 @@ public class TopDownView extends Canvas {
         gc.setFill(Color.web("ddd"));
         gc.fillRect(0, 0, width, height);
 
-        drawClearedAndGradedArea(gc);
+        if(leftRunway){
+            drawClearedAndGradedArea(gc, 0);
+        } else{
+            drawClearedAndGradedArea(gc, TORA-TODA+60);
+        }
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
@@ -73,15 +77,16 @@ public class TopDownView extends Canvas {
         drawCentreLine(gc);
         drawDesignators(gc);
         drawMapScale(gc);
+        drawTakeOffLandingDirection(gc);
         //drawScaleMarkings(gc);
         drawStopwayClearway(gc);
     }
 
-    private void drawClearedAndGradedArea(GraphicsContext gc) {
+    private void drawClearedAndGradedArea(GraphicsContext gc, int offset) {
         // Cleared and graded areas
         gc.setFill(Color.web("ccc"));
         gc.fillPolygon(
-            new double[]{0, scale_x(210), scale_x(360), scale_x(TORA - 240), scale_x(TORA - 90), scale_x(TORA + 120), scale_x(TORA + 120), scale_x(TORA - 90), scale_x(TORA - 240), scale_x(360), scale_x(210), 0},
+            new double[]{0 - scale_x(offset), scale_x(210 - offset), scale_x(360 - offset), scale_x(TORA - 240 - offset), scale_x(TORA - 90 - offset), scale_x(TORA + 120 - offset), scale_x(TORA + 120 - offset), scale_x(TORA - 90 - offset), scale_x(TORA - 240 - offset), scale_x(360 - offset), scale_x(210 - offset), 0 - scale_x(offset)},
             new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)},
             12);
     }
@@ -146,6 +151,23 @@ public class TopDownView extends Canvas {
         scaledStrokeLine(560, 292, 560, 288);
         gc.setTextAlign(TextAlignment.LEFT);
         gc.fillText("500m", scale_x(60), scale_y(285));
+    }
+
+    private void drawTakeOffLandingDirection(GraphicsContext gc){
+        gc.setFill(Color.BLACK);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(scale_y(0.5));
+        gc.setFont(Font.font("Consolas", 14));
+        scaledStrokeLine(60, 20, 560, 20);
+        if(!leftRunway){
+            scaledStrokeLine(60, 20, 100, 16);
+            scaledStrokeLine(60, 20, 100, 24);
+        } else {
+            scaledStrokeLine(560, 20, 520, 16);
+            scaledStrokeLine(560, 20, 520, 24);
+        }
+        gc.setTextAlign(TextAlignment.LEFT);
+        gc.fillText("Take-off/landing direction", scale_x(60), scale_y(10));
     }
 
     private void drawScaleMarkings(GraphicsContext gc) {
