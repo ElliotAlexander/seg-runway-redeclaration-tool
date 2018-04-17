@@ -150,8 +150,7 @@ public class Canvas extends javafx.scene.canvas.Canvas{
         return getHeight();
     }
 
-
-    public void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
+    protected void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
         RunwayParameters params = runway.getRecalcParams();
 
         int rTORA = params.getTORA();
