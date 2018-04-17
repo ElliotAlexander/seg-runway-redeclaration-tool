@@ -26,10 +26,10 @@ public class SideOnView extends RunwayView {
         scaledFillRect(leftSpace, 149, TORA, 2);
 
         drawDesignators(170);
-        drawStopway(190);
-        drawClearway(200);
+        drawStopway(100);
+        drawClearway(110);
 
-        drawDisplacedThreshold(230);
+        drawDisplacedThreshold(100);
         drawMapScale();
         drawTakeOffLandingDirection();
     }
