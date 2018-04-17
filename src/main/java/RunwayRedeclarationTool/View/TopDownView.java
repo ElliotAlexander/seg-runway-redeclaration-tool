@@ -42,7 +42,7 @@ public class TopDownView extends RunwayView {
         drawStopway(200);
         drawClearway(210);
 
-        drawDisplacedThreshold(250);
+        drawDisplacedThreshold(230);
 
     }
 

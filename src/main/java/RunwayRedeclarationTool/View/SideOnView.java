@@ -28,6 +28,8 @@ public class SideOnView extends RunwayView {
         drawDesignators(170);
         drawStopway(190);
         drawClearway(200);
+
+        drawDisplacedThreshold(230);
         drawMapScale();
         drawTakeOffLandingDirection();
     }
