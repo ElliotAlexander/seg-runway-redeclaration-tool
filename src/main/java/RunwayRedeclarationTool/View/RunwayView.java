@@ -148,7 +148,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
 
         if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
-            drawMeasuringLine(leftSpace, obstaclePosition.getDistLeftTSH(), 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
+            if (obstaclePosition.getDistLeftTSH() > 0) {
+                drawMeasuringLine(leftSpace, obstaclePosition.getDistLeftTSH(), 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
+            }
             drawMeasuringLine(obstaclePosition.getDistLeftTSH() + leftSpace, oLength, 200, "Obstacle");
             int endObstacle = leftSpace + obstaclePosition.getDistLeftTSH() + oLength;
 
@@ -187,7 +189,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
             }
 
             drawMeasuringLine(startObstacle, oLength, 200, "Obstacle");
-            drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), 200, obstaclePosition.getDistRightTSH() + "m");
+            if (obstaclePosition.getDistRightTSH() > 0) {
+                drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), 200, obstaclePosition.getDistRightTSH() + "m");
+            }
         }
     }
 
