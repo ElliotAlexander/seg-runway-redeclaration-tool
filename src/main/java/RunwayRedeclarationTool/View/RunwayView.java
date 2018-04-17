@@ -142,10 +142,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         int rTORA = recalcParams.getTORA();
         int rLDA = recalcParams.getLDA();
-        // maybe use distFromRightTSH() instead of recalculated values?
+
         int slopecalc = recalcParams.getSlopeCalculation();
         int displacedThs = TORA - LDA; //original values
-
 
         if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
             if (obstaclePosition.getDistLeftTSH() > 0) {
@@ -157,14 +156,14 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
             if (leftRunway) {
                 // __|=|__->______
                 drawMeasuringLine(endObstacle, 300, 200, "blast protection");
-                drawMeasuringLine(endObstacle + 300, rTORA, 200, "TORA " + rTORA + "m");
+                drawTORA_TODA_ASDA(endObstacle + 300, recalcParams);
 
                 drawMeasuringLine(endObstacle, slopecalc + 60, 210, "slope offset");         // length = slopecalc+60 which is the strip end. Maybe show that in text too?
                 drawMeasuringLine(endObstacle + slopecalc + 60, rLDA, 210, "LDA " + rLDA + "m");
             } else {
                 // __|=|__<-______
                 drawMeasuringLine(endObstacle, slopecalc + 60, 200, "slope offset");
-                drawMeasuringLine(endObstacle + slopecalc + 60, rTORA, 200, "TORA " + rTORA + "m");
+                drawTORA_TODA_ASDA(endObstacle + slopecalc + 60, recalcParams);
 
                 drawMeasuringLine(endObstacle, 300, 210, "RESA + strip end");
                 drawMeasuringLine(endObstacle + 300, rLDA, 210, "LDA " + rLDA + "m");
@@ -174,14 +173,14 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
             if (leftRunway) {
                 // ______->__|=|__
-                drawMeasuringLine(60, rTORA, 200, "TORA " + rTORA + "m");
+                drawTORA_TODA_ASDA(60, recalcParams);
                 drawMeasuringLine(60 + rTORA, slopecalc + 60, 200, "slope offset");
 
                 drawMeasuringLine(60 + displacedThs, rLDA, 210, "LDA " + rLDA + "m");
                 drawMeasuringLine(60 + displacedThs + rLDA, 300, 210, "strip end + RESA");
             } else {
                 // ______<-__|=|__
-                drawMeasuringLine(leftSpace, rTORA, 200, "TORA " + rTORA + "m");
+                drawTORA_TODA_ASDA(leftSpace, recalcParams);
                 drawMeasuringLine(leftSpace + rTORA, 300, 200, "blast protection");
 
                 drawMeasuringLine(leftSpace, rLDA, 210, "LDA " + rLDA + "m");
@@ -192,6 +191,25 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
             if (obstaclePosition.getDistRightTSH() > 0) {
                 drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), 200, obstaclePosition.getDistRightTSH() + "m");
             }
+        }
+    }
+
+    private void drawTORA_TODA_ASDA(int x, RunwayParameters recalcParams) {
+        int rTORA = recalcParams.getTORA();
+        int rTODA = recalcParams.getTODA();
+        int rASDA = recalcParams.getASDA();
+
+        drawMeasuringLine(x, rTORA, 200, "TORA " + rTORA + "m");
+
+        if (rTODA != rTORA) {
+            drawMeasuringLine(x, rTODA, 190, "TODA " + rTODA + "m");
+        } else {
+            gc.fillText("TODA " + rTODA + "m", scale_x(x + rTODA / 2), scale_y(190));
+        }
+        if (rASDA != rTORA && rASDA != rTODA) {
+            drawMeasuringLine(x, rASDA, 180, "ASDA " + rASDA + "m");
+        } else {
+            gc.fillText("ASDA " + rASDA + "m", scale_x(x + rASDA / 2), scale_y(180));
         }
     }
 
