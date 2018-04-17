@@ -2,19 +2,16 @@ package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
-import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
+public class SideOnView extends RunwayView {
 
     public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
-        super(runway);
-
-        super.obstaclePosition = obstaclePosition;
+        super(runway, obstaclePosition);
 
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {

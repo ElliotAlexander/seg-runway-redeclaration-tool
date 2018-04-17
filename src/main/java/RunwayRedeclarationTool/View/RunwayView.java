@@ -10,22 +10,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-
-// TODO I'm Not actually sure its good practice to double down on the name canvas, this class should probably be called something else
-// i.e. RunwayView
-public class Canvas extends javafx.scene.canvas.Canvas{
+public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     protected VirtualRunway runway;
-    protected boolean leftRunway;
     protected int TORA, ASDA, TODA, LDA;
 
-    protected GraphicsContext gc;
+    protected boolean leftRunway;
+    protected int leftSpace = 60;     // either 60 if leftRunway, or clearway if it's a right virtual runway
 
     protected ObstaclePosition obstaclePosition;
 
-    protected int leftSpace = 60;     // either 60 if leftRunway, or clearway if it's a right virtual runway
+    protected GraphicsContext gc;
 
-    public Canvas (VirtualRunway runway) {
+    public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         this.runway = runway;
+        this.obstaclePosition = obstaclePosition;
 
         RunwayParameters p = runway.getOrigParams();
         this.TORA = p.getTORA();
@@ -41,7 +39,6 @@ public class Canvas extends javafx.scene.canvas.Canvas{
 
         gc = getGraphicsContext2D();
     }
-
 
     protected void drawDesignators(int leftSpace, int y) {
         gc.setFill(Color.BLACK);
@@ -92,62 +89,6 @@ public class Canvas extends javafx.scene.canvas.Canvas{
         }
         gc.setTextAlign(TextAlignment.LEFT);
         gc.fillText("Take-off/landing direction", scale_x(60), scale_y(10));
-    }
-
-    protected void drawMapScale() {
-        gc.setFill(Color.BLACK);
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(scale_y(0.5));
-        gc.setFont(Font.font("Consolas", 16));
-        scaledStrokeLine(60, 290, 560, 290);
-        scaledStrokeLine(60, 292, 60, 288);
-        scaledStrokeLine(560, 292, 560, 288);
-        gc.setTextAlign(TextAlignment.LEFT);
-        gc.fillText("500m", scale_x(60), scale_y(285));
-    }
-
-    protected void drawMeasuringLine(int x, int length, int y, String text) {
-        gc.setFill(Color.BLACK);
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(scale_y(0.5));
-        gc.setFont(Font.font("Consolas", 16));
-        gc.setTextAlign(TextAlignment.CENTER);
-
-        scaledStrokeLine(x, y, x + length, y);
-        scaledStrokeLine(x, y + 2, x, y - 2);
-        scaledStrokeLine(x + length, y + 2, x + length, y - 2);
-        gc.fillText(text, scale_x(x + length / 2), scale_y(y - 5));
-    }
-
-    protected double scale_x(double length) {
-        return length / (TODA + 60) * getWidth();
-    }
-
-    protected double scale_y(double length) {
-        return length / 300 * getHeight();
-    }
-
-    protected void scaledStrokeLine(double x1, double y1, double x2, double y2) {
-        gc.strokeLine(scale_x(x1), scale_y(y1), scale_x(x2), scale_y(y2));
-    }
-
-    protected void scaledFillRect(double x, double y, double w, double h) {
-        gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
-    }
-
-    @Override
-    public boolean isResizable() {
-        return true;
-    }
-
-    @Override
-    public double prefWidth(double height) {
-        return getWidth();
-    }
-
-    @Override
-    public double prefHeight(double width) {
-        return getHeight();
     }
 
     protected void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
@@ -205,6 +146,62 @@ public class Canvas extends javafx.scene.canvas.Canvas{
             drawMeasuringLine(startObstacle, oLength, 200, "Obstacle");
             drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), 200, obstaclePosition.getDistRightTSH() + "m");
         }
+    }
+
+    protected void drawMapScale() {
+        gc.setFill(Color.BLACK);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(scale_y(0.5));
+        gc.setFont(Font.font("Consolas", 16));
+        scaledStrokeLine(60, 290, 560, 290);
+        scaledStrokeLine(60, 292, 60, 288);
+        scaledStrokeLine(560, 292, 560, 288);
+        gc.setTextAlign(TextAlignment.LEFT);
+        gc.fillText("500m", scale_x(60), scale_y(285));
+    }
+
+    protected void drawMeasuringLine(int x, int length, int y, String text) {
+        gc.setFill(Color.BLACK);
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(scale_y(0.5));
+        gc.setFont(Font.font("Consolas", 16));
+        gc.setTextAlign(TextAlignment.CENTER);
+
+        scaledStrokeLine(x, y, x + length, y);
+        scaledStrokeLine(x, y + 2, x, y - 2);
+        scaledStrokeLine(x + length, y + 2, x + length, y - 2);
+        gc.fillText(text, scale_x(x + length / 2), scale_y(y - 5));
+    }
+
+    protected double scale_x(double length) {
+        return length / (TODA + 60) * getWidth();
+    }
+
+    protected double scale_y(double length) {
+        return length / 300 * getHeight();
+    }
+
+    protected void scaledStrokeLine(double x1, double y1, double x2, double y2) {
+        gc.strokeLine(scale_x(x1), scale_y(y1), scale_x(x2), scale_y(y2));
+    }
+
+    protected void scaledFillRect(double x, double y, double w, double h) {
+        gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
+    }
+
+    @Override
+    public boolean isResizable() {
+        return true;
+    }
+
+    @Override
+    public double prefWidth(double height) {
+        return getWidth();
+    }
+
+    @Override
+    public double prefHeight(double width) {
+        return getHeight();
     }
 
 }
