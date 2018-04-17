@@ -4,8 +4,6 @@ import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
 import RunwayRedeclarationTool.Models.RunwaySide;
 import RunwayRedeclarationTool.Models.VirtualRunway;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -13,23 +11,9 @@ public class TopDownView extends RunwayView {
 
     public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         super(runway, obstaclePosition);
-
-        widthProperty().addListener(new InvalidationListener() {
-            public void invalidated(Observable observable) {
-                draw();
-                drawObstacle();
-            }
-        });
-        heightProperty().addListener(new InvalidationListener() {
-            public void invalidated(Observable observable) {
-                draw();
-                drawObstacle();
-            }
-        });
-        draw();
     }
 
-    private void draw() {
+    protected void draw() {
         double width = getWidth();
         double height = getHeight();
         GraphicsContext gc = getGraphicsContext2D();
@@ -49,19 +33,20 @@ public class TopDownView extends RunwayView {
         if (leftRunway) {
             scaledFillRect(60, 125, TORA, 50);
         } else {
-            int clearway = TODA - TORA;
-            leftSpace = Math.max(60, clearway);
             scaledFillRect(leftSpace, 125, TORA, 50);
         }
 
 
         drawThresholdMarkers(gc);
         drawCentreLine(gc);
-        drawDesignators(leftSpace, 150);
+        drawDesignators(150);
         drawMapScale();
         drawTakeOffLandingDirection();
         //drawScaleMarkings(gc);
-        drawStopwayClearway(gc);
+        drawStopway(200);
+        drawClearway(210);
+
+        drawDisplacedThreshold(250);
 
     }
 
@@ -97,28 +82,6 @@ public class TopDownView extends RunwayView {
         scaledStrokeLine(60, 193, 60, 197);
         scaledStrokeLine(TORA + 60, 193, TORA + 60, 197);
         gc.fillText("TORA: " + TORA + "m", scale_x(60), scale_y(191));
-    }
-
-    private void drawStopwayClearway(GraphicsContext gc) {
-        int stopway = ASDA - TORA;
-        int clearway = TODA - TORA;
-
-        if (stopway != 0) {
-            if (leftRunway) {
-                drawMeasuringLine(TORA + 60, stopway, 200, "stopway");
-            } else {
-                drawMeasuringLine(clearway - stopway, stopway, 200, "stopway");
-            }
-
-            // Assumption: clearway >= stopway (Heathrow slides)
-            if (clearway > stopway) {
-                if (leftRunway) {
-                    drawMeasuringLine(TORA + 60, clearway, 210, "clearway");
-                } else {
-                    drawMeasuringLine(0, clearway, 210, "clearway");
-                }
-            }
-        }
     }
 
     public void drawObstacle() {
@@ -160,10 +123,4 @@ public class TopDownView extends RunwayView {
         } catch (NullPointerException e) {
         }
     }
-
-
-
-
-
-
 }

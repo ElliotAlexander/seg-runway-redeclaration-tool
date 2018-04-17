@@ -4,6 +4,8 @@ import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -35,12 +37,55 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
             leftRunway = true;
         } else {
             leftRunway = false;
+            leftSpace = Math.max(TODA, ASDA) - TORA;    // the largest out of clearway and stopway
         }
 
         gc = getGraphicsContext2D();
+
+        widthProperty().addListener(new InvalidationListener() {
+            public void invalidated(Observable observable) {
+                draw();
+                drawObstacle();
+            }
+        });
+        heightProperty().addListener(new InvalidationListener() {
+            public void invalidated(Observable observable) {
+                draw();
+                drawObstacle();
+            }
+        });
+        draw();
     }
 
-    protected void drawDesignators(int leftSpace, int y) {
+    protected abstract void draw();
+
+    public abstract void drawObstacle();
+
+    protected void drawStopway(int y) {
+        int stopway = ASDA - TORA;
+
+        if (stopway != 0) {
+            if (leftRunway) {
+                drawMeasuringLine(TORA + 60, stopway, y, "stopway");
+            } else {
+                drawMeasuringLine(leftSpace - stopway, stopway, y, "stopway");
+            }
+        }
+    }
+
+    protected void drawClearway(int y) {
+        int clearway = TODA - TORA;
+
+        if (clearway != 0) {
+            if (leftRunway) {
+                drawMeasuringLine(TORA + 60, clearway, y, "clearway");
+            } else {
+                drawMeasuringLine(0, clearway, y, "clearway");
+            }
+        }
+    }
+
+    protected void drawDesignators(int y) {
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Consolas", 24));
         gc.setTextAlign(TextAlignment.CENTER);
@@ -92,12 +137,12 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     }
 
     protected void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
-        RunwayParameters params = runway.getRecalcParams();
+        RunwayParameters recalcParams = runway.getRecalcParams();
 
-        int rTORA = params.getTORA();
-        int rLDA = params.getLDA();
+        int rTORA = recalcParams.getTORA();
+        int rLDA = recalcParams.getLDA();
         // maybe use distFromRightTSH() instead of recalculated values?
-        int slopecalc = params.getSlopeCalculation();
+        int slopecalc = recalcParams.getSlopeCalculation();
         int displacedThs = TORA - LDA; //original values
 
 
@@ -148,6 +193,18 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         }
     }
 
+    protected void drawDisplacedThreshold(int y) {
+        int displacedTsh = TORA - LDA;
+
+        if (displacedTsh > 0) {
+            if (leftRunway) {
+                drawMeasuringLine(60, displacedTsh, y, "displaced TSH");
+            } else {
+                drawMeasuringLine(Math.max(TODA, ASDA) - displacedTsh, displacedTsh, y, "displaced TSH");
+            }
+        }
+    }
+
     protected void drawMapScale() {
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
@@ -164,7 +221,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(scale_y(0.5));
-        gc.setFont(Font.font("Consolas", 16));
+        gc.setFont(Font.font("Consolas", 14));
         gc.setTextAlign(TextAlignment.CENTER);
 
         scaledStrokeLine(x, y, x + length, y);
