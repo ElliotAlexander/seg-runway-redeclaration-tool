@@ -63,7 +63,7 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT);
+        runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT, RunwaySide.CENTER);
 
         if (controller.get_airports().length > 0) {
             Logger.Log("Loaded airports: c" + controller.get_airports().toString());
@@ -316,6 +316,17 @@ public class MainWindowController implements Initializable {
         // Make sure that only the correct runways are shown for the selected airport.
         if (airportComboBox.getItems().size() > 0) {
             updateRunways();
+        }
+    }
+
+    @FXML
+    private void runwaySideComboBoxHandler(){
+        if(runwaySideComboBox.getValue() == RunwaySide.CENTER){
+            distanceFromCL.setText("0");
+            distanceFromCL.setEditable(false);
+        } else {
+            distanceFromCL.clear();
+            distanceFromCL.setEditable(true);
         }
     }
 }

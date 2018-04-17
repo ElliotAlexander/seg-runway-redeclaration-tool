@@ -121,7 +121,7 @@
                 <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                 <Label text="m" GridPane.columnIndex="2" GridPane.rowIndex="4" />
                 <Label text="Obstacle side of C/L:" GridPane.rowIndex="3" />
-                <ComboBox fx:id="runwaySideComboBox" prefHeight="31.0" prefWidth="101.0" promptText="Select..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <ComboBox fx:id="runwaySideComboBox" onAction="#runwaySideComboBoxHandler" prefHeight="31.0" prefWidth="101.0" promptText="Select..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
                 <padding>
                     <Insets bottom="10.0" top="10.0" />
                 </padding>
