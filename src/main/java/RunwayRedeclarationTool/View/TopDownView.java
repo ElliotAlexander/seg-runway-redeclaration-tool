@@ -1,6 +1,8 @@
 package RunwayRedeclarationTool.View;
 
+import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
+import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.RunwaySide;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.beans.InvalidationListener;
@@ -9,14 +11,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
-    private ObstaclePosition obstaclePosition;
-
-    private int leftSpace = 60;     // either 60 if leftRunway, or clearway if it's a right virtual runway
 
     public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         super(runway);
-
-        this.obstaclePosition = obstaclePosition;
+        super.obstaclePosition = obstaclePosition;
 
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
@@ -58,6 +56,7 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
             scaledFillRect(leftSpace, 125, TORA, 50);
         }
 
+
         drawThresholdMarkers(gc);
         drawCentreLine(gc);
         drawDesignators(leftSpace, 150);
@@ -65,6 +64,7 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
         drawTakeOffLandingDirection();
         //drawScaleMarkings(gc);
         drawStopwayClearway(gc);
+
     }
 
     private void drawClearedAndGradedArea(GraphicsContext gc, int offset) {
@@ -146,6 +146,15 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
                 }
             }
 
+
+
+            int obstacleLength = runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH();
+            try {
+                drawBrokenDownDistances(obstacleLength);
+            } catch (AttributeNotAssignedException e) {
+                e.printStackTrace();
+            }
+
             gc.setFill(Color.RED);
             gc.setGlobalAlpha(0.5);
             scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
@@ -153,4 +162,10 @@ public class TopDownView extends RunwayRedeclarationTool.View.Canvas {
         } catch (NullPointerException e) {
         }
     }
+
+
+
+
+
+
 }

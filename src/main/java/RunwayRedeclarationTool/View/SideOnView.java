@@ -10,14 +10,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
-    private ObstaclePosition obstaclePosition;
-
-    private int leftSpace = 60;
 
     public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         super(runway);
 
-        this.obstaclePosition = obstaclePosition;
+        super.obstaclePosition = obstaclePosition;
 
         widthProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable observable) {
@@ -89,6 +86,8 @@ public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
             scaledFillRect(obstaclePosition.getDistLeftTSH() + 60, 149 - obstaclePosition.getObstacle().getHeight(), obstacleLength, obstaclePosition.getObstacle().getHeight());
             gc.setGlobalAlpha(1.0);
 
+
+            // TODO Add a button for this
             drawBrokenDownDistances(obstacleLength);
 
         } catch (NullPointerException e) {
@@ -100,67 +99,4 @@ public class SideOnView extends RunwayRedeclarationTool.View.Canvas {
 
     }
 
-    public void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
-        RunwayParameters params = runway.getRecalcParams();
-
-        int rTORA = params.getTORA();
-        int rLDA = params.getLDA();
-        // maybe use distFromRightTSH() instead of recalculated values?
-        int slopecalc = params.getSlopeCalculation();
-        int displacedThs = TORA - LDA; //original values
-
-
-
-        if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
-            drawMeasuringLine(60, obstaclePosition.getDistLeftTSH(), 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
-            int endObstacle = 60 + obstaclePosition.getDistLeftTSH() + oLength;
-            drawMeasuringLine(obstaclePosition.getDistLeftTSH() + 60, oLength, 200, "Obstacle");
-
-            if (leftRunway) {
-                // __|=|__->______
-                drawMeasuringLine(endObstacle, 300, 200, "blast protection");
-                drawMeasuringLine(endObstacle + 300, rTORA, 200, "TORA " + rTORA + "m");
-
-                drawMeasuringLine(endObstacle, slopecalc, 210, "slope offset");
-                drawMeasuringLine(endObstacle + slopecalc, rLDA, 210, "LDA " + rLDA + "m");
-            } else {
-                // __|=|__<-______
-                drawMeasuringLine(endObstacle, slopecalc, 200, "slope offset");
-                drawMeasuringLine(endObstacle + slopecalc, rTORA, 200, "TORA " + rTORA + "m");
-
-                drawMeasuringLine(endObstacle, 300, 210, "RESA + strip end");
-                drawMeasuringLine(endObstacle + 300, rLDA, 210, "LDA " + rLDA + "m");
-            }
-        } else {
-            int startObstacle = leftSpace + obstaclePosition.getDistLeftTSH();
-
-            if (leftRunway) {
-                // ______->__|=|__
-                drawMeasuringLine(60, rTORA, 200, "TORA " + rTORA + "m");
-                drawMeasuringLine(60 + rTORA, slopecalc, 200, "slope offset");
-
-                if (displacedThs > 0) {
-                    drawMeasuringLine(60, displacedThs, 210, "displaced TSH");
-                }
-                drawMeasuringLine(60 + displacedThs, rLDA, 210, "LDA " + rLDA + "m");
-                drawMeasuringLine(60 + displacedThs + rLDA, 300, 210, "strip end + RESA");
-            } else {
-                // ______<-__|=|__
-                drawMeasuringLine(leftSpace, rTORA, 200, "TORA " + rTORA + "m");
-                drawMeasuringLine(leftSpace + rTORA, 300, 200, "blast protection");
-
-                drawMeasuringLine(leftSpace, rLDA, 210, "LDA " + rLDA + "m");
-                drawMeasuringLine(leftSpace + rLDA, slopecalc, 210, "slope offset");
-            }
-
-            drawMeasuringLine(startObstacle, oLength, 200, "Obstacle");
-            drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), 200, obstaclePosition.getDistRightTSH() + "m");
-        }
-
-//
-//
-//
-//            drawMeasuringLine(gc, obstaclePosition.getDistLeftTSH() + 60 + oLength, 200, obstaclePosition.getDistLeftTSH() + 60 + oLength + obstaclePosition.getDistRightTSH(), 200, Integer.toString(obstaclePosition.getDistRightTSH()) + "m");
-
-    }
 }
