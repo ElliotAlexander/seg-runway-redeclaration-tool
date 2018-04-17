@@ -50,12 +50,8 @@
                   </items>
                 </Menu>
             </Menu>
-            <Menu text="View">
-                <CheckMenuItem fx:id="clearwayStopwayCheck" onAction="#drawRunway" text="Clearway/Stopway" />
-                <CheckMenuItem fx:id="clearedGradedCheck" onAction="#drawRunway" text="Cleared and graded areas" />
-            </Menu>
             <Menu text="About">
-                <MenuItem text="About" />
+                <MenuItem onAction="#showAbout" text="Our project"/>
             </Menu>
             <Menu text="Help">
                 <MenuItem text="Help" />

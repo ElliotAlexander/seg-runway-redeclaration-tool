@@ -26,7 +26,7 @@ public class NewAirportPopup {
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+        grid.setPadding(new Insets(25));
 
         Scene scene = new Scene(grid, 700, 400);
         window.setScene(scene);

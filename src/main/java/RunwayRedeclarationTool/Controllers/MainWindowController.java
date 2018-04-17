@@ -277,13 +277,11 @@ public class MainWindowController implements Initializable {
         }
     }
 
-
     @FXML
     public void handleImportFile() {
         new XML_File_Loader(controller).load_file();
         refresh_combobox();
     }
-
 
     @FXML
     void handleImportFolder() {
@@ -335,5 +333,10 @@ public class MainWindowController implements Initializable {
             distanceFromCL.clear();
             distanceFromCL.setEditable(true);
         }
+    }
+
+    @FXML
+    private void showAbout() {
+        AboutPopup.display();
     }
 }
