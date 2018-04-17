@@ -49,11 +49,7 @@ public class Calculator {
         RunwayParameters params = vRunway.getOrigParams();
         int stopway = params.ASDA - params.TORA;
         int clearway = params.TODA - params.TORA;
-        int displacedTSH = 0;
-
-        if (distFromTSH < 0) { // Object is off the runway
-            displacedTSH = params.TORA - params.LDA;
-        }
+        int displacedTSH = params.TORA - params.LDA;
 
         // Take off distances
         int rTORA = params.TORA - distFromTSH - displacedTSH - visual_strip_end - RESA;
@@ -86,27 +82,18 @@ public class Calculator {
 
         int stopway = oParams.ASDA - oParams.TORA;
         int clearway = oParams.TODA - oParams.TORA;
-        String brkdwn;
+        int displacedTSH = oParams.TORA - oParams.LDA;
 
-        if (distFromTSH < 0) {
-            int displacedTSH = oParams.TORA - oParams.LDA;
-
-            brkdwn = vRunway.getDesignator() + " (Take off away, landing over):\n" +
-                    "TORA = original TORA - distance from threshold - displaced threshold - RESA - strip end\n" +
-                    "     = " + oParams.TORA + " - " + distFromTSH + " - " + displacedTSH + " - " + RESA + " - " +
-                    visual_strip_end + " = " + rParams.TORA + "\n";
-        } else {
-            brkdwn = vRunway.getDesignator() + " (Take off away, landing over):\n" +
-                    "TORA = original TORA - distance from threshold - RESA - strip end\n" +
-                    "     = " + oParams.TORA + " - " + distFromTSH + " - " + RESA + " - " + visual_strip_end +
-                    " = " + rParams.TORA + "\n";
-        }
-        brkdwn += "TODA = recalculated TORA + clearway\n" + "     = " + oParams.TORA + " + " + clearway + " = " +
-            rParams.TODA + "\n" +
-            "ASDA = recalculated TORA + stopway\n" + "     = " + oParams.TORA + " + " + stopway + " = " +
-            rParams.ASDA + "\n" +
-            "LDA  = original LDA - distance from threshold - slope calculation - strip end\n" + "     = " +
-            oParams.LDA + " - " + distFromTSH + " - " + obHeight + "*50 - " + visual_strip_end + " = " + rParams.LDA;
+        String brkdwn = vRunway.getDesignator() + " (Take off away, landing over):\n" +
+                "TORA = original TORA - distance from threshold - displaced threshold - RESA - strip end\n" +
+                "     = " + oParams.TORA + " - " + distFromTSH + " - " + displacedTSH + " - " + RESA + " - " +
+                visual_strip_end + " = " + rParams.TORA + "\n" +
+                "TODA = recalculated TORA + clearway\n" + "     = " + oParams.TORA + " + " + clearway + " = " +
+                rParams.TODA + "\n" +
+                "ASDA = recalculated TORA + stopway\n" + "     = " + oParams.TORA + " + " + stopway + " = " +
+                rParams.ASDA + "\n" +
+                "LDA  = original LDA - distance from threshold - slope calculation - strip end\n" + "     = " +
+                oParams.LDA + " - " + distFromTSH + " - " + obHeight + "*50 - " + visual_strip_end + " = " + rParams.LDA;
 
         Logger.Log("Added breakdown calculations for " + vRunway.getDesignator() + " taking off away and landing over.");
         vRunway.setRecalcBreakdown(brkdwn);
@@ -116,10 +103,7 @@ public class Calculator {
     private void takeoffTowardsLandTowards(Obstacle o, VirtualRunway vRunway, int distFromTSH) {
         // Setting up all needed values
         RunwayParameters params = vRunway.getOrigParams();
-        int displacedTSH = 0;
-        if (distFromTSH < 0) {      // Object is off the runway
-            displacedTSH = params.TORA - params.LDA;
-        }
+        int displacedTSH = params.TORA - params.LDA;
 
         // Take off distances
         int slopeCalc = o.getHeight() * 50;
@@ -148,26 +132,16 @@ public class Calculator {
             e.printStackTrace();    //Shouldn't happen since we're setting them just before this method is called. Everything is private
         }
 
-        String brkdwn;
+        int displacedTSH = oParams.TORA - oParams.LDA;
 
-        if (distFromTSH < 0) {
-            int displacedTSH = oParams.TORA - oParams.LDA;
-
-            brkdwn = vRunway.getDesignator() + " (Take off towards, landing towards):\n" +
-                    "TORA = distance from threshold + displaced threshold - slope calculation - strip end\n" +
-                    "     = " + distFromTSH + " + " + displacedTSH + " - " + obHeight + "*50 - " + visual_strip_end +
-                    " = " + rParams.TORA + "\n";
-        } else {
-            brkdwn = vRunway.getDesignator() + " (Take off towards, landing towards):\n" +
-                    "TORA = distance from threshold - slope calculation - strip end\n" +
-                    "     = " + distFromTSH + " - " + obHeight + "*50 - " + visual_strip_end +
-                    " = " + rParams.TORA + "\n";
-        }
-
-        brkdwn += "TODA = recalculated TORA\n" + "     = " + rParams.TODA + "\n" +
-            "ASDA = recalculated TORA\n" + "     = " + rParams.ASDA + "\n" +
-            "LDA  = distance from threshold - RESA - strip end\n" + "     = " + distFromTSH + " - " + RESA +
-            " - " + visual_strip_end + " = " + rParams.LDA;
+        String brkdwn = vRunway.getDesignator() + " (Take off towards, landing towards):\n" +
+                "TORA = distance from threshold + displaced threshold - slope calculation - strip end\n" +
+                "     = " + distFromTSH + " + " + displacedTSH + " - " + obHeight + "*50 - " + visual_strip_end +
+                " = " + rParams.TORA + "\n" +
+                "TODA = recalculated TORA\n" + "     = " + rParams.TODA + "\n" +
+                "ASDA = recalculated TORA\n" + "     = " + rParams.ASDA + "\n" +
+                "LDA  = distance from threshold - RESA - strip end\n" + "     = " + distFromTSH + " - " + RESA +
+                " - " + visual_strip_end + " = " + rParams.LDA;
 
         Logger.Log("Added breakdown calculations for " + vRunway.getDesignator() + " taking off towards and landing towards.");
         vRunway.setRecalcBreakdown(brkdwn);
