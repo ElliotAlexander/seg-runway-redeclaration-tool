@@ -17,7 +17,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     protected int TORA, ASDA, TODA, LDA;
 
     protected boolean leftRunway;
-    protected int leftSpace = 60;     // either 60 if leftRunway, or clearway if it's a right virtual runway
+    protected int leftSpace;
 
     protected ObstaclePosition obstaclePosition;
 
@@ -35,6 +35,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
             leftRunway = true;
+            leftSpace = 60;
         } else {
             leftRunway = false;
             leftSpace = Math.max(TODA, ASDA) - TORA;    // the largest out of clearway and stopway
@@ -147,21 +148,21 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
 
         if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
-            drawMeasuringLine(60, obstaclePosition.getDistLeftTSH(), 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
-            int endObstacle = 60 + obstaclePosition.getDistLeftTSH() + oLength;
-            drawMeasuringLine(obstaclePosition.getDistLeftTSH() + 60, oLength, 200, "Obstacle");
+            drawMeasuringLine(leftSpace, obstaclePosition.getDistLeftTSH(), 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
+            drawMeasuringLine(obstaclePosition.getDistLeftTSH() + leftSpace, oLength, 200, "Obstacle");
+            int endObstacle = leftSpace + obstaclePosition.getDistLeftTSH() + oLength;
 
             if (leftRunway) {
                 // __|=|__->______
                 drawMeasuringLine(endObstacle, 300, 200, "blast protection");
                 drawMeasuringLine(endObstacle + 300, rTORA, 200, "TORA " + rTORA + "m");
 
-                drawMeasuringLine(endObstacle, slopecalc, 210, "slope offset");
-                drawMeasuringLine(endObstacle + slopecalc, rLDA, 210, "LDA " + rLDA + "m");
+                drawMeasuringLine(endObstacle, slopecalc + 60, 210, "slope offset");         // length = slopecalc+60 which is the strip end. Maybe show that in text too?
+                drawMeasuringLine(endObstacle + slopecalc + 60, rLDA, 210, "LDA " + rLDA + "m");
             } else {
                 // __|=|__<-______
-                drawMeasuringLine(endObstacle, slopecalc, 200, "slope offset");
-                drawMeasuringLine(endObstacle + slopecalc, rTORA, 200, "TORA " + rTORA + "m");
+                drawMeasuringLine(endObstacle, slopecalc + 60, 200, "slope offset");
+                drawMeasuringLine(endObstacle + slopecalc + 60, rTORA, 200, "TORA " + rTORA + "m");
 
                 drawMeasuringLine(endObstacle, 300, 210, "RESA + strip end");
                 drawMeasuringLine(endObstacle + 300, rLDA, 210, "LDA " + rLDA + "m");
@@ -172,11 +173,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
             if (leftRunway) {
                 // ______->__|=|__
                 drawMeasuringLine(60, rTORA, 200, "TORA " + rTORA + "m");
-                drawMeasuringLine(60 + rTORA, slopecalc, 200, "slope offset");
+                drawMeasuringLine(60 + rTORA, slopecalc + 60, 200, "slope offset");
 
-                if (displacedThs > 0) {
-                    drawMeasuringLine(60, displacedThs, 210, "displaced TSH");
-                }
                 drawMeasuringLine(60 + displacedThs, rLDA, 210, "LDA " + rLDA + "m");
                 drawMeasuringLine(60 + displacedThs + rLDA, 300, 210, "strip end + RESA");
             } else {
@@ -185,7 +183,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
                 drawMeasuringLine(leftSpace + rTORA, 300, 200, "blast protection");
 
                 drawMeasuringLine(leftSpace, rLDA, 210, "LDA " + rLDA + "m");
-                drawMeasuringLine(leftSpace + rLDA, slopecalc, 210, "slope offset");
+                drawMeasuringLine(leftSpace + rLDA, slopecalc + 60, 210, "slope offset");
             }
 
             drawMeasuringLine(startObstacle, oLength, 200, "Obstacle");

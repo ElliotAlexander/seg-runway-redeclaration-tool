@@ -30,11 +30,7 @@ public class TopDownView extends RunwayView {
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
-        if (leftRunway) {
-            scaledFillRect(60, 125, TORA, 50);
-        } else {
-            scaledFillRect(leftSpace, 125, TORA, 50);
-        }
+        scaledFillRect(leftSpace, 125, TORA, 50);
 
 
         drawThresholdMarkers(gc);
@@ -90,7 +86,7 @@ public class TopDownView extends RunwayView {
 
             GraphicsContext gc = getGraphicsContext2D();
 
-            int obstacle_x = obstaclePosition.getDistLeftTSH() + 60;
+            int obstacle_x = obstaclePosition.getDistLeftTSH() + leftSpace;
             int obstacle_y;
 
             if (Integer.parseInt(runway.getDesignator().substring(0, 2)) > 18) {

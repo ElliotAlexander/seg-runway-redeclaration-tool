@@ -32,8 +32,6 @@ public class SideOnView extends RunwayView {
         drawTakeOffLandingDirection();
     }
 
-
-
     public void drawObstacle() {
         try {
             draw();
@@ -42,7 +40,7 @@ public class SideOnView extends RunwayView {
 
             gc.setFill(Color.RED);
             gc.setGlobalAlpha(0.5);
-            scaledFillRect(obstaclePosition.getDistLeftTSH() + 60, 149 - obstaclePosition.getObstacle().getHeight(), obstacleLength, obstaclePosition.getObstacle().getHeight());
+            scaledFillRect(obstaclePosition.getDistLeftTSH() + leftSpace, 149 - obstaclePosition.getObstacle().getHeight(), obstacleLength, obstaclePosition.getObstacle().getHeight());
             gc.setGlobalAlpha(1.0);
 
 
