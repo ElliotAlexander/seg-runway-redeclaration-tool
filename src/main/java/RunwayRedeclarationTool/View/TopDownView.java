@@ -30,19 +30,19 @@ public class TopDownView extends RunwayView {
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
-        scaledFillRect(leftSpace, 125, TORA, 50);
+        scaledFillRect(leftSpace, 125, TORA-padding, 50);
 
 
         drawThresholdMarkers(gc);
         drawCentreLine(gc);
-        drawDesignators(150);
+        drawDesignators(150, Color.WHITE);
         drawMapScale();
         drawTakeOffLandingDirection();
         //drawScaleMarkings(gc);
-        drawStopway(100);
-        drawClearway(110);
+        drawStopway(115);
+        drawClearway(100);
 
-        drawDisplacedThreshold(100);
+        drawDisplacedThreshold(115);
 
     }
 
@@ -50,7 +50,7 @@ public class TopDownView extends RunwayView {
         // Cleared and graded areas
         gc.setFill(Color.web("ccc"));
         gc.fillPolygon(
-            new double[]{0 - scale_x(offset), scale_x(210 - offset), scale_x(360 - offset), scale_x(TORA - 240 - offset), scale_x(TORA - 90 - offset), scale_x(TORA + 120 - offset), scale_x(TORA + 120 - offset), scale_x(TORA - 90 - offset), scale_x(TORA - 240 - offset), scale_x(360 - offset), scale_x(210 - offset), 0 - scale_x(offset)},
+            new double[]{scale_x(-offset), scale_x(210 - offset), scale_x(360 - offset), scale_x(TORA - 240 - offset), scale_x(TORA - 90 - offset), scale_x(TORA + 120 - offset), scale_x(TORA + 120 - offset), scale_x(TORA - 90 - offset), scale_x(TORA - 240 - offset), scale_x(360 - offset), scale_x(210 - offset), scale_x(-offset)},
             new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)},
             12);
     }
@@ -114,7 +114,7 @@ public class TopDownView extends RunwayView {
 
             gc.setFill(Color.RED);
             gc.setGlobalAlpha(0.5);
-            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
+            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH() - padding, obstaclePosition.getWidth());
             gc.setGlobalAlpha(1.0);
         } catch (NullPointerException e) {
         }

@@ -18,6 +18,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
     protected boolean leftRunway;
     protected int leftSpace;
+    protected int padding;
 
     protected ObstaclePosition obstaclePosition;
 
@@ -32,6 +33,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         this.ASDA = p.getASDA();
         this.TODA = p.getTODA();
         this.LDA = p.getLDA();
+
+        this.padding = 150;
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
             leftRunway = true;
@@ -67,9 +70,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (stopway != 0) {
             if (leftRunway) {
-                drawMeasuringLine(TORA + 60, stopway, y, "stopway");
+                drawMeasuringLine(TORA + 60, stopway, y, "Stopway");
             } else {
-                drawMeasuringLine(leftSpace - stopway, stopway, y, "stopway");
+                drawMeasuringLine(leftSpace - stopway, stopway, y, "Stopway");
             }
         }
     }
@@ -79,15 +82,15 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (clearway != 0) {
             if (leftRunway) {
-                drawMeasuringLine(TORA + 60, clearway, y, "clearway");
+                drawMeasuringLine(TORA + 60, clearway, y, "Clearway");
             } else {
-                drawMeasuringLine(0, clearway, y, "clearway");
+                drawMeasuringLine(0, clearway, y, "Clearway");
             }
         }
     }
 
-    protected void drawDesignators(int y) {
-        gc.setFill(Color.BLACK);
+    protected void drawDesignators(int y, Color textColor) {
+        gc.setFill(textColor);
         gc.setFont(Font.font("Consolas", 24));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
@@ -124,17 +127,12 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(scale_y(0.5));
         gc.setFont(Font.font("Consolas", 14));
-
-        scaledStrokeLine(60, 20, 560, 20);
+        gc.setTextAlign(TextAlignment.RIGHT);
         if (!leftRunway) {
-            scaledStrokeLine(60, 20, 100, 16);
-            scaledStrokeLine(60, 20, 100, 24);
+            gc.fillText("Take-off/landing direction: \uD83E\uDC78", scale_x(TODA), scale_y(10));
         } else {
-            scaledStrokeLine(560, 20, 520, 16);
-            scaledStrokeLine(560, 20, 520, 24);
+            gc.fillText("Take-off/landing direction: \uD83E\uDC7A", scale_x(TODA), scale_y(10));
         }
-        gc.setTextAlign(TextAlignment.LEFT);
-        gc.fillText("Take-off/landing direction", scale_x(60), scale_y(10));
     }
 
     protected void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
@@ -218,9 +216,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (displacedTsh > 0) {
             if (leftRunway) {
-                drawMeasuringLine(60, displacedTsh, y, "displaced TSH");
+                drawMeasuringLine(60, displacedTsh, y, "Displaced TSH");
             } else {
-                drawMeasuringLine(Math.max(TODA, ASDA) - displacedTsh, displacedTsh, y, "displaced TSH");
+                drawMeasuringLine(Math.max(TODA, ASDA) - displacedTsh, displacedTsh, y, "Displaced TSH");
             }
         }
     }
@@ -251,7 +249,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     }
 
     protected double scale_x(double length) {
-        return length / (TODA + 60) * getWidth();
+        double maxWidth = TODA + leftSpace + padding*2;
+        return (length + padding) / maxWidth * getWidth();
     }
 
     protected double scale_y(double length) {

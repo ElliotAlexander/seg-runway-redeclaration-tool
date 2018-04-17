@@ -25,7 +25,7 @@ public class SideOnView extends RunwayView {
 
         scaledFillRect(leftSpace, 149, TORA, 2);
 
-        drawDesignators(170);
+        drawDesignators(170, Color.BLACK);
         drawStopway(100);
         drawClearway(110);
 
