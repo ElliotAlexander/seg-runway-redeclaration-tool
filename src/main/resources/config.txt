@@ -11,6 +11,7 @@
 # Logging
     Log File: logs.txt
     Log Directory: %USERHOME%/logs
+    Use Log File: true
 
 # Developers only
     SQL Config : db_config.sql

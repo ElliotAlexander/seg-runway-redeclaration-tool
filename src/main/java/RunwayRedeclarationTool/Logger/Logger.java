@@ -11,6 +11,10 @@ public class Logger {
 
     public Logger(Configuration config){
         try {
+            if (!Boolean.parseBoolean(config.getConfigurationValue("UseLogFile"))) {
+                Logger.Log("Disabling file logger as per config value [" + config.getConfigurationValue("UseLogFile") + "].");
+                return;
+            }
             fl = new FileLogger(config.getConfigurationValue("LogDirectory"), config.getConfigurationValue("LogFile"));
             fl.Log(buffered_output);
         } catch (ConfigurationKeyNotFound configurationKeyNotFound) {
