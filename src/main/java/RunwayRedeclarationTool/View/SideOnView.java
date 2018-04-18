@@ -11,6 +11,9 @@ public class SideOnView extends RunwayView {
         super(runway, obstaclePosition);
     }
 
+    /**
+     * Draw a side-on view of the runway.
+     */
     protected void draw() {
         double width = getWidth();
         double height = getHeight();
@@ -34,6 +37,9 @@ public class SideOnView extends RunwayView {
         drawTakeOffLandingDirection();
     }
 
+    /**
+     * Draw an obstacle on the runway.
+     */
     public void drawObstacle() {
         try {
             draw();

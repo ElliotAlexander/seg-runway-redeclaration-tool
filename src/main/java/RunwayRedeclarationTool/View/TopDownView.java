@@ -13,6 +13,9 @@ public class TopDownView extends RunwayView {
         super(runway, obstaclePosition);
     }
 
+    /**
+     * Draw a top-down view of the runway.
+     */
     protected void draw() {
         double width = getWidth();
         double height = getHeight();
@@ -46,6 +49,12 @@ public class TopDownView extends RunwayView {
 
     }
 
+    /**
+     * Draw the cleared and graded areas around the runway.
+     *
+     * @param gc GraphicsContext for drawing.
+     * @param offset the value to horizontally shift the drawing.
+     */
     private void drawClearedAndGradedArea(GraphicsContext gc, int offset) {
         // Cleared and graded areas
         gc.setFill(Color.web("ccc"));
@@ -55,6 +64,11 @@ public class TopDownView extends RunwayView {
             12);
     }
 
+    /**
+     * Draw the threshold markers on the runway.
+     *
+     * @param gc GraphicsContext for drawing.
+     */
     private void drawThresholdMarkers(GraphicsContext gc) {
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(scale_y(2));
@@ -65,6 +79,11 @@ public class TopDownView extends RunwayView {
         }
     }
 
+    /**
+     * Draw the runway centreline.
+     *
+     * @param gc GraphicsContext for drawing.
+     */
     private void drawCentreLine(GraphicsContext gc) {
         gc.setLineWidth(scale_y(1));
         gc.setLineDashes(30);
@@ -80,6 +99,9 @@ public class TopDownView extends RunwayView {
         gc.fillText("TORA: " + TORA + "m", scale_x(60), scale_y(191));
     }
 
+    /**
+     * Draw the obstacle on the view.
+     */
     public void drawObstacle() {
         try {
             draw();

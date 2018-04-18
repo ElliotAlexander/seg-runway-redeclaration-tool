@@ -111,6 +111,9 @@ public class MainWindowController implements Initializable {
     }
 
 
+    /**
+     * Add top-down and side-on views to the main window.
+     */
     public void drawRunway() {
         topDownViewContainer.getChildren().clear();
         sideOnViewContainer.getChildren().clear();
@@ -155,12 +158,21 @@ public class MainWindowController implements Initializable {
 }
 
     // TODO - Clear the text fields
-    @FXML void clearFields() {
+
+    /**
+     * Clear the current object and additional markings.
+     */
+    @FXML
+    public void clearFields() {
         this.obstaclePosition = null;
         drawRunway();
     }
 
-    @FXML void updateRunways() {
+    /**
+     * Update the runway combo box when airport is changed.
+     */
+    @FXML
+    public void updateRunways() {
         Airport airport = airportComboBox.getValue();
         if (airport == null || controller.get_runways(airport.getAirport_id()).length == 0) {
             return;
@@ -172,16 +184,27 @@ public class MainWindowController implements Initializable {
         runwayComboBox.setItems(observableList);
     }
 
-    @FXML void handleTopDownImageExport(){
+    /**
+     * Export the current top-down view as an image.
+     */
+    @FXML
+    public void handleTopDownImageExport(){
         Logger.Log("Running Image Export for top down view.");
         new ImageExport().export(topDownView);
     }
 
-    @FXML void handleSideOnImageExport(){
+    /**
+     * Export the current side-on view as an image.
+     */
+    @FXML
+    public void handleSideOnImageExport(){
         Logger.Log("Running Image Export for side on view.");
         new ImageExport().export(sideOnView);
     }
 
+    /**
+     * Export all runway and obstacle information as text.
+     */
     @FXML
     public void handleExportAsText(){
         String outputString = "";
@@ -203,6 +226,9 @@ public class MainWindowController implements Initializable {
         ExportToTextWindow.display(outputString);
     }
 
+    /**
+     * Update the virtual runways combo box after runway change.
+     */
     @FXML
     public void updateVirtualRunways() {
         Runway runway = runwayComboBox.getValue();
@@ -217,6 +243,9 @@ public class MainWindowController implements Initializable {
         updateDeclaredDistancesTextfield();
     }
 
+    /**
+     * Recalculate and display the declared distances given the obstacle on the runway.
+     */
     @FXML
     public void recalculateDistances() {
 
@@ -263,6 +292,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Add a new airport to the database.
+     */
     @FXML
     public void handleNewAirport() {
         try {
@@ -278,6 +310,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Add a new runway to the database.
+     */
     @FXML
     public void handleNewRunway() {
         try {
@@ -299,6 +334,9 @@ public class MainWindowController implements Initializable {
 
     }
 
+    /**
+     * Add a new obstacle to the database.
+     */
     @FXML
     public void handleNewObstacle() {
         try {
@@ -315,24 +353,36 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Load an XML file.
+     */
     @FXML
     public void handleImportFile() {
         new XML_File_Loader(controller).load_file();
         refresh_combobox();
     }
 
+    /**
+     * Load a directory.
+     */
     @FXML
     void handleImportFolder() {
         new XML_File_Loader(controller).load_directory();
         refresh_combobox();
     }
 
+    /**
+     * Remove an airport from the database.
+     */
     @FXML
     public void handleRemoveAirport() {
         RemoveAirportPopup.display(controller);
         refresh_combobox();
     }
 
+    /**
+     * Refresh the combo boxes to reflect changes to .
+     */
     private void refresh_combobox() {
         airportComboBox.getItems().clear();
         airportComboBox.getItems().addAll(controller.get_airports());
@@ -362,6 +412,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Prevents user from entering a value for distance to C/L if they specify the object is in the center.
+     */
     @FXML
     private void runwaySideComboBoxHandler(){
         if(runwaySideComboBox.getValue() == RunwaySide.CENTER){
@@ -373,6 +426,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * Show the About popup display.
+     */
     @FXML
     private void showAbout() {
         AboutPopup.display();
