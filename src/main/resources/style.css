@@ -7,6 +7,10 @@
     -fx-effect: null;
 }
 
+.text{
+    -fx-font-smoothing-type: gray;
+}
+
 .text-field {
     -fx-focus-color: #007bff;
 }

@@ -45,6 +45,8 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Runway Re-declaration Tool");
+        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(960);
         Image icon  = new Image(this.getClass().getClassLoader().getResourceAsStream("icon.png"));
         primaryStage.getIcons().add(icon);
 
