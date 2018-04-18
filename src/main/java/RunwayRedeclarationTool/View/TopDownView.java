@@ -39,8 +39,8 @@ public class TopDownView extends RunwayView {
         drawMapScale();
         drawTakeOffLandingDirection();
         //drawScaleMarkings(gc);
-        drawStopway(115);
-        drawClearway(100);
+        drawStopway(100);
+        drawClearway(115);
 
         drawDisplacedThreshold(115);
 
@@ -107,7 +107,7 @@ public class TopDownView extends RunwayView {
 
             int obstacleLength = runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH();
             try {
-                drawBrokenDownDistances(obstacleLength);
+                drawBrokenDownDistances(obstacleLength, 210);
             } catch (AttributeNotAssignedException e) {
                 e.printStackTrace();
             }

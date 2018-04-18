@@ -1,43 +1,77 @@
 <?xml version="1.0"?>
 <class>
-    <Airport airport_name="Heathrow">
+    <Airport airport_name="London Heathrow">
         <airport_id>LHR</airport_id>
         <Runway>
             <vr designator="09L">
-                <tora>1000</tora>
-                <toda>1000</toda>
-                <asda>1000</asda>
-                <lda>1000</lda>
+                <tora>3901</tora>
+                <toda>3901</toda>
+                <asda>3901</asda>
+                <lda>3592</lda>
             </vr>
             <vr designator="27R">
-                <tora>1000</tora>
-                <toda>1000</toda>
-                <asda>1000</asda>
-                <lda>1000</lda>
+                <tora>3882</tora>
+                <toda>3960</toda>
+                <asda>3882</asda>
+                <lda>3882</lda>
+            </vr>
+        </Runway>
+        <Runway>
+            <vr designator="09R">
+                <tora>3658</tora>
+                <toda>3658</toda>
+                <asda>3658</asda>
+                <lda>3350</lda>
+            </vr>
+            <vr designator="27L">
+                <tora>3658</tora>
+                <toda>3658</toda>
+                <asda>3658</asda>
+                <lda>3658</lda>
             </vr>
         </Runway>
     </Airport>
-  <Airport airport_name="Los Angeles International Airport">
-    <airport_id>LAX</airport_id>
-    <Runway>
-      <vr designator="15L">
-        <tora>2000</tora>
-        <toda>2000</toda>
-        <asda>2000</asda>
-        <lda>2000</lda>
-      </vr>
-      <vr designator="33R">
-        <tora>2000</tora>
-        <toda>2000</toda>
-        <asda>2000</asda>
-        <lda>2000</lda>
-      </vr>
-    </Runway>
-  </Airport>
-  <Obstacle obstacle_name="Crashed 747-400">
-    <height>100</height>
-  </Obstacle>
-  <Obstacle obstacle_name="Sixteen Spitfire Mk IX">
-        <height>100</height>
-  </Obstacle>
+    <Airport airport_name="London Gatwick">
+        <airport_id>LGW</airport_id>
+        <Runway>
+            <vr designator="08L">
+                <tora>2565</tora>
+                <toda>3040</toda>
+                <asda>2565</asda>
+                <lda>2243</lda>
+            </vr>
+            <vr designator="26R">
+                <tora>2565</tora>
+                <toda>2703</toda>
+                <asda>2565</asda>
+                <lda>2148</lda>
+            </vr>
+        </Runway>
+    </Airport>
+    <Airport airport_name="Southampton">
+        <airport_id>SOU</airport_id>
+        <Runway>
+            <vr designator="02">
+                <tora>1723</tora>
+                <toda>1831</toda>
+                <asda>1723</asda>
+                <lda>1650</lda>
+            </vr>
+            <vr designator="20">
+                <tora>1650</tora>
+                <toda>1805</toda>
+                <asda>1650</asda>
+                <lda>1605</lda>
+            </vr>
+        </Runway>
+    </Airport>
+    <Obstacle obstacle_name="Crashed 747-400">
+        <height>20</height>
+    </Obstacle>
+    <Obstacle obstacle_name="Crashed Airbus A380">
+        <height>24</height>
+    </Obstacle>
+    <Obstacle obstacle_name="Surface damage">
+        <height>1</height>
+    </Obstacle>
  </class>

@@ -47,7 +47,7 @@ public class SideOnView extends RunwayView {
 
 
             // TODO Add a button for this
-            drawBrokenDownDistances(obstacleLength);
+            drawBrokenDownDistances(obstacleLength, 200);
 
         } catch (NullPointerException e) {
             // TODO: this is bad practice. Make sure that there is an object when this method is called
