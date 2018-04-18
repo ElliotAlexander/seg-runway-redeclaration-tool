@@ -218,7 +218,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
             drawMeasuringLine(startObstacle, oLength, y, "Obstacle");
             if (obstaclePosition.getDistRightTSH() > 0) {
-                drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), 200, obstaclePosition.getDistRightTSH() + "m");
+                drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), y, obstaclePosition.getDistRightTSH() + "m");
             }
         }
     }
