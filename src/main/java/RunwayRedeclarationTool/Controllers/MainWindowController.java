@@ -22,10 +22,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.FileChooser;
 
 import javax.swing.*;
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;

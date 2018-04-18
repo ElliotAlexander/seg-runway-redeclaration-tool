@@ -22,5 +22,9 @@ public class Configuration {
         }
     }
 
+    public String[] getKeys(){
+        return configuration_values.keySet().toArray(new String[configuration_values.keySet().size()]);
+    }
+
 
 }
