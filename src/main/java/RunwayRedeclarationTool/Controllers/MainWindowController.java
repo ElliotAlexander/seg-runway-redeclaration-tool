@@ -8,6 +8,8 @@ import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
 import RunwayRedeclarationTool.View.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -59,11 +61,47 @@ public class MainWindowController implements Initializable {
         this.config = config;
         this.controller = controller;
     }
-
-
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT, RunwaySide.CENTER);
+
+        distanceFromTHRLeft.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    distanceFromTHRLeft.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        distanceFromTHRRight.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    distanceFromTHRRight.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        distanceFromCL.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    distanceFromCL.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        obstacleWidth.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    obstacleWidth.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
 
         if (controller.get_airports().length > 0) {
             Logger.Log("Loaded airports: c" + controller.get_airports().toString());
