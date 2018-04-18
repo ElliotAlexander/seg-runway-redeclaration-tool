@@ -166,7 +166,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param oLength the length of the obstacle.
      * @throws AttributeNotAssignedException
      */
-    protected void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
+    protected void drawBrokenDownDistances(int oLength, int y) throws AttributeNotAssignedException {
         RunwayParameters recalcParams = runway.getRecalcParams();
 
         int rTORA = recalcParams.getTORA();
@@ -177,46 +177,46 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
             if (obstaclePosition.getDistLeftTSH() > 0) {
-                drawMeasuringLine(leftSpace, obstaclePosition.getDistLeftTSH(), 200, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
+                drawMeasuringLine(leftSpace, obstaclePosition.getDistLeftTSH(), y, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
             }
-            drawMeasuringLine(obstaclePosition.getDistLeftTSH() + leftSpace, oLength, 200, "Obstacle");
+            drawMeasuringLine(obstaclePosition.getDistLeftTSH() + leftSpace, oLength, y, "Obstacle");
             int endObstacle = leftSpace + obstaclePosition.getDistLeftTSH() + oLength;
 
             if (leftRunway) {
                 // __|=|__->______
-                drawMeasuringLine(endObstacle, 300, 200, "blast protection");
-                drawTORA_TODA_ASDA(endObstacle + 300, recalcParams);
+                drawMeasuringLine(endObstacle, 300, y, "blast protection");
+                drawTORA_TODA_ASDA(endObstacle + 300, y, recalcParams);
 
-                drawMeasuringLine(endObstacle, slopecalc + 60, 210, "slope offset");         // length = slopecalc+60 which is the strip end. Maybe show that in text too?
-                drawMeasuringLine(endObstacle + slopecalc + 60, rLDA, 210, "LDA " + rLDA + "m");
+                drawMeasuringLine(endObstacle, slopecalc + 60, y + 10, "slope offset");         // length = slopecalc+60 which is the strip end. Maybe show that in text too?
+                drawMeasuringLine(endObstacle + slopecalc + 60, rLDA, y + 10, "LDA " + rLDA + "m");
             } else {
                 // __|=|__<-______
-                drawMeasuringLine(endObstacle, slopecalc + 60, 200, "slope offset");
-                drawTORA_TODA_ASDA(endObstacle + slopecalc + 60, recalcParams);
+                drawMeasuringLine(endObstacle, slopecalc + 60, y, "slope offset");
+                drawTORA_TODA_ASDA(endObstacle + slopecalc + 60, y, recalcParams);
 
-                drawMeasuringLine(endObstacle, 300, 210, "RESA + strip end");
-                drawMeasuringLine(endObstacle + 300, rLDA, 210, "LDA " + rLDA + "m");
+                drawMeasuringLine(endObstacle, 300, y + 10, "RESA + strip end");
+                drawMeasuringLine(endObstacle + 300, rLDA, y + 10, "LDA " + rLDA + "m");
             }
         } else {
             int startObstacle = leftSpace + obstaclePosition.getDistLeftTSH();
 
             if (leftRunway) {
                 // ______->__|=|__
-                drawTORA_TODA_ASDA(60, recalcParams);
-                drawMeasuringLine(60 + rTORA, slopecalc + 60, 200, "slope offset");
+                drawTORA_TODA_ASDA(60, y, recalcParams);
+                drawMeasuringLine(60 + rTORA, slopecalc + 60, y, "slope offset");
 
-                drawMeasuringLine(60 + displacedThs, rLDA, 210, "LDA " + rLDA + "m");
-                drawMeasuringLine(60 + displacedThs + rLDA, 300, 210, "strip end + RESA");
+                drawMeasuringLine(60 + displacedThs, rLDA, y + 10, "LDA " + rLDA + "m");
+                drawMeasuringLine(60 + displacedThs + rLDA, 300, y + 10, "strip end + RESA");
             } else {
                 // ______<-__|=|__
-                drawTORA_TODA_ASDA(leftSpace, recalcParams);
-                drawMeasuringLine(leftSpace + rTORA, 300, 200, "blast protection");
+                drawTORA_TODA_ASDA(leftSpace, y, recalcParams);
+                drawMeasuringLine(leftSpace + rTORA, 300, y, "blast protection");
 
-                drawMeasuringLine(leftSpace, rLDA, 210, "LDA " + rLDA + "m");
-                drawMeasuringLine(leftSpace + rLDA, slopecalc + 60, 210, "slope offset");
+                drawMeasuringLine(leftSpace, rLDA, y + 10, "LDA " + rLDA + "m");
+                drawMeasuringLine(leftSpace + rLDA, slopecalc + 60, y + 10, "slope offset");
             }
 
-            drawMeasuringLine(startObstacle, oLength, 200, "Obstacle");
+            drawMeasuringLine(startObstacle, oLength, y, "Obstacle");
             if (obstaclePosition.getDistRightTSH() > 0) {
                 drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), 200, obstaclePosition.getDistRightTSH() + "m");
             }
@@ -229,22 +229,22 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param x
      * @param recalcParams
      */
-    private void drawTORA_TODA_ASDA(int x, RunwayParameters recalcParams) {
+    private void drawTORA_TODA_ASDA(int x, int y, RunwayParameters recalcParams) {
         int rTORA = recalcParams.getTORA();
         int rTODA = recalcParams.getTODA();
         int rASDA = recalcParams.getASDA();
 
-        drawMeasuringLine(x, rTORA, 200, "TORA " + rTORA + "m");
+        drawMeasuringLine(x, rTORA, y, "TORA " + rTORA + "m");
 
         if (rTODA != rTORA) {
-            drawMeasuringLine(x, rTODA, 190, "TODA " + rTODA + "m");
+            drawMeasuringLine(x, rTODA, y - 10, "TODA " + rTODA + "m");
         } else {
-            gc.fillText("TODA " + rTODA + "m", scale_x(x + rTODA / 2), scale_y(190));
+            gc.fillText("TODA " + rTODA + "m", scale_x(x + rTODA / 2), scale_y(y - 10));
         }
         if (rASDA != rTORA && rASDA != rTODA) {
-            drawMeasuringLine(x, rASDA, 180, "ASDA " + rASDA + "m");
+            drawMeasuringLine(x, rASDA, y - 20, "ASDA " + rASDA + "m");
         } else {
-            gc.fillText("ASDA " + rASDA + "m", scale_x(x + rASDA / 2), scale_y(180));
+            gc.fillText("ASDA " + rASDA + "m", scale_x(x + rASDA / 2), scale_y(y - 20));
         }
     }
 
