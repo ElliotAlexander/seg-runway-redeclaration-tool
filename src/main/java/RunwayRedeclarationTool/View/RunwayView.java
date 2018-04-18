@@ -24,6 +24,12 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
     protected GraphicsContext gc;
 
+    /**
+     * Parent class of top-down and side-on view classes.
+     *
+     * @param runway           the runway to draw.
+     * @param obstaclePosition the position of the obstacle.
+     */
     public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
@@ -65,6 +71,11 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
     public abstract void drawObstacle();
 
+    /**
+     * Draw a measuring line to display the stopway.
+     *
+     * @param y the height at which to draw the measuring line.
+     */
     protected void drawStopway(int y) {
         int stopway = ASDA - TORA;
 
@@ -77,6 +88,11 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         }
     }
 
+    /**
+     * Draw a measuring line to display the clearway.
+     *
+     * @param y the height at which to draw the measuring line.
+     */
     protected void drawClearway(int y) {
         int clearway = TODA - TORA;
 
@@ -89,6 +105,12 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         }
     }
 
+    /**
+     * Draw the runway designators on both ends of the runway.
+     *
+     * @param y         the height at which to draw the designators.
+     * @param textColor the colour to draw the designators in.
+     */
     protected void drawDesignators(int y, Color textColor) {
         gc.setFill(textColor);
         gc.setFont(Font.font("Consolas", 24));
@@ -122,6 +144,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         }
     }
 
+    /**
+     * Display an indication of the take-off and landing direction.
+     */
     protected void drawTakeOffLandingDirection() {
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
@@ -135,6 +160,12 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         }
     }
 
+    /**
+     * Draw a breakdown of the distances relating to the object.
+     *
+     * @param oLength the length of the obstacle.
+     * @throws AttributeNotAssignedException
+     */
     protected void drawBrokenDownDistances(int oLength) throws AttributeNotAssignedException {
         RunwayParameters recalcParams = runway.getRecalcParams();
 
@@ -192,6 +223,12 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         }
     }
 
+    /**
+     * Draw the TORA, TODA and ASDA of the runway.
+     *
+     * @param x
+     * @param recalcParams
+     */
     private void drawTORA_TODA_ASDA(int x, RunwayParameters recalcParams) {
         int rTORA = recalcParams.getTORA();
         int rTODA = recalcParams.getTODA();
@@ -211,6 +248,11 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         }
     }
 
+    /**
+     * Draw the diaplaced threshold marker.
+     *
+     * @param y the height at which to draw the marker.
+     */
     protected void drawDisplacedThreshold(int y) {
         int displacedTsh = TORA - LDA;
 
@@ -223,6 +265,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         }
     }
 
+    /**
+     * Draw a scale on the views.
+     */
     protected void drawMapScale() {
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
@@ -235,6 +280,14 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         gc.fillText("500m", scale_x(60), scale_y(285));
     }
 
+    /**
+     * Draw a horizontal measuring line on the view.
+     *
+     * @param x      the start position of the line
+     * @param length the length of the line.
+     * @param y      the height at which to draw the line.
+     * @param text   the text to label the line with.
+     */
     protected void drawMeasuringLine(int x, int length, int y, String text) {
         gc.setFill(Color.BLACK);
         gc.setStroke(Color.BLACK);
@@ -248,19 +301,47 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         gc.fillText(text, scale_x(x + length / 2), scale_y(y - 5));
     }
 
+    /**
+     * Scale distances in metres to percentage width on the views.
+     *
+     * @param length the length to scale.
+     * @return the scaled length.
+     */
     protected double scale_x(double length) {
-        double maxWidth = TODA + leftSpace + padding*2;
+        double maxWidth = TODA + leftSpace + padding * 2;
         return (length + padding) / maxWidth * getWidth();
     }
 
+    /**
+     * Scale distances in metres to percentage height on the views.
+     *
+     * @param length the length to scale.
+     * @return the scaled length.
+     */
     protected double scale_y(double length) {
         return length / 300 * getHeight();
     }
 
+    /**
+     * Draw a scaled line on the view.
+     *
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
     protected void scaledStrokeLine(double x1, double y1, double x2, double y2) {
         gc.strokeLine(scale_x(x1), scale_y(y1), scale_x(x2), scale_y(y2));
     }
 
+    /**
+     * Draw a scaled rectangle on the view.
+     *
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
     protected void scaledFillRect(double x, double y, double w, double h) {
         gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
     }
@@ -279,5 +360,4 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     public double prefHeight(double width) {
         return getHeight();
     }
-
 }
