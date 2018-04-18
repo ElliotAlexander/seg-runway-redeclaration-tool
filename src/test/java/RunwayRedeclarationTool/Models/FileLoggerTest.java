@@ -41,7 +41,6 @@ public class FileLoggerTest {
             fail("Failed to load configuration vales when setting up loggers.");
         }
 
-
     }
 
 }
