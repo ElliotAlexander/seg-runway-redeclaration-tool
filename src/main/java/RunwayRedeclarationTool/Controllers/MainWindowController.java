@@ -441,4 +441,13 @@ public class MainWindowController implements Initializable {
         new XML_Export(controller);
         refresh_combobox();
     }
+
+
+    @FXML
+    public void handleRemoveObstacle(){
+        for(Obstacle o : SelectObstaclePopup.display(controller, "Select Obstacle(s) to remove")){
+            controller.remove_obstacle(o);
+        }
+        refresh_combobox();
+    }
 }

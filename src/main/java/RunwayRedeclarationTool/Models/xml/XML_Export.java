@@ -138,7 +138,6 @@ public class XML_Export {
                     Logger.Log("Adding Virtual Runway [" + vr.toString() + "] to XML.");
 
                 }
-
                 airport_element.appendChild(runway_Element);
             }
     }

@@ -298,6 +298,20 @@ public class DB_controller
         return return_list.toArray(new Obstacle[return_list.size()]);
     }
 
+    public void remove_obstacle(Obstacle o){
+        String remove_obstacle = "DELETE FROM obstacle WHERE obstacle_name=\'" + o.getName() + "\';";
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+            Logger.Log("Executing: " + remove_obstacle);
+            stmt.execute(remove_obstacle);
+            Logger.Log("Removing obstacle [" + o.toString() + "].");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void rebuild_db(Connection connection){
 
         // This presumes that maven has already moved resources into /target, so may not work in IDE - depending on your config.
