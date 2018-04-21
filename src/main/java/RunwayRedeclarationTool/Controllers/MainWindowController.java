@@ -6,6 +6,7 @@ import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.Models.xml.XML_Export;
 import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
 import RunwayRedeclarationTool.View.*;
 import javafx.beans.value.ChangeListener;
@@ -374,7 +375,9 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleRemoveAirport() {
-        RemoveAirportPopup.display(controller);
+        for(Airport a : SelectAirportPopup.display(controller, "Select Airports to Remove")){
+            controller.remove_Airport(a);
+        }
         refresh_combobox();
     }
 
@@ -430,5 +433,12 @@ public class MainWindowController implements Initializable {
     @FXML
     private void showAbout() {
         AboutPopup.display();
+    }
+
+
+    @FXML
+    public void handleExportXML(){
+        new XML_Export(controller);
+        refresh_combobox();
     }
 }

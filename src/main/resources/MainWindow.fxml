@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -19,8 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<?import javafx.scene.control.ScrollPane?>
-<BorderPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu text="File">
@@ -40,6 +40,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Export">
                   <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleExportXML" text="XML" />
                       <Menu mnemonicParsing="false" text="Image">
                         <items>
                           <MenuItem mnemonicParsing="false" onAction="#handleSideOnImageExport" text="Side On View" />

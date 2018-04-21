@@ -1,19 +1,15 @@
 package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Models.Airport;
-import RunwayRedeclarationTool.Models.Runway;
+import RunwayRedeclarationTool.Models.Obstacle;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -21,19 +17,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 
+public class SelectObstaclePopup {
 
-public class RemoveAirportPopup {
-
-
-
-    public static Airport[] display(DB_controller controller) {
+    public static Obstacle[] display(DB_controller controller, String windowTitle) {
         final Stage window = new Stage();
 
 
         // Window setup
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Remove an Airport");
+        window.setTitle(windowTitle);
         BorderPane grid = new BorderPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(grid, 700, 400);
@@ -41,25 +35,29 @@ public class RemoveAirportPopup {
 
 
         // Top Panel
-        Label topLabel = new Label("Select Airports to remove:");
+        Label topLabel = new Label("Select one or more Obstacles from the table");
         grid.setTop(topLabel);
 
 
         // Center Panel - Table setup
         TableView table = new TableView();
         table.setEditable(true);
-        TableColumn airportName = new TableColumn("Name");
-        TableColumn airportID = new TableColumn("Identifier");
-        table.getColumns().addAll(airportName, airportID);
+        TableColumn obstacleName = new TableColumn("Name");
+        TableColumn obstacleHeight = new TableColumn("Height");
+        table.getColumns().addAll(obstacleName, obstacleHeight);
 
-        final ObservableList<Airport> data = FXCollections.observableArrayList(controller.get_airports());
+        final ObservableList<Obstacle> data = FXCollections.observableArrayList(controller.get_obstacles());
 
-        airportName.setCellValueFactory(
-                new PropertyValueFactory<Airport,String>("airport_name")
+        obstacleName.setCellValueFactory(
+                new PropertyValueFactory<Airport,String>("name")
         );
 
-        airportID.setCellValueFactory(
-                new PropertyValueFactory<Airport,String>("airport_id")
+        obstacleHeight.setCellValueFactory(
+                new PropertyValueFactory<Airport,String>("height")
+        );
+
+        table.getSelectionModel().setSelectionMode(
+                SelectionMode.MULTIPLE
         );
 
 
@@ -76,14 +74,14 @@ public class RemoveAirportPopup {
         layout.setMargin(cancelButton, new Insets(15, 0, 15, 0));
         grid.setBottom(layout);
 
-
+        ArrayList<Obstacle> obstacles = new ArrayList<>();
 
         confirmButtom.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                ObservableList<Airport> airports = table.getSelectionModel().getSelectedItems();
-                for(Airport airport : airports){
-                    controller.remove_Airport(airport);
+                List<Obstacle> showing = table.getSelectionModel().getSelectedItems();
+                for(Obstacle obstacle : showing){
+                    obstacles.add(obstacle);
                 }
                 window.close();
             }
@@ -99,6 +97,7 @@ public class RemoveAirportPopup {
 
         window.setScene(scene);
         window.showAndWait();
-        return null;
+        return obstacles.toArray(new Obstacle[obstacles.size()]);
     }
+
 }
