@@ -3,10 +3,12 @@ package RunwayRedeclarationTool.Models.xml;
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.Airport;
+import RunwayRedeclarationTool.Models.Obstacle;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.View.SelectAirportPopup;
+import RunwayRedeclarationTool.View.SelectObstaclePopup;
 import javafx.stage.FileChooser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,17 +36,6 @@ public class XML_Export {
     }
 
     private void export(){
-
-        FileChooser fd = new FileChooser();
-        fd.setInitialDirectory(new File(System.getProperty("user.home")));
-        fd.setTitle("Select a save location");
-        fd.setInitialFileName("exported_airports.xml");
-        fd.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("XML", "*.xml")
-        );
-
-        File file = fd.showSaveDialog(null);
-
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -56,6 +47,20 @@ public class XML_Export {
             for(Airport airport : SelectAirportPopup.display(db_controller, "Select Airports to export")){
                 buildAirportElement(airport, document, rootElement);
             }
+
+            for(Obstacle obstacle : SelectObstaclePopup.display(db_controller, "Select Obstacles to export")){
+                buildObstacleElement(obstacle, document, rootElement);
+            }
+
+            FileChooser fd = new FileChooser();
+            fd.setInitialDirectory(new File(System.getProperty("user.home")));
+            fd.setTitle("Select a save location");
+            fd.setInitialFileName("exported_airports.xml");
+            fd.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("XML", "*.xml")
+            );
+
+            File file = fd.showSaveDialog(null);
 
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -75,8 +80,20 @@ public class XML_Export {
         }
     }
 
+    private void buildObstacleElement(Obstacle obstacle, Document document, Element rootElement){
+        Element obstacle_element = document.createElement("Obstacle");
+        obstacle_element.setAttribute("obstacle_name", obstacle.getName());
+        rootElement.appendChild(obstacle_element);
 
-    private Document buildAirportElement(Airport airport, Document document, Element rootElement){
+        Element height_element = document.createElement("height");
+        height_element.appendChild(document.createTextNode(String.valueOf(obstacle.getHeight())));
+        obstacle_element.appendChild(height_element);
+
+        Logger.Log("Adding Obstacle Node [" + obstacle.toString() + "]");
+    }
+
+
+    private void buildAirportElement(Airport airport, Document document, Element rootElement){
 
         // Root airport element + name attribute
         Element airport_element = document.createElement("Airport");
@@ -89,6 +106,7 @@ public class XML_Export {
         Element airport_id = document.createElement("airport_id");
         airport_id.appendChild(document.createTextNode(airport.getAirport_id()));
         airport_element.appendChild(airport_id);
+        Logger.Log("Adding Airport [" + airport.toString() + "] to XML.");
 
         // Runway and vr elements
 
@@ -117,11 +135,12 @@ public class XML_Export {
 
 
                     runway_Element.appendChild(vr_node);
+                    Logger.Log("Adding Virtual Runway [" + vr.toString() + "] to XML.");
+
                 }
 
                 airport_element.appendChild(runway_Element);
             }
-        return document;
     }
     
 
