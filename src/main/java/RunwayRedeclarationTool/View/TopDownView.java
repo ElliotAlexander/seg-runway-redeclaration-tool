@@ -1,6 +1,7 @@
 package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
 import RunwayRedeclarationTool.Models.RunwaySide;
 import RunwayRedeclarationTool.Models.VirtualRunway;
@@ -131,6 +132,7 @@ public class TopDownView extends RunwayView {
             try {
                 drawBrokenDownDistances(obstacleLength, 210);
             } catch (AttributeNotAssignedException e) {
+                Logger.Log(Logger.Level.ERROR, "Failed to draw broken down distances!\nObstacle position = " + obstaclePosition.toString());
                 e.printStackTrace();
             }
 

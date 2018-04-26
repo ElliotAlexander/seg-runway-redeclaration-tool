@@ -35,8 +35,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
 
+
         if(runway == null){
-            Logger.Log(Logger.Level.WARNING, "Attempting to draw non-existent runway. Returning blank.");
             return;
         }
 

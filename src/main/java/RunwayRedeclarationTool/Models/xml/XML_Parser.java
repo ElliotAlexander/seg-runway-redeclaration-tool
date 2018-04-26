@@ -149,4 +149,19 @@ public class XML_Parser {
 
     }
 
+    private void parse_obstacle_position(Element[] obstacle_positions){
+        if(obstacle_positions.length > 1){
+            Logger.Log(Logger.Level.ERROR, "Found more than one obstacle position when importing.\nOnly the first obstacle position within the file will be imported.");
+        }
+
+        if(obstacle_positions.length == 0){
+            Logger.Log("Found no obstacle positions within file Skipping.");
+            return;
+        }
+
+        Element import_position = obstacle_positions[0];
+
+
+    }
+
 }
