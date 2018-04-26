@@ -15,11 +15,11 @@ public class AboutPopup {
 
         Text t1 = new Text("Runway Re-declaration Tool\n");
         Text t2 = new Text("A project by\nKeshav Kaushal\nAdelaida Creosteanu\nElliot Alexander\nChauncey Hertzog Fraser\n\n");
-        Text t3 = new Text("\tCommercial airports are busy places. Ideally runways will be fully open at all times, but this is " +
+        Text t3 = new Text("Commercial airports are busy places. Ideally runways will be fully open at all times, but this is " +
                 "not always possible. When there is an obstruction (such as a broken down aircraft or surface " +
                 "damage) on the runway, it may need to be closed. However it may still be possible to keep the " +
                 "runway open, albeit with reduced distances available for landing and taking off. " +
-                "All runways have a published set of parameters. \n\tWhen an obstacle is present on the runway, " +
+                "All runways have a published set of parameters. \n\nWhen an obstacle is present on the runway, " +
                 "these parameters must be recalculated and a commercial decision made whether to continue " +
                 "operations on the runway. If (limited) operations are to continue, the published data about the " +
                 "runway must be recalculated and republished. The final decision about whether to land/take off " +
