@@ -10,8 +10,6 @@ public class PopupNotification {
 
     public static void display(String title, String message){
 
-
-
         TrayNotification tray = new TrayNotification();
 
         Image pic = new Image("/popup.png");

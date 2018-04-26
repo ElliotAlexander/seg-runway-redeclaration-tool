@@ -100,7 +100,6 @@ public class MainWindowController implements Initializable {
         });
 
         if (controller.get_airports().length > 0) {
-            Logger.Log("Loaded airports: c" + controller.get_airports().toString());
             refresh_airports();
             drawRunway();
         }
@@ -280,6 +279,7 @@ public class MainWindowController implements Initializable {
             airportComboBox.getItems().add(newAirport);
             airportComboBox.setValue(newAirport);
             controller.add_airport(newAirport);
+            PopupNotification.display("Success - Airport added.", "Airport " + newAirport.toString() + " added successfully.");
         } catch (NullPointerException e) {
         }
     }
@@ -292,6 +292,7 @@ public class MainWindowController implements Initializable {
         try {
             Airport currentAirport = airportComboBox.getValue();
             if (currentAirport == null) {
+                // TODO change this.
                 JOptionPane.showMessageDialog(null, "You need to add or import an airport prior to adding a runway.");
                 return;
             }
@@ -303,6 +304,7 @@ public class MainWindowController implements Initializable {
             runwayComboBox.getItems().addAll(newRunway);
             runwayComboBox.setValue(newRunway);
             controller.add_Runway(newRunway, currentAirport.getAirport_id());
+            PopupNotification.display("Success - Runway added", "Successfully added Runway " + newRunway.toString());
         } catch (NullPointerException e) {
         }
 
@@ -323,6 +325,7 @@ public class MainWindowController implements Initializable {
             obstructionComboBox.getItems().add(newObstacle);
             obstructionComboBox.setValue(newObstacle);
             controller.add_obstacle(newObstacle);
+            PopupNotification.display("Success - Obstacle added", "Successfully added obstacle " + newObstacle.toString());
         } catch (NullPointerException e) {
         }
     }
@@ -350,10 +353,13 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleRemoveAirport() {
+        int remove_count = 0;
         for(Airport a : SelectAirportPopup.display(controller, "Select Airports to Remove")){
             controller.remove_Airport(a);
+            remove_count++;
         }
         refresh_airports();
+        PopupNotification.display("Success - Airports removed", "Successfully removed " + remove_count + " airports.");
     }
 
     /**
@@ -439,9 +445,12 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void handleRemoveObstacle(){
+        int removed_count = 0;
         for(Obstacle o : RemoveObstaclePopup.display(controller)){
             controller.remove_obstacle(o);
+            removed_count++;
         }
         refresh_airports();
+        PopupNotification.display("Success - Obstacles removed.", "Successfully removed " + removed_count + " obstacles.");
     }
 }
