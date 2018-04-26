@@ -152,8 +152,6 @@ public class MainWindowController implements Initializable {
         }
 }
 
-    // TODO - Clear the text fields
-
     /**
      * Clear the current object and additional markings.
      */
