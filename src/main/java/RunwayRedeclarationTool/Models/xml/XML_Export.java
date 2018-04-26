@@ -3,14 +3,21 @@ package RunwayRedeclarationTool.Models.xml;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.View.PopupNotification;
 import RunwayRedeclarationTool.View.SelectAirportPopup;
 import RunwayRedeclarationTool.View.SelectObstaclePopup;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import tray.animations.AnimationType;
+import tray.notification.TrayNotification;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,6 +25,8 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 public class XML_Export {
     
@@ -106,6 +115,8 @@ public class XML_Export {
                 StreamResult result = new StreamResult(file);
                 transformer.transform(source, result);
                 Logger.Log("Saving XML file [File=" + file.getAbsolutePath() + "].");
+                PopupNotification.display("Success", "XML file exported to file " + file.getName());
+
                 return;
 
         } catch (ParserConfigurationException e) {
