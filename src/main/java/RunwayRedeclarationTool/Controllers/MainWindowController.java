@@ -216,13 +216,9 @@ public class MainWindowController implements Initializable {
         Logger.Log("Attempting to recalculate distances.");
         Calculator calculator = Calculator.getInstance();
         try {
-
-            // TODO - When calculate is clicked with empty values, nothing is shown to the user. Catch NumberFormatExcpetion and throw a popup
-            // Can copy code from NewRunwayWindow probs.
             Runway runway = runwayComboBox.getValue();
             Obstacle obstacle = obstructionComboBox.getValue();
 
-            // TODO - Don't need this.
             int distFromCL;
             if (runwaySideComboBox.getValue() == RunwaySide.CENTER) {
                 distFromCL = 0;
@@ -257,7 +253,7 @@ public class MainWindowController implements Initializable {
             alert.showAndWait();
             return;
         } catch (NumberFormatException e){
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to parse values in Obstacle Position boxes.\n, Please ensure the values are valid.", ButtonType.CLOSE);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to parse values in Obstacle Position boxes.\n,Please ensure the values are valid.", ButtonType.CLOSE);
             alert.setTitle("Failed to parse values");
             alert.showAndWait();
         }
