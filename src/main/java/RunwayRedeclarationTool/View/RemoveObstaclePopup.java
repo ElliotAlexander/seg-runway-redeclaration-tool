@@ -1,9 +1,7 @@
 package RunwayRedeclarationTool.View;
 
-import RunwayRedeclarationTool.Exceptions.ConfigurationFileNotFound;
 import RunwayRedeclarationTool.Models.Airport;
 import RunwayRedeclarationTool.Models.Obstacle;
-import RunwayRedeclarationTool.Models.config.Config_Manager;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,8 +10,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -23,9 +19,7 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectObstaclePopup {
-
-    public static boolean export_obstacle_position = true;
+public class RemoveObstaclePopup {
 
     public static Obstacle[] display(DB_controller controller) {
         final Stage window = new Stage();
@@ -33,7 +27,7 @@ public class SelectObstaclePopup {
 
         // Window setup
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Select an obstacle to export");
+        window.setTitle("Select an obstacle to remove");
         BorderPane grid = new BorderPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(grid, 700, 400);
@@ -80,12 +74,6 @@ public class SelectObstaclePopup {
         layout.setMargin(cancelButton, new Insets(15, 0, 15, 0));
         grid.setBottom(layout);
 
-        CheckBox checkbox = new CheckBox();
-        checkbox.setText("Export obstacle position");
-        checkbox.setSelected(true);
-        layout.getChildren().add(checkbox);
-        layout.setMargin(checkbox, new Insets(15, 15, 15, 15));
-
         ArrayList<Obstacle> obstacles = new ArrayList<>();
 
         confirmButtom.setOnAction(new EventHandler<ActionEvent>() {
@@ -111,4 +99,5 @@ public class SelectObstaclePopup {
         window.showAndWait();
         return obstacles.toArray(new Obstacle[obstacles.size()]);
     }
+
 }

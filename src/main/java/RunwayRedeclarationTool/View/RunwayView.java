@@ -1,6 +1,7 @@
 package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
@@ -33,6 +34,11 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
+
+        if(runway == null){
+            Logger.Log(Logger.Level.WARNING, "Attempting to draw non-existent runway. Returning blank.");
+            return;
+        }
 
         RunwayParameters p = runway.getOrigParams();
         this.TORA = p.getTORA();
@@ -167,6 +173,13 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @throws AttributeNotAssignedException
      */
     protected void drawBrokenDownDistances(int oLength, int y) throws AttributeNotAssignedException {
+
+        if(obstaclePosition == null){
+            Logger.Log(Logger.Level.WARNING, "Obstacle Position is not yet set, and this method has been called in error");
+            Logger.Log(Logger.Level.WARNING, "Skipping drawBrokenDownDistances. ");
+            return;
+        }
+
         RunwayParameters recalcParams = runway.getRecalcParams();
 
         int rTORA = recalcParams.getTORA();
