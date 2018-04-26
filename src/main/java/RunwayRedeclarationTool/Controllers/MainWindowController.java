@@ -434,7 +434,6 @@ public class MainWindowController implements Initializable {
     @FXML
     public void handleExportXML(){
         new XML_Export(controller, obstaclePosition);
-        refresh_airports();
     }
 
 
