@@ -33,7 +33,7 @@ public class TopDownView extends RunwayView {
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
-        scaledFillRect(leftSpace, 125, TORA-padding, 50);
+        scaledFillRect(leftSpace, 125, TORA, 50);
 
 
         drawThresholdMarkers(gc);
@@ -136,7 +136,7 @@ public class TopDownView extends RunwayView {
 
             gc.setFill(Color.RED);
             gc.setGlobalAlpha(0.5);
-            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH() - padding, obstaclePosition.getWidth());
+            scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
             gc.setGlobalAlpha(1.0);
         } catch (NullPointerException e) {
         }
