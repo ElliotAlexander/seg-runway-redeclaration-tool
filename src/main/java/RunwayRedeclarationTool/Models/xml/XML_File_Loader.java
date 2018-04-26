@@ -2,6 +2,7 @@ package RunwayRedeclarationTool.Models.xml;
 
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.View.PopupNotification;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import java.io.File;
@@ -39,6 +40,7 @@ public class XML_File_Loader {
             } else {
                 Logger.Log("Parsing file...");
                 parser.parse_xml(file);
+                PopupNotification.display("Success - XML File imported", "Successfully imported XML file:    " + file.getName());
                 return true;
             }
         }
