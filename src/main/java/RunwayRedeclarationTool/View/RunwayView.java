@@ -46,7 +46,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         this.TODA = p.getTODA();
         this.LDA = p.getLDA();
 
-        this.padding = 150;
+        this.padding = 300;
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
             leftRunway = true;
@@ -356,7 +356,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param h
      */
     protected void scaledFillRect(double x, double y, double w, double h) {
-        gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
+        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
     }
 
     @Override

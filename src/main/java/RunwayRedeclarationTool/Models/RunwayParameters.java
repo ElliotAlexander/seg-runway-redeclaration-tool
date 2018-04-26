@@ -12,6 +12,10 @@ public class RunwayParameters {
         this.LDA = LDA;
     }
 
+    /*
+        Must be set before setting an instance of this class to the redeclared distances of a virtual runway.
+        It will be used to draw the broken down distances on the display and the TOCS/ALS slope.
+     */
     public void setSlopeCalculation(int slopeCalculation) {
         this.slopeCalculation = slopeCalculation;
     }

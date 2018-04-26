@@ -160,6 +160,10 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void clearFields() {
+        distanceFromTHRLeft.clear();
+        distanceFromTHRRight.clear();
+        distanceFromCL.clear();
+        obstacleWidth.clear();
         this.obstaclePosition = null;
         drawRunway();
     }

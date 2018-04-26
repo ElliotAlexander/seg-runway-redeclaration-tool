@@ -33,7 +33,8 @@ public class VirtualRunway {
         return recalcParams;
     }
 
-    public void setRecalcParams(RunwayParameters recalcParams) {
+    public void setRecalcParams(RunwayParameters recalcParams, int slopecalc) {
+        recalcParams.setSlopeCalculation(slopecalc);
         this.recalcParams = recalcParams;
     }
 
