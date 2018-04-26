@@ -200,6 +200,14 @@
             <version>0.2.8</version>
         </dependency>
 
+        <dependency>
+            <artifactId>TrayNotification</artifactId>
+            <groupId>..</groupId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}/lib/TrayNotification.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
 </project>

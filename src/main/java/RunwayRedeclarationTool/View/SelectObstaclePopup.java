@@ -87,7 +87,17 @@ public class SelectObstaclePopup {
         layout.getChildren().add(checkbox);
         layout.setMargin(checkbox, new Insets(15, 15, 15, 15));
 
+        export_obstacle_position = true;
+
         ArrayList<Obstacle> obstacles = new ArrayList<>();
+
+        checkbox.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                export_obstacle_position = checkbox.isSelected();
+                Logger.Log("Setting export obstacle position to " + checkbox.isSelected());
+            }
+        });
 
         confirmButtom.setOnAction(new EventHandler<ActionEvent>() {
             @Override

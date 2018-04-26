@@ -4,7 +4,6 @@ import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.View.SelectAirportPopup;
-import RunwayRedeclarationTool.View.RemoveObstaclePopup;
 import RunwayRedeclarationTool.View.SelectObstaclePopup;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -19,7 +18,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.util.Optional;
 
 public class XML_Export {
     
@@ -65,20 +63,20 @@ public class XML_Export {
                     return;
                 }
 
-                if(obstacles.length > 0){
-                    if(obstaclePosition == null){
-                        Logger.Log("Skipping export Obstacle Position Dialog - Obstacle Position is null.");
-                        Alert no_obstacle_set = new Alert(Alert.AlertType.ERROR, "Failed to export obstacle position. \nNo obstacle position is set!", ButtonType.CLOSE);
-                        no_obstacle_set.showAndWait();
-                    } else {
-                        if(SelectObstaclePopup.export_obstacle_position){
-                            Logger.Log("Exporting obstacle position to XML.");
-                            exportObstaclePosition(document, rootElement);
+
+                if(SelectObstaclePopup.export_obstacle_position == true) {
+                        if (obstaclePosition == null) {
+                            Logger.Log("Skipping export Obstacle Position Dialog - Obstacle Position is null.");
+                            Alert no_obstacle_set = new Alert(Alert.AlertType.ERROR, "Failed to export obstacle position. \nNo obstacle position is set!", ButtonType.CLOSE);
+                            no_obstacle_set.showAndWait();
+                        } else {
+                                Logger.Log("Exporting obstacle position to XML.");
+                                exportObstaclePosition(document, rootElement);
                         }
+                    } else {
+                        Logger.Log("Not exporting obstacle position [" + SelectObstaclePopup.export_obstacle_position + "].");
                     }
-                } else {
-                    Logger.Log("Skipping exporting obstacle position to XML - no obstacles selected.");
-                }
+
 
                 for(Obstacle obstacle : obstacles){
                     buildObstacleElement(obstacle, document, rootElement);
@@ -103,7 +101,7 @@ public class XML_Export {
                 TransformerFactory transformerFactory = TransformerFactory.newInstance();
                 Transformer transformer = transformerFactory.newTransformer();
                 transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty(OutputKeys.INDENT, "YES");
                 DOMSource source = new DOMSource(document);
                 StreamResult result = new StreamResult(file);
                 transformer.transform(source, result);
