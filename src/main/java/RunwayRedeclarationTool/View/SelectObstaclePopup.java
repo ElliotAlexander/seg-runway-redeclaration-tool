@@ -1,10 +1,10 @@
 package RunwayRedeclarationTool.View;
 
-import RunwayRedeclarationTool.Exceptions.ConfigurationFileNotFound;
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.Airport;
 import RunwayRedeclarationTool.Models.Obstacle;
-import RunwayRedeclarationTool.Models.config.Config_Manager;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.Models.xml.XML_Export;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,7 @@ public class SelectObstaclePopup {
         grid.setCenter(table);
 
         // Bottom Panel
-        Button confirmButtom = new Button("Remove");
+        Button confirmButtom = new Button("Select");
         Button cancelButton = new Button("Cancel");
         FlowPane layout = new FlowPane();
         layout.getChildren().add(confirmButtom);
@@ -103,6 +104,13 @@ public class SelectObstaclePopup {
             @Override
             public void handle(ActionEvent event) {
                 window.close();
+            }
+        });
+
+        window.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                Logger.Log("Window closed from SelectObstaclePopup. Exiting Export process.");
+                XML_Export.force_close_event = true;
             }
         });
 

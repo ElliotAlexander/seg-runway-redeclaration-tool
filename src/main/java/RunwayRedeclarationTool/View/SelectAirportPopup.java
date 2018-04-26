@@ -1,7 +1,9 @@
 package RunwayRedeclarationTool.View;
 
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.Airport;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.Models.xml.XML_Export;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,6 +102,13 @@ public class SelectAirportPopup {
             }
         });
 
+
+        window.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                                     public void handle(WindowEvent we) {
+                                         Logger.Log("Window closed from AirportSelectPopup. Exiting Export process.");
+                                         XML_Export.force_close_event = true;
+                                         }
+                                 });
 
         window.setScene(scene);
         window.showAndWait();
