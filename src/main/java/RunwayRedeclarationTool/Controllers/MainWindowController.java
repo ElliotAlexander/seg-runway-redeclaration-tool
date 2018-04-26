@@ -16,10 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -104,7 +101,7 @@ public class MainWindowController implements Initializable {
 
         if (controller.get_airports().length > 0) {
             Logger.Log("Loaded airports: c" + controller.get_airports().toString());
-            refresh_combobox();
+            refresh_airports();
             drawRunway();
         }
     }
@@ -168,22 +165,6 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Update the runway combo box when airport is changed.
-     */
-    @FXML
-    public void updateRunways() {
-        Airport airport = airportComboBox.getValue();
-        if (airport == null || controller.get_runways(airport.getAirport_id()).length == 0) {
-            return;
-        }
-        Logger.Log("Switching to airport: " + airport.getAirport_id());
-        ArrayList<Runway> runways = new ArrayList<>();
-        Collections.addAll(runways, controller.get_runways(airport.getAirport_id()));
-        ObservableList<Runway> observableList = FXCollections.observableList(runways);
-        runwayComboBox.setItems(observableList);
-    }
-
-    /**
      * Export the current top-down view as an image.
      */
     @FXML
@@ -223,23 +204,6 @@ public class MainWindowController implements Initializable {
         outputString +=  "\n\nCurrent Obstacle: \n" + obstructionComboBox.getSelectionModel().getSelectedItem();
         outputString += "\n" + obstaclePosition;
         ExportToTextWindow.display(outputString);
-    }
-
-    /**
-     * Update the virtual runways combo box after runway change.
-     */
-    @FXML
-    public void updateVirtualRunways() {
-        Runway runway = runwayComboBox.getValue();
-        if (runway == null) {
-            return;
-        }
-        Logger.Log("Switching to runway: " + runway.toString());
-        ArrayList<VirtualRunway> virtualRunways = new ArrayList<>();
-        Collections.addAll(virtualRunways, runway.leftRunway, runway.rightRunway);
-        ObservableList<VirtualRunway> observableList = FXCollections.observableList(virtualRunways);
-        virtualRunwayComboBox.setItems(observableList);
-        updateDeclaredDistancesTextfield();
     }
 
     /**
@@ -287,7 +251,14 @@ public class MainWindowController implements Initializable {
             Logger.Log(Logger.Level.ERROR, e.getStackTrace().toString());
             declaredDistances.getChildren().add(new Text("\n\n" + e.getMessage()));
         } catch (AttributeNotAssignedException e) {
-            //TODO
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error recalculating runway parameters.\nEnsure that the Obstacle position fields are correct.", ButtonType.CLOSE);
+            alert.setTitle("Calculation failed");
+            alert.showAndWait();
+            return;
+        } catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to parse values in Obstacle Position boxes.\n, Please ensure the values are valid.", ButtonType.CLOSE);
+            alert.setTitle("Failed to parse values");
+            alert.showAndWait();
         }
     }
 
@@ -358,7 +329,7 @@ public class MainWindowController implements Initializable {
     @FXML
     public void handleImportFile() {
         new XML_File_Loader(controller).load_file();
-        refresh_combobox();
+        refresh_airports();
     }
 
     /**
@@ -367,7 +338,7 @@ public class MainWindowController implements Initializable {
     @FXML
     void handleImportFolder() {
         new XML_File_Loader(controller).load_directory();
-        refresh_combobox();
+        refresh_airports();
     }
 
     /**
@@ -378,39 +349,59 @@ public class MainWindowController implements Initializable {
         for(Airport a : SelectAirportPopup.display(controller, "Select Airports to Remove")){
             controller.remove_Airport(a);
         }
-        refresh_combobox();
+        refresh_airports();
     }
 
     /**
      * Refresh the combo boxes to reflect changes to .
      */
-    private void refresh_combobox() {
+    private void refresh_airports() {
         airportComboBox.getItems().clear();
-        airportComboBox.getItems().addAll(controller.get_airports());
+        Airport[] airports = controller.get_airports();
+        airportComboBox.getItems().addAll(airports);
+        if(airports.length > 0){
+            airportComboBox.setValue(airports[0]);
+            refresh_runways();
+        }
+
+        refresh_obstacles();
+    }
+
+    @FXML
+    private void refresh_runways(){
         if (airportComboBox.getItems().size() > 0) {
-            airportComboBox.setValue(airportComboBox.getItems().get(0));
-            if (controller.get_runways(airportComboBox.getValue().getAirport_id()).length > 0) {
+            Runway[] runways = controller.get_runways(airportComboBox.getValue().getAirport_id());
+            if (runways.length > 0) {
                 runwayComboBox.getItems().clear();
-                runwayComboBox.getItems().addAll(controller.get_runways());
-                if (runwayComboBox.getItems().size() > 0) {
-                    runwayComboBox.setValue(runwayComboBox.getItems().get(0));
-                    updateVirtualRunways();
-                }
+                runwayComboBox.getItems().addAll(runways);
+                runwayComboBox.setValue(runwayComboBox.getItems().get(0));
+                refresh_virtual_runways();
             }
         } else {
             runwayComboBox.getItems().clear();
         }
+    }
 
+    private void refresh_obstacles(){
         obstructionComboBox.getItems().clear();
         obstructionComboBox.getItems().addAll(controller.get_obstacles());
         if (obstructionComboBox.getItems().size() > 0) {
             obstructionComboBox.setValue(obstructionComboBox.getItems().get(0));
         }
+    }
 
-        // Make sure that only the correct runways are shown for the selected airport.
-        if (airportComboBox.getItems().size() > 0) {
-            updateRunways();
+    @FXML
+    private void refresh_virtual_runways(){
+        Runway runway = runwayComboBox.getValue();
+        if (runway == null) {
+            return;
         }
+        ArrayList<VirtualRunway> virtualRunways = new ArrayList<>();
+        Collections.addAll(virtualRunways, runway.leftRunway, runway.rightRunway);
+        ObservableList<VirtualRunway> observableList = FXCollections.observableList(virtualRunways);
+        virtualRunwayComboBox.setItems(observableList);
+        virtualRunwayComboBox.setValue(virtualRunwayComboBox.getItems().get(0));
+        updateDeclaredDistancesTextfield();
     }
 
     /**
@@ -438,16 +429,16 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void handleExportXML(){
-        new XML_Export(controller);
-        refresh_combobox();
+        new XML_Export(controller, obstaclePosition);
+        refresh_airports();
     }
 
 
     @FXML
     public void handleRemoveObstacle(){
-        for(Obstacle o : SelectObstaclePopup.display(controller, "Select Obstacle(s) to remove")){
+        for(Obstacle o : RemoveObstaclePopup.display(controller)){
             controller.remove_obstacle(o);
         }
-        refresh_combobox();
+        refresh_airports();
     }
 }
