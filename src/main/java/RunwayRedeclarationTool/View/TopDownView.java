@@ -26,11 +26,7 @@ public class TopDownView extends RunwayView {
         gc.setFill(Color.web("ddd"));
         gc.fillRect(0, 0, width, height);
 
-        if(leftRunway){
-            drawClearedAndGradedArea(gc, 0);
-        } else{
-            drawClearedAndGradedArea(gc, TORA-TODA+60);
-        }
+        drawClearedAndGradedArea(gc, leftSpace);
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
@@ -42,7 +38,6 @@ public class TopDownView extends RunwayView {
         drawDesignators(150, Color.WHITE);
         drawMapScale();
         drawTakeOffLandingDirection();
-        //drawScaleMarkings(gc);
         drawStopway(100);
         drawClearway(115);
 
@@ -60,8 +55,10 @@ public class TopDownView extends RunwayView {
         // Cleared and graded areas
         gc.setFill(Color.web("ccc"));
         gc.fillPolygon(
-            new double[]{scale_x(-offset), scale_x(210 - offset), scale_x(360 - offset), scale_x(TORA - 240 - offset), scale_x(TORA - 90 - offset), scale_x(TORA + 120 - offset), scale_x(TORA + 120 - offset), scale_x(TORA - 90 - offset), scale_x(TORA - 240 - offset), scale_x(360 - offset), scale_x(210 - offset), scale_x(-offset)},
-            new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)},
+                new double[]{scale_x(offset - 60), scale_x(150 + offset), scale_x(300 + offset), scale_x(TORA + offset - 300), scale_x(TORA + offset - 150), scale_x(TORA + offset + 60),
+                        scale_x(TORA + offset + 60), scale_x(TORA + offset - 150), scale_x(TORA + offset - 300), scale_x(300 + offset), scale_x(150 + offset), scale_x(offset - 60)},
+                new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75),
+                        scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)},
             12);
     }
 
@@ -90,14 +87,6 @@ public class TopDownView extends RunwayView {
         gc.setLineDashes(30);
         scaledStrokeLine(TORA/6 + leftSpace, 150, TORA*5/6 +leftSpace, 150);
         gc.setLineDashes(0);
-    }
-
-    private void drawScaleMarkings(GraphicsContext gc) {
-        // TORA
-        scaledStrokeLine(60, 195, runway.getOrigParams().getTORA() + 60, 195);
-        scaledStrokeLine(60, 193, 60, 197);
-        scaledStrokeLine(TORA + 60, 193, TORA + 60, 197);
-        gc.fillText("TORA: " + TORA + "m", scale_x(60), scale_y(191));
     }
 
     /**
