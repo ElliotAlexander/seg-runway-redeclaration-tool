@@ -11,11 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
-
-import javax.swing.*;
 
 public class NewObstaclePopup {
 
@@ -47,19 +45,28 @@ public class NewObstaclePopup {
         final TextField heightField = new TextField();
         grid.add(heightField, 1, 2);
 
+
+        final Label errorLabel = new Label("You need to enter a value!");
+        grid.add(errorLabel, 0,3);
+        errorLabel.setTextFill(Color.RED);
+        errorLabel.setVisible(false);
+
         Button button = new Button("Submit");
 
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                // TODO catch Number Format here.
                 try {
-                    Obstacle newObstacle = new Obstacle(designatorField.getText(), Integer.parseInt(heightField.getText()));
-                    obstacle = newObstacle;
-                    window.close();
+                    if(designatorField.getText().replace("\\s+", "").equalsIgnoreCase("")){
+                        Logger.Log(Logger.Level.WARNING, "Failed to parse Integer from \'"+heightField.getText()+"\'.");
+                        errorLabel.setVisible(true);
+                    } else {
+                        Obstacle newObstacle = new Obstacle(designatorField.getText(), Integer.parseInt(heightField.getText()));
+                        obstacle = newObstacle;
+                        window.close();
+                    }
                 } catch (NumberFormatException e){
                     Logger.Log(Logger.Level.WARNING, "Failed to parse Integer from \'"+heightField.getText()+"\'.");
-                    JOptionPane.showMessageDialog( null, "Failed to parse an Integer from the Height value!");
-                    return;
+                    errorLabel.setVisible(true);
                 }
 
             }
@@ -70,5 +77,4 @@ public class NewObstaclePopup {
         window.showAndWait();
         return obstacle;
     }
-
 }

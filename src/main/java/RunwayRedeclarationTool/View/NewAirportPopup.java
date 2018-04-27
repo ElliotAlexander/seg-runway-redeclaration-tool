@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.View;
 
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.Airport;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -9,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
@@ -45,11 +47,20 @@ public class NewAirportPopup {
 
         Button button = new Button("Submit");
 
+        final Label errorLabel = new Label("You need to enter a value!");
+        errorLabel.setTextFill(Color.RED);
+        errorLabel.setVisible(false);
+        grid.add(errorLabel,0,2);
+
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                // TODO check code format is as expected
-                airport = new Airport(nameField.getText(), idField.getText().toUpperCase());
-                window.close();
+                if(!nameField.getText().replaceAll("\\s+", "").equalsIgnoreCase("") && !idField.getText().replaceAll("\\s+", "").equalsIgnoreCase("")){
+                    airport = new Airport(nameField.getText(), idField.getText().toUpperCase());
+                    window.close();
+                } else {
+                    Logger.Log("Empty values entered. ");
+                    errorLabel.setVisible(true);
+                }
             }
         });
         grid.add(button, 0, 4);

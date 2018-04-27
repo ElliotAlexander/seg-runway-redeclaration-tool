@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.View;
 
+import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.Runway;
 import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
@@ -11,11 +12,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+
+import java.awt.font.NumericShaper;
 
 public class NewRunwayPopup {
     static Runway runway;
@@ -95,27 +99,43 @@ public class NewRunwayPopup {
         final TextField lda2 = new TextField();
         grid.add(lda2, 3, 5);
 
+        final Label errorLabel = new Label("You need to enter a value!");
+        grid.add(errorLabel, 1,6);
+        errorLabel.setTextFill(Color.RED);
+        errorLabel.setVisible(false);
+
         Button button = new Button("Submit");
         button.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
-                VirtualRunway leftRunway = new VirtualRunway(
-                        designatorField.getText(),
-                        new RunwayParameters(
-                        Integer.parseInt(tora.getText()),
-                        Integer.parseInt(toda.getText()),
-                        Integer.parseInt(asda.getText()),
-                        Integer.parseInt(lda.getText())
-                ));
-                VirtualRunway rightRunway = new VirtualRunway(
-                        designatorField2.getText(),
-                        new RunwayParameters(
-                                Integer.parseInt(tora2.getText()),
-                                Integer.parseInt(toda2.getText()),
-                                Integer.parseInt(asda2.getText()),
-                                Integer.parseInt(lda2.getText())
-                        ));
-                runway = new Runway(leftRunway, rightRunway);
-                window.close();
+                try {
+                    if(designatorField.getText().replaceAll("\\s+", "").equalsIgnoreCase("") || designatorField2.getText().replaceAll("\\s+", "").equalsIgnoreCase("")){
+                        errorLabel.setVisible(true);
+                        Logger.Log("Empty values entered in NewRunwayPopup.");
+                        return;
+                    }
+
+                    VirtualRunway leftRunway = new VirtualRunway(
+                            designatorField.getText(),
+                            new RunwayParameters(
+                                    Integer.parseInt(tora.getText()),
+                                    Integer.parseInt(toda.getText()),
+                                    Integer.parseInt(asda.getText()),
+                                    Integer.parseInt(lda.getText())
+                            ));
+                    VirtualRunway rightRunway = new VirtualRunway(
+                            designatorField2.getText(),
+                            new RunwayParameters(
+                                    Integer.parseInt(tora2.getText()),
+                                    Integer.parseInt(toda2.getText()),
+                                    Integer.parseInt(asda2.getText()),
+                                    Integer.parseInt(lda2.getText())
+                            ));
+                    runway = new Runway(leftRunway, rightRunway);
+                    window.close();
+                } catch(NumberFormatException e){
+                    errorLabel.setVisible(true);
+                    Logger.Log("Invalid values entered in NewRunwayPopup.");
+                }
             }
         });
         grid.add(button, 0, 6);
