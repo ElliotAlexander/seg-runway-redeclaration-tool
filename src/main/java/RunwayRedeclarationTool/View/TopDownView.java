@@ -26,11 +26,7 @@ public class TopDownView extends RunwayView {
         gc.setFill(Color.web("ddd"));
         gc.fillRect(0, 0, width, height);
 
-        if(leftRunway){
-            drawClearedAndGradedArea(gc, 0);
-        } else{
-            drawClearedAndGradedArea(gc, TORA-TODA+60);
-        }
+        drawClearedAndGradedArea(gc, leftSpace);
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
@@ -42,7 +38,6 @@ public class TopDownView extends RunwayView {
         drawDesignators(150, Color.WHITE);
         drawMapScale();
         drawTakeOffLandingDirection();
-        //drawScaleMarkings(gc);
         drawStopway(100);
         drawClearway(115);
 
@@ -60,8 +55,10 @@ public class TopDownView extends RunwayView {
         // Cleared and graded areas
         gc.setFill(Color.web("ccc"));
         gc.fillPolygon(
-            new double[]{scale_x(-offset), scale_x(210 - offset), scale_x(360 - offset), scale_x(TORA - 240 - offset), scale_x(TORA - 90 - offset), scale_x(TORA + 120 - offset), scale_x(TORA + 120 - offset), scale_x(TORA - 90 - offset), scale_x(TORA - 240 - offset), scale_x(360 - offset), scale_x(210 - offset), scale_x(-offset)},
-            new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75), scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)},
+                new double[]{scale_x(offset - 60), scale_x(150 + offset), scale_x(300 + offset), scale_x(TORA + offset - 300), scale_x(TORA + offset - 150), scale_x(TORA + offset + 60),
+                        scale_x(TORA + offset + 60), scale_x(TORA + offset - 150), scale_x(TORA + offset - 300), scale_x(300 + offset), scale_x(150 + offset), scale_x(offset - 60)},
+                new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75),
+                        scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)},
             12);
     }
 
@@ -92,22 +89,12 @@ public class TopDownView extends RunwayView {
         gc.setLineDashes(0);
     }
 
-    private void drawScaleMarkings(GraphicsContext gc) {
-        // TORA
-        scaledStrokeLine(60, 195, runway.getOrigParams().getTORA() + 60, 195);
-        scaledStrokeLine(60, 193, 60, 197);
-        scaledStrokeLine(TORA + 60, 193, TORA + 60, 197);
-        gc.fillText("TORA: " + TORA + "m", scale_x(60), scale_y(191));
-    }
-
     /**
      * Draw the obstacle on the view.
      */
     public void drawObstacle() {
         try {
             draw();
-
-            GraphicsContext gc = getGraphicsContext2D();
 
             int obstacle_x = obstaclePosition.getDistLeftTSH() + leftSpace;
             int obstacle_y;
@@ -127,19 +114,22 @@ public class TopDownView extends RunwayView {
             }
 
 
-
             int obstacleLength = runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH();
-            try {
-                drawBrokenDownDistances(obstacleLength, 210);
-            } catch (AttributeNotAssignedException e) {
-                Logger.Log(Logger.Level.ERROR, "Failed to draw broken down distances!\nObstacle position = " + obstaclePosition.toString());
-                e.printStackTrace();
-            }
+
+            drawBrokenDownDistances(obstacleLength, 210);
+
 
             gc.setFill(Color.RED);
             gc.setGlobalAlpha(0.5);
             scaledFillRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
             gc.setGlobalAlpha(1.0);
+
+            gc.setFill(Color.BLACK);
+            gc.strokeRect(scale_x(obstacle_x), scale_y(obstacle_y - obstaclePosition.getWidth() / 2), scale_x(TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH()), scale_y(obstaclePosition.getWidth()));
+
+        } catch (AttributeNotAssignedException e) {
+            Logger.Log(Logger.Level.ERROR, "Failed to draw broken down distances!\nObstacle position = " + obstaclePosition.toString());
+            e.printStackTrace();
         } catch (NullPointerException e) {
         }
     }

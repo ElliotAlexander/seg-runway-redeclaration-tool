@@ -50,7 +50,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
             leftRunway = true;
-            leftSpace = 60;
+            leftSpace = 0;
         } else {
             leftRunway = false;
             leftSpace = Math.max(TODA, ASDA) - TORA;    // the largest out of clearway and stopway
@@ -73,10 +73,6 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         draw();
     }
 
-    protected abstract void draw();
-
-    public abstract void drawObstacle();
-
     /**
      * Draw a measuring line to display the stopway.
      *
@@ -87,7 +83,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (stopway != 0) {
             if (leftRunway) {
-                drawMeasuringLine(TORA + 60, stopway, y, "Stopway");
+                drawMeasuringLine(TORA, stopway, y, "Stopway");
             } else {
                 drawMeasuringLine(leftSpace - stopway, stopway, y, "Stopway");
             }
@@ -104,9 +100,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (clearway != 0) {
             if (leftRunway) {
-                drawMeasuringLine(TORA + 60, clearway, y, "Clearway");
+                drawMeasuringLine(TORA, clearway, y, "Clearway");
             } else {
-                drawMeasuringLine(0, clearway, y, "Clearway");
+                drawMeasuringLine(leftSpace - clearway, clearway, y, "Clearway");
             }
         }
     }
@@ -200,11 +196,11 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
                 drawMeasuringLine(endObstacle, 300, y, "blast protection");
                 drawTORA_TODA_ASDA(endObstacle + 300, y, recalcParams);
 
-                drawMeasuringLine(endObstacle, slopecalc + 60, y + 10, "slope offset");         // length = slopecalc+60 which is the strip end. Maybe show that in text too?
+                drawMeasuringLine(endObstacle, slopecalc + 60, y + 10, "slope + strip end");         // length = slopecalc+60 which is the strip end. Maybe show that in text too?
                 drawMeasuringLine(endObstacle + slopecalc + 60, rLDA, y + 10, "LDA " + rLDA + "m");
             } else {
                 // __|=|__<-______
-                drawMeasuringLine(endObstacle, slopecalc + 60, y, "slope offset");
+                drawMeasuringLine(endObstacle, slopecalc + 60, y, "slope + strip end");
                 drawTORA_TODA_ASDA(endObstacle + slopecalc + 60, y, recalcParams);
 
                 drawMeasuringLine(endObstacle, 300, y + 10, "RESA + strip end");
@@ -215,18 +211,18 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
             if (leftRunway) {
                 // ______->__|=|__
-                drawTORA_TODA_ASDA(60, y, recalcParams);
-                drawMeasuringLine(60 + rTORA, slopecalc + 60, y, "slope offset");
+                drawTORA_TODA_ASDA(0, y, recalcParams);
+                drawMeasuringLine(rTORA, slopecalc + 60, y, "strip end + slope");
 
-                drawMeasuringLine(60 + displacedThs, rLDA, y + 10, "LDA " + rLDA + "m");
-                drawMeasuringLine(60 + displacedThs + rLDA, 300, y + 10, "strip end + RESA");
+                drawMeasuringLine(displacedThs, rLDA, y + 10, "LDA " + rLDA + "m");
+                drawMeasuringLine(displacedThs + rLDA, 300, y + 10, "strip end + RESA");
             } else {
                 // ______<-__|=|__
                 drawTORA_TODA_ASDA(leftSpace, y, recalcParams);
                 drawMeasuringLine(leftSpace + rTORA, 300, y, "blast protection");
 
                 drawMeasuringLine(leftSpace, rLDA, y + 10, "LDA " + rLDA + "m");
-                drawMeasuringLine(leftSpace + rLDA, slopecalc + 60, y + 10, "slope offset");
+                drawMeasuringLine(leftSpace + rLDA, slopecalc + 60, y + 10, "strip end + slope");
             }
 
             drawMeasuringLine(startObstacle, oLength, y, "Obstacle");
@@ -271,9 +267,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (displacedTsh > 0) {
             if (leftRunway) {
-                drawMeasuringLine(60, displacedTsh, y, "Displaced TSH");
+                drawMeasuringLine(0, displacedTsh, y, "Displaced TSH");
             } else {
-                drawMeasuringLine(Math.max(TODA, ASDA) - displacedTsh, displacedTsh, y, "Displaced TSH");
+                drawMeasuringLine(leftSpace + LDA, displacedTsh, y, "Displaced TSH");
             }
         }
     }
@@ -315,27 +311,6 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     }
 
     /**
-     * Scale distances in metres to percentage width on the views.
-     *
-     * @param length the length to scale.
-     * @return the scaled length.
-     */
-    protected double scale_x(double length) {
-        double maxWidth = TODA + leftSpace + padding * 2;
-        return (length + padding) / maxWidth * getWidth();
-    }
-
-    /**
-     * Scale distances in metres to percentage height on the views.
-     *
-     * @param length the length to scale.
-     * @return the scaled length.
-     */
-    protected double scale_y(double length) {
-        return length / 300 * getHeight();
-    }
-
-    /**
      * Draw a scaled line on the view.
      *
      * @param x1
@@ -345,6 +320,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      */
     protected void scaledStrokeLine(double x1, double y1, double x2, double y2) {
         gc.strokeLine(scale_x(x1), scale_y(y1), scale_x(x2), scale_y(y2));
+
     }
 
     /**
@@ -356,8 +332,33 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param h
      */
     protected void scaledFillRect(double x, double y, double w, double h) {
-        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
+        gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
+        //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
     }
+
+    /**
+     * Scale distances in metres to percentage width on the views.
+     *
+     * @param length the length to scale.
+     * @return the scaled length.
+     */
+    protected double scale_x(double length) {
+        double maxWidth = Math.max(TODA, ASDA);
+        //        double maxWidth = TODA + leftSpace + padding * 2;
+        return length * getWidth() / maxWidth;
+        //        return (length + padding) / maxWidth * getWidth();
+    }
+
+    /**
+     * Scale distances in metres to percentage height on the views.
+     *
+     * @param length the length to scale.
+     * @return the scaled length.
+     */
+    protected double scale_y(double length) {
+        return length * getHeight() / 300;
+    }
+
 
     @Override
     public boolean isResizable() {
@@ -373,4 +374,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     public double prefHeight(double width) {
         return getHeight();
     }
+
+    protected abstract void draw();
+
+    public abstract void drawObstacle();
 }
