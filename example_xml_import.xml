@@ -16,20 +16,6 @@
                 <lda>3882</lda>
             </vr>
         </Runway>
-        <Runway>
-            <vr designator="09R">
-                <tora>3658</tora>
-                <toda>3658</toda>
-                <asda>3658</asda>
-                <lda>3350</lda>
-            </vr>
-            <vr designator="27L">
-                <tora>3658</tora>
-                <toda>3658</toda>
-                <asda>3658</asda>
-                <lda>3658</lda>
-            </vr>
-        </Runway>
     </Airport>
     <Airport airport_name="London Gatwick">
         <airport_id>LGW</airport_id>
