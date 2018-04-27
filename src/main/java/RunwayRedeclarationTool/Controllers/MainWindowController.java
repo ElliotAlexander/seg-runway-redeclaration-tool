@@ -445,7 +445,7 @@ public class MainWindowController implements Initializable {
             controller.remove_obstacle(o);
             removed_count++;
         }
-        refresh_airports();
+        refresh_obstacles();
         PopupNotification.display("Success - Obstacles removed.", "Successfully removed " + removed_count + " obstacles.");
     }
 }
