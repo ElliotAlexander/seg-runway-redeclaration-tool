@@ -2,6 +2,7 @@ package RunwayRedeclarationTool.View;
 
 import RunwayRedeclarationTool.Exceptions.AttributeNotAssignedException;
 import RunwayRedeclarationTool.Models.ObstaclePosition;
+import RunwayRedeclarationTool.Models.RunwayParameters;
 import RunwayRedeclarationTool.Models.VirtualRunway;
 import javafx.scene.paint.Color;
 
@@ -24,8 +25,6 @@ public class SideOnView extends RunwayView {
 
         // Draw runway surface
         gc.setFill(Color.web("333"));
-
-
         scaledFillRect(leftSpace, 149, TORA, 2);
 
         drawDesignators(170, Color.BLACK);
@@ -51,6 +50,9 @@ public class SideOnView extends RunwayView {
             scaledFillRect(obstaclePosition.getDistLeftTSH() + leftSpace, 149 - obstaclePosition.getObstacle().getHeight(), obstacleLength, obstaclePosition.getObstacle().getHeight());
             gc.setGlobalAlpha(1.0);
 
+            int slopecalc = runway.getRecalcParams().getSlopeCalculation();
+
+            drawSlope(obstacleLength, slopecalc);
 
             // TODO Add a button for this
             drawBrokenDownDistances(obstacleLength, 200);
@@ -62,6 +64,34 @@ public class SideOnView extends RunwayView {
             System.err.println("Recalculated parameters have not been assigned!");
         }
 
+    }
+
+    /**
+     * Draw the TOCS/ALS slope that the plane needs to ascend/descend to safely fly over the obstacle.
+     */
+    private void drawSlope(int oLength, int slopecalc) {
+        gc.setFill(Color.BLUE);
+        gc.setGlobalAlpha(0.5);
+
+        int oHeight = obstaclePosition.getObstacle().getHeight();
+
+        if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
+            if (leftRunway) {
+                // __|=|__->______
+                int endObstacle = leftSpace + obstaclePosition.getDistLeftTSH() + oLength;
+
+                gc.fillPolygon(new double[]{scale_x(endObstacle), scale_x(endObstacle), scale_x(endObstacle + slopecalc)}, new double[]{scale_y(149 - oHeight), scale_y(149), scale_y(149)}, 3);
+            }
+        } else {
+            if (!leftRunway) {
+                // ______<-__|=|__
+                int startObstacle = leftSpace + obstaclePosition.getDistLeftTSH();
+
+                gc.fillPolygon(new double[]{scale_x(startObstacle - slopecalc), scale_x(startObstacle), scale_x(startObstacle)}, new double[]{scale_y(149), scale_y(149), scale_y(149 - oHeight)}, 3);
+            }
+        }
+
+        gc.setGlobalAlpha(1.0);
     }
 
 }
