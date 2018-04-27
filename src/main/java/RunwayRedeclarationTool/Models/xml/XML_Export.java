@@ -194,7 +194,6 @@ public class XML_Export {
     private void exportObstaclePosition(Document document, Element rootElement){
         if(obstaclePosition == null){
             Logger.Log(Logger.Level.WARNING, "Obstacle position is null, skipping.");
-            // TODO throw a popup.
         }
 
 

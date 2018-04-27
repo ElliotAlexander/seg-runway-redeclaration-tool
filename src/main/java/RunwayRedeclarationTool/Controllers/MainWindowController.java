@@ -286,8 +286,9 @@ public class MainWindowController implements Initializable {
         try {
             Airport currentAirport = airportComboBox.getValue();
             if (currentAirport == null) {
-                // TODO change this.
-                JOptionPane.showMessageDialog(null, "You need to add or import an airport prior to adding a runway.");
+                Alert alert = new Alert(Alert.AlertType.ERROR, "You need to add or import an airport prior to adding a runway.", ButtonType.CLOSE);
+                alert.setTitle("Failed to parse values");
+                alert.showAndWait();
                 return;
             }
             Runway newRunway = NewRunwayPopup.display("Add a new runway to " + currentAirport.toString());

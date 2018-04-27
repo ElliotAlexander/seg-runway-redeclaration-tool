@@ -13,12 +13,6 @@ import java.util.Arrays;
 
 public class PredefinedObstacles {
 
-
-    // This class could be a lot quicker if we hard coded in obstacles
-    // My personal preference is to load from a file?
-    // Although this could negatively impact startup time pretty considerably
-    // TODO - Consider this?
-
     private final String default_obstacles_file = "default_obstacles.txt";
 
     public void addDefaults(DB_controller dbc, Configuration configuration){
