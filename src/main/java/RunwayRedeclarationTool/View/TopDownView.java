@@ -55,10 +55,32 @@ public class TopDownView extends RunwayView {
         // Cleared and graded areas
         gc.setFill(Color.web("ccc"));
         gc.fillPolygon(
-                new double[]{scale_x(offset - 60), scale_x(150 + offset), scale_x(300 + offset), scale_x(TORA + offset - 300), scale_x(TORA + offset - 150), scale_x(TORA + offset + 60),
-                        scale_x(TORA + offset + 60), scale_x(TORA + offset - 150), scale_x(TORA + offset - 300), scale_x(300 + offset), scale_x(150 + offset), scale_x(offset - 60)},
-                new double[]{scale_y(75), scale_y(75), scale_y(45), scale_y(45), scale_y(75), scale_y(75),
-                        scale_y(225), scale_y(225), scale_y(255), scale_y(255), scale_y(225), scale_y(225)},
+                new double[]{
+                        scale_x(offset - 60),
+                        scale_x(150 + offset),
+                        scale_x(300 + offset),
+                        scale_x(TORA + offset - 300),
+                        scale_x(TORA + offset - 150),
+                        scale_x(TORA + offset + 60),
+                        scale_x(TORA + offset + 60),
+                        scale_x(TORA + offset - 150),
+                        scale_x(TORA + offset - 300),
+                        scale_x(300 + offset),
+                        scale_x(150 + offset),
+                        scale_x(offset - 60)},
+                new double[]{
+                        scale_y(75),
+                        scale_y(75),
+                        scale_y(45),
+                        scale_y(45),
+                        scale_y(75),
+                        scale_y(75),
+                        scale_y(225),
+                        scale_y(225),
+                        scale_y(255),
+                        scale_y(255),
+                        scale_y(225),
+                        scale_y(225)},
             12);
     }
 
