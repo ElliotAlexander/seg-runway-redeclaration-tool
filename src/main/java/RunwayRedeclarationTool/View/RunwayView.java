@@ -21,6 +21,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     protected int leftSpace;
     protected int padding;
 
+    protected boolean rotateView;
+
     protected ObstaclePosition obstaclePosition;
 
     protected GraphicsContext gc;
@@ -31,10 +33,10 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param runway           the runway to draw.
      * @param obstaclePosition the position of the obstacle.
      */
-    public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
+    public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition, boolean rotateView) {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
-
+        this.rotateView = rotateView;
 
         if(runway == null){
             return;
@@ -122,9 +124,17 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         String num = runway.getDesignator().substring(0, 2);
         String designator1 = num + "\n" + runway.getDesignator().substring(2, runway.getDesignator().length());
 
-        int oppositeNum = Integer.parseInt(num) + 18;
-        if (oppositeNum > 36) {
-            oppositeNum -= 36;
+//        int oppositeNum = Integer.parseInt(num) + 18;
+//        if (oppositeNum > 36) {
+//            oppositeNum -= 36;
+//        }
+
+        int oppositeNum;
+
+        if(Integer.parseInt(num) > 18){
+            oppositeNum = Integer.parseInt(num) - 18;
+        }else{
+            oppositeNum = 18 + Integer.parseInt(num);
         }
         String designator2 = String.format("%02d", oppositeNum);
 
@@ -156,9 +166,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         gc.setFont(Font.font("Consolas", 14));
         gc.setTextAlign(TextAlignment.RIGHT);
         if (!leftRunway) {
-            gc.fillText("Take-off/landing direction: \uD83E\uDC78", scale_x(TODA), scale_y(10));
+            gc.fillText("Take-off/landing direction: \uD83E\uDC78", getWidth() - scale_x(60), scale_y(10));
         } else {
-            gc.fillText("Take-off/landing direction: \uD83E\uDC7A", scale_x(TODA), scale_y(10));
+            gc.fillText("Take-off/landing direction: \uD83E\uDC7A", getWidth() - scale_x(60), scale_y(10));
         }
     }
 
@@ -333,7 +343,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      */
     protected void scaledFillRect(double x, double y, double w, double h) {
         gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
-        //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
+        //gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
     }
 
     /**
