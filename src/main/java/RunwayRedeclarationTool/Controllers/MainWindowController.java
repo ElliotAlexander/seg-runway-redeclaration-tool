@@ -14,8 +14,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -44,6 +48,8 @@ public class MainWindowController implements Initializable {
     private TextFlow declaredDistances, calculationsBreakdown;
     @FXML
     private Button calculateButton, clearAllButton;
+    @FXML
+    private CheckBox rotateViewCheckbox;
     @FXML
     private TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL, obstacleWidth;
     private TopDownView topDownView;
@@ -92,12 +98,19 @@ public class MainWindowController implements Initializable {
             return;
         }
 
-        topDownView = new TopDownView(virtualRunway, obstaclePosition);
+        Pane pane = new Pane();
+        StaticElements staticElements = new StaticElements(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
+        staticElements.widthProperty().bind(topDownViewContainer.widthProperty());
+        staticElements.heightProperty().bind(topDownViewContainer.heightProperty());
+
+        topDownView = new TopDownView(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
         topDownView.widthProperty().bind(topDownViewContainer.widthProperty());
         topDownView.heightProperty().bind(topDownViewContainer.heightProperty());
-        topDownViewContainer.getChildren().add(topDownView);
 
-        sideOnView = new SideOnView(virtualRunway, obstaclePosition);
+        pane.getChildren().addAll(staticElements, topDownView);
+        topDownViewContainer.getChildren().add(pane);
+
+        sideOnView = new SideOnView(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
         sideOnView.widthProperty().bind(sideOnViewContainer.widthProperty());
         sideOnView.heightProperty().bind(sideOnViewContainer.heightProperty());
         sideOnViewContainer.getChildren().add(sideOnView);

@@ -10,8 +10,8 @@ import javafx.scene.paint.Color;
 
 public class TopDownView extends RunwayView {
 
-    public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
-        super(runway, obstaclePosition);
+    public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition, boolean rotateView) {
+        super(runway, obstaclePosition, rotateView);
     }
 
     /**
@@ -22,9 +22,22 @@ public class TopDownView extends RunwayView {
         double height = getHeight();
         GraphicsContext gc = getGraphicsContext2D();
 
-        // Fill canvas with grey
-        gc.setFill(Color.web("ddd"));
-        gc.fillRect(0, 0, width, height);
+        double designator = Integer.parseInt(runway.getDesignator().substring(0, 2));
+        double bearing;
+
+        if (designator < 18) {
+            bearing = designator * 10;
+        } else {
+            bearing = (36 - designator) * 10;
+        }
+
+        // Clear the canvas
+        gc.clearRect(0, 0, width, height);
+
+        if (rotateView) {
+            this.setRotate(bearing - 90);
+            this.setScaleX(0.0089*bearing+0.2);
+        }
 
         drawClearedAndGradedArea(gc, leftSpace);
 
@@ -36,19 +49,19 @@ public class TopDownView extends RunwayView {
         drawThresholdMarkers(gc);
         drawCentreLine(gc);
         drawDesignators(150, Color.WHITE);
-        drawMapScale();
-        drawTakeOffLandingDirection();
+        //drawMapScale();
+        //drawTakeOffLandingDirection();
         drawStopway(100);
-        drawClearway(115);
+        drawClearway(110);
 
-        drawDisplacedThreshold(115);
+        drawDisplacedThreshold(100);
 
     }
 
     /**
      * Draw the cleared and graded areas around the runway.
      *
-     * @param gc GraphicsContext for drawing.
+     * @param gc     GraphicsContext for drawing.
      * @param offset the value to horizontally shift the drawing.
      */
     private void drawClearedAndGradedArea(GraphicsContext gc, int offset) {
@@ -107,7 +120,7 @@ public class TopDownView extends RunwayView {
     private void drawCentreLine(GraphicsContext gc) {
         gc.setLineWidth(scale_y(1));
         gc.setLineDashes(30);
-        scaledStrokeLine(TORA/6 + leftSpace, 150, TORA*5/6 +leftSpace, 150);
+        scaledStrokeLine(TORA / 6 + leftSpace, 150, TORA * 5 / 6 + leftSpace, 150);
         gc.setLineDashes(0);
     }
 
@@ -147,7 +160,7 @@ public class TopDownView extends RunwayView {
             gc.setGlobalAlpha(1.0);
 
             gc.setFill(Color.BLACK);
-            gc.strokeRect(scale_x(obstacle_x), scale_y(obstacle_y - obstaclePosition.getWidth() / 2), scale_x(TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH()), scale_y(obstaclePosition.getWidth()));
+            scaledStrokeRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
 
         } catch (AttributeNotAssignedException e) {
             Logger.Log(Logger.Level.ERROR, "Failed to draw broken down distances!\nObstacle position = " + obstaclePosition.toString());

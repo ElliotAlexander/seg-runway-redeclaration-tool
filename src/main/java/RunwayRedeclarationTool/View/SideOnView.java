@@ -7,8 +7,8 @@ import javafx.scene.paint.Color;
 
 public class SideOnView extends RunwayView {
 
-    public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
-        super(runway, obstaclePosition);
+    public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition, boolean rotateView) {
+        super(runway, obstaclePosition, rotateView);
     }
 
     /**
@@ -51,7 +51,7 @@ public class SideOnView extends RunwayView {
             gc.setGlobalAlpha(1.0);
 
             gc.setFill(Color.BLACK);
-            gc.strokeRect(scale_x(obstaclePosition.getDistLeftTSH() + leftSpace), scale_y(149 - oHeight), scale_x(obstacleLength), scale_y(oHeight));
+            scaledStrokeRect(obstaclePosition.getDistLeftTSH() + leftSpace, 149 - oHeight, obstacleLength, oHeight);
 
             int slopecalc = runway.getRecalcParams().getSlopeCalculation();
 

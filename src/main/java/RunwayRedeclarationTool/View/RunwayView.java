@@ -19,7 +19,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
     protected boolean leftRunway;
     protected int leftSpace;
-    protected int padding;
+
+    protected boolean rotateView;
 
     protected ObstaclePosition obstaclePosition;
 
@@ -31,10 +32,10 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param runway           the runway to draw.
      * @param obstaclePosition the position of the obstacle.
      */
-    public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
+    public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition, boolean rotateView) {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
-
+        this.rotateView = rotateView;
 
         if(runway == null){
             return;
@@ -44,8 +45,6 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         this.ASDA = p.getASDA();
         this.TODA = p.getTODA();
         this.LDA = p.getLDA();
-
-        this.padding = 300;
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
             leftRunway = true;
@@ -155,9 +154,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         gc.setFont(Font.font("Consolas", 14));
         gc.setTextAlign(TextAlignment.RIGHT);
         if (!leftRunway) {
-            gc.fillText("Take-off/landing direction: \uD83E\uDC78", scale_x(TODA), scale_y(10));
+            gc.fillText("Take-off/landing direction: \uD83E\uDC78", getWidth() - scale_x(60), scale_y(290));
         } else {
-            gc.fillText("Take-off/landing direction: \uD83E\uDC7A", scale_x(TODA), scale_y(10));
+            gc.fillText("Take-off/landing direction: \uD83E\uDC7A", getWidth() - scale_x(60), scale_y(290));
         }
     }
 
@@ -323,7 +322,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     }
 
     /**
-     * Draw a scaled rectangle on the view.
+     * Draw a scaled filled rectangle on the view.
      *
      * @param x
      * @param y
@@ -331,7 +330,20 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param h
      */
     protected void scaledFillRect(double x, double y, double w, double h) {
-        gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
+        gc.fillRect(scale_x(x), scale_y(y), scale_x(w - 100), scale_y(h));
+        //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
+    }
+
+    /**
+     * Draw a scaled outline of a rectangle on the view.
+     *
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
+    protected void scaledStrokeRect(double x, double y, double w, double h) {
+        gc.strokeRect(scale_x(x), scale_y(y), scale_x(w - 100), scale_y(h));
         //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
     }
 
@@ -342,9 +354,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @return the scaled length.
      */
     protected double scale_x(double length) {
-        double maxWidth = Math.max(TODA, ASDA);
+        double maxWidth = Math.max(TODA, ASDA) + 200;
         //        double maxWidth = TODA + leftSpace + padding * 2;
-        return length * getWidth() / maxWidth;
+        return (100 + length) * getWidth() / maxWidth;
         //        return (length + padding) / maxWidth * getWidth();
     }
 
