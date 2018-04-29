@@ -19,7 +19,6 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
     protected boolean leftRunway;
     protected int leftSpace;
-    protected int padding;
 
     protected ObstaclePosition obstaclePosition;
 
@@ -35,7 +34,6 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
 
-
         if(runway == null){
             return;
         }
@@ -45,8 +43,6 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         this.ASDA = p.getASDA();
         this.TODA = p.getTODA();
         this.LDA = p.getLDA();
-
-        this.padding = 300;
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
             leftRunway = true;
@@ -332,7 +328,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param h
      */
     protected void scaledFillRect(double x, double y, double w, double h) {
-        gc.fillRect(scale_x(x), scale_y(y), scale_x(w), scale_y(h));
+        gc.fillRect(scale_x(x), scale_y(y), scale_x(w - 100), scale_y(h));
         //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
     }
 
@@ -343,9 +339,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @return the scaled length.
      */
     protected double scale_x(double length) {
-        double maxWidth = Math.max(TODA, ASDA);
+        double maxWidth = Math.max(TODA, ASDA) + 200;
         //        double maxWidth = TODA + leftSpace + padding * 2;
-        return length * getWidth() / maxWidth;
+        return (100 + length) * getWidth() / maxWidth;
         //        return (length + padding) / maxWidth * getWidth();
     }
 
