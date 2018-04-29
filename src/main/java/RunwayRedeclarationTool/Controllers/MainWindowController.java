@@ -9,8 +9,6 @@ import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.Models.xml.XML_Export;
 import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
 import RunwayRedeclarationTool.View.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -61,10 +59,10 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT, RunwaySide.CENTER);
 
-        distanceFromTHRLeft.textProperty().addListener(new BoxChangeListener(distanceFromTHRLeft));
-        distanceFromTHRRight.textProperty().addListener(new BoxChangeListener(distanceFromTHRRight));
-        distanceFromCL.textProperty().addListener(new BoxChangeListener(distanceFromCL));
-        obstacleWidth.textProperty().addListener(new BoxChangeListener(obstacleWidth));
+        distanceFromTHRLeft.textProperty().addListener(new IntegerOnlyTextListener(distanceFromTHRLeft));
+        distanceFromTHRRight.textProperty().addListener(new IntegerOnlyTextListener(distanceFromTHRRight));
+        distanceFromCL.textProperty().addListener(new IntegerOnlyTextListener(distanceFromCL));
+        obstacleWidth.textProperty().addListener(new IntegerOnlyTextListener(obstacleWidth));
 
         if (controller.get_airports().length > 0) {
             refresh_airports();

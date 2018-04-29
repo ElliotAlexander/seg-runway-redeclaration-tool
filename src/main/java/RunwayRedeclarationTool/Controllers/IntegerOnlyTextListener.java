@@ -5,11 +5,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
-public class BoxChangeListener implements ChangeListener {
+public class IntegerOnlyTextListener implements ChangeListener {
 
     private final TextField element;
 
-    public BoxChangeListener(TextField element){
+    public IntegerOnlyTextListener(TextField element){
         this.element = element;
     }
 
@@ -20,7 +20,7 @@ public class BoxChangeListener implements ChangeListener {
                 element.setText(((String)newValue).replaceAll("[^\\d]", ""));
             }
         } else {
-            Logger.Log("BoxChangeListener has been applied to the wrong class.");
+            Logger.Log("IntegerOnlyTextListener has been applied to the wrong class.");
         }
     }
 }
