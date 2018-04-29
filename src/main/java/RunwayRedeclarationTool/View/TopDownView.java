@@ -39,9 +39,9 @@ public class TopDownView extends RunwayView {
         drawMapScale();
         drawTakeOffLandingDirection();
         drawStopway(100);
-        drawClearway(115);
+        drawClearway(110);
 
-        drawDisplacedThreshold(115);
+        drawDisplacedThreshold(100);
 
     }
 
