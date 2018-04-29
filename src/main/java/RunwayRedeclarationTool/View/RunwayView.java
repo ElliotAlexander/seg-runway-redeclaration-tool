@@ -320,7 +320,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     }
 
     /**
-     * Draw a scaled rectangle on the view.
+     * Draw a scaled filled rectangle on the view.
      *
      * @param x
      * @param y
@@ -329,6 +329,19 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      */
     protected void scaledFillRect(double x, double y, double w, double h) {
         gc.fillRect(scale_x(x), scale_y(y), scale_x(w - 100), scale_y(h));
+        //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
+    }
+
+    /**
+     * Draw a scaled outline of a rectangle on the view.
+     *
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
+    protected void scaledStrokeRect(double x, double y, double w, double h) {
+        gc.strokeRect(scale_x(x), scale_y(y), scale_x(w - 100), scale_y(h));
         //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
     }
 

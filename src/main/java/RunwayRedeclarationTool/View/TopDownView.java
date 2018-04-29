@@ -147,7 +147,7 @@ public class TopDownView extends RunwayView {
             gc.setGlobalAlpha(1.0);
 
             gc.setFill(Color.BLACK);
-            gc.strokeRect(scale_x(obstacle_x), scale_y(obstacle_y - obstaclePosition.getWidth() / 2), scale_x(TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH()), scale_y(obstaclePosition.getWidth()));
+            scaledStrokeRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
 
         } catch (AttributeNotAssignedException e) {
             Logger.Log(Logger.Level.ERROR, "Failed to draw broken down distances!\nObstacle position = " + obstaclePosition.toString());
