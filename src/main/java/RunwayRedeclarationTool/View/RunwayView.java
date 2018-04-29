@@ -155,9 +155,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         gc.setFont(Font.font("Consolas", 14));
         gc.setTextAlign(TextAlignment.RIGHT);
         if (!leftRunway) {
-            gc.fillText("Take-off/landing direction: \uD83E\uDC78", getWidth() - scale_x(60), scale_y(10));
+            gc.fillText("Take-off/landing direction: \uD83E\uDC78", getWidth() - scale_x(60), scale_y(290));
         } else {
-            gc.fillText("Take-off/landing direction: \uD83E\uDC7A", getWidth() - scale_x(60), scale_y(10));
+            gc.fillText("Take-off/landing direction: \uD83E\uDC7A", getWidth() - scale_x(60), scale_y(290));
         }
     }
 

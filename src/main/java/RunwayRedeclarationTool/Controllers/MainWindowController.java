@@ -133,13 +133,7 @@ public class MainWindowController implements Initializable {
             return;
         }
 
-        //Canvas layer = new Canvas(800,800);
-        //GraphicsContext gc2 = layer.getGraphicsContext2D();
-        //gc2.setFill(Color.web("ddd"));
-        //gc2.fillRect(0,0,800,800);
-
         Pane pane = new Pane();
-
         StaticElements staticElements = new StaticElements(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
         staticElements.widthProperty().bind(topDownViewContainer.widthProperty());
         staticElements.heightProperty().bind(topDownViewContainer.heightProperty());
@@ -150,8 +144,6 @@ public class MainWindowController implements Initializable {
 
         pane.getChildren().addAll(staticElements, topDownView);
         topDownViewContainer.getChildren().add(pane);
-        //topDownViewContainer.getChildren().add(topDownView);
-
 
         sideOnView = new SideOnView(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
         sideOnView.widthProperty().bind(sideOnViewContainer.widthProperty());
