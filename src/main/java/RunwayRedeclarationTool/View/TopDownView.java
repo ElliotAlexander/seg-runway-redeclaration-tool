@@ -52,9 +52,10 @@ public class TopDownView extends RunwayView {
         //drawMapScale();
         //drawTakeOffLandingDirection();
         drawStopway(100);
-        drawClearway(115);
+        drawClearway(110);
 
-        drawDisplacedThreshold(115);
+        drawDisplacedThreshold(100);
+
     }
 
     /**
@@ -93,7 +94,7 @@ public class TopDownView extends RunwayView {
                         scale_y(255),
                         scale_y(225),
                         scale_y(225)},
-                12);
+            12);
     }
 
     /**
@@ -159,7 +160,7 @@ public class TopDownView extends RunwayView {
             gc.setGlobalAlpha(1.0);
 
             gc.setFill(Color.BLACK);
-            gc.strokeRect(scale_x(obstacle_x), scale_y(obstacle_y - obstaclePosition.getWidth() / 2), scale_x(TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH()), scale_y(obstaclePosition.getWidth()));
+            scaledStrokeRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
 
         } catch (AttributeNotAssignedException e) {
             Logger.Log(Logger.Level.ERROR, "Failed to draw broken down distances!\nObstacle position = " + obstaclePosition.toString());
