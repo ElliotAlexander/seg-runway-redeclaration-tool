@@ -39,7 +39,6 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         if(runway == null){
             return;
         }
-
         RunwayParameters p = runway.getOrigParams();
         this.TORA = p.getTORA();
         this.ASDA = p.getASDA();

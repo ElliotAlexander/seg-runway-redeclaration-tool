@@ -21,7 +21,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,42 +61,10 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT, RunwaySide.CENTER);
 
-        distanceFromTHRLeft.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    distanceFromTHRLeft.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
-        distanceFromTHRRight.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    distanceFromTHRRight.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
-        distanceFromCL.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    distanceFromCL.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
-        obstacleWidth.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    obstacleWidth.setText(newValue.replaceAll("[^\\d]", ""));
-                }
-            }
-        });
+        distanceFromTHRLeft.textProperty().addListener(new BoxChangeListener(distanceFromTHRLeft));
+        distanceFromTHRRight.textProperty().addListener(new BoxChangeListener(distanceFromTHRRight));
+        distanceFromCL.textProperty().addListener(new BoxChangeListener(distanceFromCL));
+        obstacleWidth.textProperty().addListener(new BoxChangeListener(obstacleWidth));
 
         if (controller.get_airports().length > 0) {
             refresh_airports();
