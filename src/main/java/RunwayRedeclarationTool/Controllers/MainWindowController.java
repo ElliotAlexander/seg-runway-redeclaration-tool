@@ -88,7 +88,7 @@ public class MainWindowController implements Initializable {
 
     @FXML
     public void handleVirtualRunwayComboBox(){
-        PopupNotification.display("Switched to " + virtualRunwayComboBox.getValue().toString(), "");
+        PopupNotification.display("Switched to " + virtualRunwayComboBox.getSelectionModel().getSelectedItem(), "");
         drawRunway();
     }
 
@@ -99,8 +99,10 @@ public class MainWindowController implements Initializable {
         topDownViewContainer.getChildren().clear();
         sideOnViewContainer.getChildren().clear();
 
-        Runway runway = runwayComboBox.getValue();
-        VirtualRunway virtualRunway = virtualRunwayComboBox.getValue();
+        Runway runway = runwayComboBox.getSelectionModel().getSelectedItem();
+        VirtualRunway virtualRunway = virtualRunwayComboBox.getSelectionModel().getSelectedItem();
+
+
 
         try {
             if (runway == null) {
@@ -113,13 +115,22 @@ public class MainWindowController implements Initializable {
             return;
         }
 
+        if(virtualRunway == null){
+            return;
+        }
+
         Pane pane = new Pane();
 
         // Add a compass to the top-down view
         Canvas canvas = new Canvas(30, 30);
         Image compass = new Image(this.getClass().getClassLoader().getResourceAsStream("compass.png"));
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        double designator = Integer.parseInt(virtualRunway.getDesignator().substring(0, 2));
+
+        String designator_String = virtualRunway.getDesignator();
+        Integer designator = Integer.parseInt(designator_String.replaceAll("[^\\d.]", ""));
+
+
+
         double bearing;
         if (designator < 18) {
             bearing = designator * 10;
@@ -323,7 +334,6 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleNewObstacle() {
-        try {
             Obstacle newObstacle;
             NewObstaclePopup popup = new NewObstaclePopup();
             newObstacle = popup.display("Add a New Obstacle");
@@ -335,8 +345,6 @@ public class MainWindowController implements Initializable {
             obstacleComboBox.setValue(newObstacle);
             controller.add_obstacle(newObstacle);
             PopupNotification.display("Success - Obstacle added", "Successfully added obstacle " + newObstacle.toString());
-        } catch (NullPointerException e) {
-        }
     }
 
     /**
