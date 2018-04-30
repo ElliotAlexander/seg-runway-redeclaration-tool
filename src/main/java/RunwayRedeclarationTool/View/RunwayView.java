@@ -21,6 +21,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     protected int leftSpace;
 
     protected boolean rotateView;
+    protected double bearing;
 
     protected ObstaclePosition obstaclePosition;
 
@@ -52,6 +53,15 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         } else {
             leftRunway = false;
             leftSpace = Math.max(TODA, ASDA) - TORA;    // the largest out of clearway and stopway
+        }
+
+
+        double designator = Integer.parseInt(runway.getDesignator().substring(0, 2));
+
+        if (designator < 18) {
+            bearing = designator * 10;
+        } else {
+            bearing = (36 - designator) * 10;
         }
 
         gc = getGraphicsContext2D();
