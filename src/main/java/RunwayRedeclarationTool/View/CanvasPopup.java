@@ -23,7 +23,7 @@ public class CanvasPopup {
 
         window = new Stage();
         window.initModality(Modality.WINDOW_MODAL);
-        window.setTitle("Side on View");
+        window.setTitle(title);
         BorderPane root = new BorderPane(pane);
         Scene scene = new Scene(root, image.getWidth(), image.getHeight());
 

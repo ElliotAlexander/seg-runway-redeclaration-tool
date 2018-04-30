@@ -59,7 +59,5 @@ public class PopupController {
         for(CanvasPopup top_popup : top_popups){
             top_popup.redraw(top_snapshot);
         }
-
     }
-
 }
