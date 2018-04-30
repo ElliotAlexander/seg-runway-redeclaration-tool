@@ -22,15 +22,6 @@ public class TopDownView extends RunwayView {
         double height = getHeight();
         GraphicsContext gc = getGraphicsContext2D();
 
-        double designator = Integer.parseInt(runway.getDesignator().substring(0, 2));
-        double bearing;
-
-        if (designator < 18) {
-            bearing = designator * 10;
-        } else {
-            bearing = (36 - designator) * 10;
-        }
-
         // Clear the canvas
         gc.clearRect(0, 0, width, height);
 
@@ -49,8 +40,6 @@ public class TopDownView extends RunwayView {
         drawThresholdMarkers(gc);
         drawCentreLine(gc);
         drawDesignators(150, Color.WHITE);
-        //drawMapScale();
-        //drawTakeOffLandingDirection();
         drawStopway(100);
         drawClearway(110);
 

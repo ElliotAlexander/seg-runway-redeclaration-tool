@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -62,7 +63,7 @@ public class MainWindowController implements Initializable {
         this.controller = controller;
         this.popupController = new PopupController();
     }
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT, RunwaySide.CENTER);
@@ -101,6 +102,25 @@ public class MainWindowController implements Initializable {
         }
 
         Pane pane = new Pane();
+
+        // Add a compass to the top-down view
+        Canvas canvas = new Canvas(30, 30);
+        Image compass = new Image(this.getClass().getClassLoader().getResourceAsStream("compass.png"));
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        double designator = Integer.parseInt(virtualRunway.getDesignator().substring(0, 2));
+        double bearing;
+        if (designator < 18) {
+            bearing = designator * 10;
+        } else {
+            bearing = (36 - designator) * 10;
+        }
+        if (rotateViewCheckbox.isSelected()) {
+            canvas.setRotate(0);
+        } else {
+            canvas.setRotate(90-bearing);
+        }
+        gc.drawImage(compass, 0, 0, 30, 30);
+
         StaticElements staticElements = new StaticElements(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
         staticElements.widthProperty().bind(topDownViewContainer.widthProperty());
         staticElements.heightProperty().bind(topDownViewContainer.heightProperty());
@@ -109,7 +129,7 @@ public class MainWindowController implements Initializable {
         topDownView.widthProperty().bind(topDownViewContainer.widthProperty());
         topDownView.heightProperty().bind(topDownViewContainer.heightProperty());
 
-        pane.getChildren().addAll(staticElements, topDownView);
+        pane.getChildren().addAll(staticElements, topDownView, canvas);
         topDownViewContainer.getChildren().add(pane);
 
         sideOnView = new SideOnView(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
@@ -127,13 +147,13 @@ public class MainWindowController implements Initializable {
 
     }
 
-    public void updateDeclaredDistancesTextfield(){
+    public void updateDeclaredDistancesTextfield() {
         try {
             Runway runway = runwayComboBox.getValue();
             declaredDistances.getChildren().clear();
             declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
             declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n"));
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             // The runway is not set.
         }
     }
@@ -166,7 +186,7 @@ public class MainWindowController implements Initializable {
      * Export the current top-down view as an image.
      */
     @FXML
-    public void handleTopDownImageExport(){
+    public void handleTopDownImageExport() {
         Logger.Log("Running Image Export for top down view.");
         new ImageExport().export(topDownView);
     }
@@ -175,7 +195,7 @@ public class MainWindowController implements Initializable {
      * Export the current side-on view as an image.
      */
     @FXML
-    public void handleSideOnImageExport(){
+    public void handleSideOnImageExport() {
         Logger.Log("Running Image Export for side on view.");
         new ImageExport().export(sideOnView);
     }
@@ -184,22 +204,22 @@ public class MainWindowController implements Initializable {
      * Export all runway and obstacle information as text.
      */
     @FXML
-    public void handleExportAsText(){
+    public void handleExportAsText() {
         String outputString = "";
 
-        for(Node n : declaredDistances.getChildren()){
-            if(n instanceof Text){
+        for (Node n : declaredDistances.getChildren()) {
+            if (n instanceof Text) {
                 outputString += ((Text) n).getText();
             }
         }
 
-        for(Node n : calculationsBreakdown.getChildren()){
-            if( n instanceof Text){
+        for (Node n : calculationsBreakdown.getChildren()) {
+            if (n instanceof Text) {
                 outputString += ((Text) n).getText();
             }
         }
 
-        outputString +=  "\n\nCurrent Obstacle: \n" + obstructionComboBox.getSelectionModel().getSelectedItem();
+        outputString += "\n\nCurrent Obstacle: \n" + obstructionComboBox.getSelectionModel().getSelectedItem();
         outputString += "\n" + obstaclePosition;
         ExportToTextWindow.display(outputString);
     }
@@ -249,7 +269,7 @@ public class MainWindowController implements Initializable {
             alert.setTitle("Calculation failed");
             alert.showAndWait();
             return;
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to parse values in Obstacle Position boxes.\n,Please ensure the values are valid.", ButtonType.CLOSE);
             alert.setTitle("Failed to parse values");
             alert.showAndWait();
@@ -346,7 +366,7 @@ public class MainWindowController implements Initializable {
     @FXML
     public void handleRemoveAirport() {
         int remove_count = 0;
-        for(Airport a : SelectAirportPopup.display(controller, "Select Airports to Remove")){
+        for (Airport a : SelectAirportPopup.display(controller, "Select Airports to Remove")) {
             controller.remove_Airport(a);
             remove_count++;
         }
@@ -361,7 +381,7 @@ public class MainWindowController implements Initializable {
         airportComboBox.getItems().clear();
         Airport[] airports = controller.get_airports();
         airportComboBox.getItems().addAll(airports);
-        if(airports.length > 0){
+        if (airports.length > 0) {
             airportComboBox.setValue(airports[0]);
             refresh_runways();
         }
@@ -370,7 +390,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void refresh_runways(){
+    private void refresh_runways() {
         if (airportComboBox.getItems().size() > 0) {
             Runway[] runways = controller.get_runways(airportComboBox.getValue().getAirport_id());
             if (runways.length > 0) {
@@ -384,7 +404,7 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    private void refresh_obstacles(){
+    private void refresh_obstacles() {
         obstructionComboBox.getItems().clear();
         obstructionComboBox.getItems().addAll(controller.get_obstacles());
         if (obstructionComboBox.getItems().size() > 0) {
@@ -393,7 +413,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    private void refresh_virtual_runways(){
+    private void refresh_virtual_runways() {
         Runway runway = runwayComboBox.getValue();
         if (runway == null) {
             return;
@@ -410,8 +430,8 @@ public class MainWindowController implements Initializable {
      * Prevents user from entering a value for distance to C/L if they specify the object is in the center.
      */
     @FXML
-    private void runwaySideComboBoxHandler(){
-        if(runwaySideComboBox.getValue() == RunwaySide.CENTER){
+    private void runwaySideComboBoxHandler() {
+        if (runwaySideComboBox.getValue() == RunwaySide.CENTER) {
             distanceFromCL.setText("0");
             distanceFromCL.setEditable(false);
         } else {
@@ -430,15 +450,15 @@ public class MainWindowController implements Initializable {
 
 
     @FXML
-    public void handleExportXML(){
+    public void handleExportXML() {
         new XML_Export(controller, obstaclePosition);
     }
 
 
     @FXML
-    public void handleRemoveObstacle(){
+    public void handleRemoveObstacle() {
         int removed_count = 0;
-        for(Obstacle o : RemoveObstaclePopup.display(controller)){
+        for (Obstacle o : RemoveObstaclePopup.display(controller)) {
             controller.remove_obstacle(o);
             removed_count++;
         }
