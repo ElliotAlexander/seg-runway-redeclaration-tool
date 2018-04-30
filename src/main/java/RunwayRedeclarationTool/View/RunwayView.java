@@ -19,6 +19,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
     protected boolean leftRunway;
     protected int leftSpace;
+    protected int padding;
 
     protected boolean rotateView;
     protected double bearing;
@@ -46,6 +47,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
         this.ASDA = p.getASDA();
         this.TODA = p.getTODA();
         this.LDA = p.getLDA();
+
+        padding = TORA / 10;
 
         if (Integer.parseInt(runway.getDesignator().substring(0, 2)) <= 18) {   // left virtual runway
             leftRunway = true;
@@ -340,8 +343,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param h
      */
     protected void scaledFillRect(double x, double y, double w, double h) {
-        gc.fillRect(scale_x(x), scale_y(y), scale_x(w - 100), scale_y(h));
-        //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
+        gc.fillRect(scale_x(x), scale_y(y), scale_x(w - padding), scale_y(h));
     }
 
     /**
@@ -353,8 +355,7 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param h
      */
     protected void scaledStrokeRect(double x, double y, double w, double h) {
-        gc.strokeRect(scale_x(x), scale_y(y), scale_x(w - 100), scale_y(h));
-        //        gc.fillRect(scale_x(x), scale_y(y), scale_x(w-padding), scale_y(h));
+        gc.strokeRect(scale_x(x), scale_y(y), scale_x(w - padding), scale_y(h));
     }
 
     /**
@@ -364,10 +365,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @return the scaled length.
      */
     protected double scale_x(double length) {
-        double maxWidth = Math.max(TODA, ASDA) + 200;
-        //        double maxWidth = TODA + leftSpace + padding * 2;
-        return (100 + length) * getWidth() / maxWidth;
-        //        return (length + padding) / maxWidth * getWidth();
+        double maxWidth = Math.max(TODA, ASDA) + 2 * padding;
+        return (length + padding) * getWidth() / maxWidth;
     }
 
     /**
