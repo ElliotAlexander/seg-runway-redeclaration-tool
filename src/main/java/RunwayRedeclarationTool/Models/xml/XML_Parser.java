@@ -1,5 +1,6 @@
 package RunwayRedeclarationTool.Models.xml;
 
+import RunwayRedeclarationTool.Controllers.MainWindowController;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
@@ -18,12 +19,14 @@ import java.util.List;
 public class XML_Parser {
 
     protected final DB_controller controller;
+    protected final MainWindowController mwc;
 
-    protected XML_Parser(DB_controller controller){
+    public XML_Parser(DB_controller controller, MainWindowController mwc){
         this.controller = controller;
+        this.mwc = mwc;
     }
 
-    protected void parse_xml(File xml_file){
+    public void parse_xml(File xml_file){
         try {
 
             Logger.Log("Loaded file :"+ xml_file.getName() + " for parsing.");
@@ -159,7 +162,32 @@ public class XML_Parser {
             return;
         }
 
-        Element import_position = obstacle_positions[0];
+        try {
+            Element import_position = obstacle_positions[0];
+            int width = Integer.parseInt(import_position.getChild("width").getValue());
+            int DistanceFromCL = Integer.parseInt(import_position.getChild("DistanceFromCL").getValue());
+            int DistanceLeftTSH = Integer.parseInt(import_position.getChild("DistanceLeftTSH").getValue());
+            int DistanceRightTSH = Integer.parseInt(import_position.getChild("DistanceRightTSH").getValue());
+
+            RunwaySide side = RunwaySide.CENTER;
+
+            switch (import_position.getChild("RunwaySide").getValue()) {
+                case "RIGHT":
+                    side = RunwaySide.RIGHT;
+                case "LEFT":
+                    side = RunwaySide.LEFT;
+                case "CENTRE":
+                    side = RunwaySide.CENTER;
+            }
+
+
+            ObstaclePosition newOP = new ObstaclePosition(mwc.getObstaclePosition().getObstacle(), width, DistanceFromCL, DistanceLeftTSH, DistanceRightTSH, side);
+            mwc.setObstaclePosition(newOP);
+
+        } catch(NumberFormatException e){
+            Logger.Log(Logger.Level.ERROR, "Failed to parse values in ObstaclePosition XML data.");
+            Logger.Log(Logger.Level.ERROR, "Failed at: [" + obstacle_positions[0].coalesceText(true) + "].");
+        }
 
 
     }

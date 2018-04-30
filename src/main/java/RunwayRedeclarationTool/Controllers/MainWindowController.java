@@ -8,6 +8,7 @@ import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.Models.xml.XML_Export;
 import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
+import RunwayRedeclarationTool.Models.xml.XML_Parser;
 import RunwayRedeclarationTool.View.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,12 +60,15 @@ public class MainWindowController implements Initializable {
 
     private final PopupController popupController;
 
+    private final IOController ioController;
+
 
 
     public MainWindowController(Configuration config, DB_controller controller) {
         this.config = config;
         this.controller = controller;
         this.popupController = new PopupController();
+        this.ioController = new IOController(this, controller);
     }
 
     @Override
@@ -189,8 +194,7 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleTopDownImageExport() {
-        Logger.Log("Running Image Export for top down view.");
-        new ImageExport().export(topDownView);
+        ioController.exportImage(topDownView);
     }
 
     /**
@@ -198,8 +202,7 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleSideOnImageExport() {
-        Logger.Log("Running Image Export for side on view.");
-        new ImageExport().export(sideOnView);
+        ioController.exportImage(sideOnView);
     }
 
     /**
@@ -207,23 +210,7 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleExportAsText() {
-        String outputString = "";
-
-        for (Node n : declaredDistances.getChildren()) {
-            if (n instanceof Text) {
-                outputString += ((Text) n).getText();
-            }
-        }
-
-        for (Node n : calculationsBreakdown.getChildren()) {
-            if (n instanceof Text) {
-                outputString += ((Text) n).getText();
-            }
-        }
-
-        outputString += "\n\nCurrent Obstacle: \n" + obstructionComboBox.getSelectionModel().getSelectedItem();
-        outputString += "\n" + obstaclePosition;
-        ExportToTextWindow.display(outputString);
+        ioController.exportAsText(declaredDistances.getChildren(), calculationsBreakdown.getChildren(), obstructionComboBox.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -349,7 +336,7 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleImportFile() {
-        new XML_File_Loader(controller).load_file();
+        ioController.importXMLFile();
         refresh_airports();
     }
 
@@ -358,7 +345,7 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     void handleImportFolder() {
-        new XML_File_Loader(controller).load_directory();
+        ioController.importXMLFolder();
         refresh_airports();
     }
 
@@ -466,5 +453,19 @@ public class MainWindowController implements Initializable {
         }
         refresh_obstacles();
         PopupNotification.display("Success - Obstacles removed.", "Successfully removed " + removed_count + " obstacles.");
+    }
+
+    public ObstaclePosition getObstaclePosition(){
+        return obstaclePosition;
+    }
+
+    public void setObstaclePosition(ObstaclePosition o){
+        obstaclePosition = o;
+        Logger.Log(Logger.Level.INFO, "Updated Obstacle Position to [" + obstaclePosition.toString() + "]");
+        distanceFromCL.setText(String.valueOf(obstaclePosition.getDistFromCL()));
+        distanceFromTHRRight.setText(String.valueOf(obstaclePosition.getDistRightTSH()));
+        distanceFromTHRLeft.setText(String.valueOf(obstaclePosition.getDistLeftTSH()));
+        obstacleWidth.setText(String.valueOf(obstaclePosition.getWidth()));
+        recalculateDistances();
     }
 }

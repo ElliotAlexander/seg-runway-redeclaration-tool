@@ -21,6 +21,7 @@ public class ImageExport {
     public void export(Canvas canvas){
         try {
 
+            Logger.Log("Running image exporter.");
             ArrayList<String> file_types = new ArrayList<>(Arrays.asList(ImageIO.getWriterFileSuffixes()));
             RunwayRedeclarationTool.Logger.Logger.Log("Opening file chooser window");
             FileChooser fileChooser = new FileChooser();
