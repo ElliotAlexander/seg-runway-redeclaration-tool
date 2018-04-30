@@ -14,12 +14,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -56,9 +53,14 @@ public class MainWindowController implements Initializable {
     private SideOnView sideOnView;
     private ObstaclePosition obstaclePosition;
 
+    private final PopupController popupController;
+
+
+
     public MainWindowController(Configuration config, DB_controller controller) {
         this.config = config;
         this.controller = controller;
+        this.popupController = new PopupController();
     }
     
     @Override
@@ -117,6 +119,12 @@ public class MainWindowController implements Initializable {
 
         topDownView.drawObstacle();
         sideOnView.drawObstacle();
+
+
+        popupController.redrawAll(sideOnView, topDownView);
+
+
+
     }
 
     public void updateDeclaredDistancesTextfield(){
@@ -128,7 +136,18 @@ public class MainWindowController implements Initializable {
         } catch (NullPointerException e){
             // The runway is not set.
         }
-}
+    }
+
+
+    @FXML
+    public void popoutSideView(){
+        popupController.newPopup(sideOnView);
+    }
+
+    @FXML
+    public void popoutTopView(){
+        popupController.newPopup(topDownView);
+    }
 
     /**
      * Clear the current object and additional markings.

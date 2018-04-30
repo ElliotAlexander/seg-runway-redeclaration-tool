@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu text="File">
@@ -53,6 +53,16 @@
                   </items>
                 </Menu>
             </Menu>
+         <Menu mnemonicParsing="false" text="View">
+           <items>
+               <Menu mnemonicParsing="false" text="New Runway Window">
+                 <items>
+                     <MenuItem mnemonicParsing="false" onAction="#popoutSideView" text="Side View" />
+                   <MenuItem mnemonicParsing="false" onAction="#popoutTopView" text="Top View" />
+                 </items>
+               </Menu>
+           </items>
+         </Menu>
             <Menu text="About">
                 <MenuItem onAction="#showAbout" text="Our project" />
             </Menu>

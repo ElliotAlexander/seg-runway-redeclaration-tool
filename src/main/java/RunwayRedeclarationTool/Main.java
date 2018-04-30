@@ -7,7 +7,6 @@ import RunwayRedeclarationTool.Controllers.MainWindowController;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.config.PredefinedObstacles;
 import RunwayRedeclarationTool.Models.db.DB_controller;
-import RunwayRedeclarationTool.Models.xml.XML_Export;
 import RunwayRedeclarationTool.View.SplashScreen;
 import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
