@@ -19,7 +19,7 @@ public class NewObstaclePopup {
 
     static Obstacle obstacle;
 
-    public static Obstacle display(String title){
+    public Obstacle display(String title) {
         final Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);

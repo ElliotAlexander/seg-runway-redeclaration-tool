@@ -55,7 +55,8 @@ public class XML_Export {
             // Single threaded
             force_close_event  = false;
 
-                for(Airport airport : SelectAirportPopup.display(db_controller, "Select Airports to export")){
+            SelectAirportPopup popup = new SelectAirportPopup();
+            for (Airport airport : popup.display(db_controller)) {
                     buildAirportElement(airport, document, rootElement);
                 }
 
@@ -64,7 +65,8 @@ public class XML_Export {
                     return;
                 }
 
-                Obstacle[] obstacles = SelectObstaclePopup.display(db_controller);
+            SelectObstaclePopup popup2 = new SelectObstaclePopup();
+            Obstacle[] obstacles = popup2.display(db_controller);
 
 
                 if(force_close_event){

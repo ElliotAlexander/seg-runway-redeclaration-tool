@@ -19,12 +19,11 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-import java.awt.font.NumericShaper;
 
 public class NewRunwayPopup {
     static Runway runway;
 
-    public static Runway display(String title){
+    public Runway display(String title) {
         final Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);

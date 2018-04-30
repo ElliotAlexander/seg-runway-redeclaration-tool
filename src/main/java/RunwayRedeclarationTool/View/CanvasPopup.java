@@ -12,7 +12,6 @@ public class CanvasPopup {
 
     private Node pane;
     private Stage window;
-    private Image image;
 
     private final String title;
 
@@ -22,7 +21,6 @@ public class CanvasPopup {
 
     public void display(Image image){
 
-        this.image = image;
         window = new Stage();
         window.initModality(Modality.WINDOW_MODAL);
         window.setTitle("Side on View");
@@ -37,7 +35,6 @@ public class CanvasPopup {
 
 
     public void redraw(Image image){
-        this.image = image;
         if(image == null){
             return;
         }

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RemoveObstaclePopup {
 
-    public static Obstacle[] display(DB_controller controller) {
+    public Obstacle[] display(DB_controller controller) {
         final Stage window = new Stage();
 
 

@@ -17,9 +17,9 @@ import javafx.scene.control.Label;
 
 public class NewAirportPopup {
 
-    static Airport airport;
+    static Airport airport = null;
 
-    public static Airport display() {
+    public Airport display() {
         final Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add a new Airport");

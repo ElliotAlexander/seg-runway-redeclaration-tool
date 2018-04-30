@@ -63,7 +63,8 @@ public class IOController {
 
         outputString += "\n\nCurrent Obstacle: \n" + currentlySelected;
         outputString += "\n" + mwc.getObstaclePosition();
-        ExportToTextWindow.display(outputString);
+        ExportToTextWindow popup = new ExportToTextWindow();
+        popup.display(outputString);
     }
 
     public void exportImage(RunwayView runwayView){

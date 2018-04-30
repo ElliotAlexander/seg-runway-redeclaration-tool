@@ -28,7 +28,7 @@ public class SelectObstaclePopup {
 
     public static boolean export_obstacle_position = true;
 
-    public static Obstacle[] display(DB_controller controller) {
+    public Obstacle[] display(DB_controller controller) {
         final Stage window = new Stage();
 
 

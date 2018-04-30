@@ -275,9 +275,11 @@ public class MainWindowController implements Initializable {
     @FXML
     public void handleNewAirport() {
         try {
-            Airport newAirport = NewAirportPopup.display();
+            NewAirportPopup popup = new NewAirportPopup();
+            Airport newAirport = popup.display();
             // This stops select an airport being added to the combobox.
             if (newAirport == null) {
+                Logger.Log("New airport popup returned null");
                 return;
             }
             airportComboBox.getItems().add(newAirport);
@@ -301,7 +303,8 @@ public class MainWindowController implements Initializable {
                 alert.showAndWait();
                 return;
             }
-            Runway newRunway = NewRunwayPopup.display("Add a new runway to " + currentAirport.toString());
+            NewRunwayPopup popup = new NewRunwayPopup();
+            Runway newRunway = popup.display("Add a new runway to " + currentAirport.toString());
             // This stops select a runway being added to the combo box.
             if (newRunway == null) {
                 return;
@@ -322,7 +325,8 @@ public class MainWindowController implements Initializable {
     public void handleNewObstacle() {
         try {
             Obstacle newObstacle;
-            newObstacle = NewObstaclePopup.display("Add a New Obstacle");
+            NewObstaclePopup popup = new NewObstaclePopup();
+            newObstacle = popup.display("Add a New Obstacle");
             // This stops 'select an obstacle' being added as an option on the combo box.
             if (newObstacle == null) {
                 return;
@@ -359,7 +363,8 @@ public class MainWindowController implements Initializable {
     @FXML
     public void handleRemoveAirport() {
         int remove_count = 0;
-        for (Airport a : SelectAirportPopup.display(controller, "Select Airports to Remove")) {
+        SelectAirportPopup popup = new SelectAirportPopup();
+        for (Airport a : popup.display(controller)) {
             controller.remove_Airport(a);
             remove_count++;
         }
@@ -454,7 +459,8 @@ public class MainWindowController implements Initializable {
     @FXML
     public void handleRemoveObstacle() {
         int removed_count = 0;
-        for (Obstacle o : RemoveObstaclePopup.display(controller)) {
+        RemoveObstaclePopup popup = new RemoveObstaclePopup();
+        for (Obstacle o : popup.display(controller)) {
             controller.remove_obstacle(o);
             removed_count++;
         }

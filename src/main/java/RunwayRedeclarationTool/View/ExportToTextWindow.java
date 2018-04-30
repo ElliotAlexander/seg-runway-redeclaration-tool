@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class ExportToTextWindow {
 
-    public static void display(String export_string){
+    public void display(String export_string) {
 
 
         Logger.Log("Opening export as text window.");

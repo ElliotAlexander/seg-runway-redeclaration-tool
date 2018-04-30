@@ -24,13 +24,13 @@ import java.util.List;
 
 public class SelectAirportPopup {
 
-    public static Airport[] display(DB_controller controller, String windowTitle) {
+    public Airport[] display(DB_controller controller) {
         final Stage window = new Stage();
 
 
         // Window setup
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle(windowTitle);
+        window.setTitle("Select Airports to Remove");
         BorderPane grid = new BorderPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(grid, 700, 400);
