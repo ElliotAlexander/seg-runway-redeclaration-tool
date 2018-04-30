@@ -399,4 +399,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     protected abstract void draw();
 
     public abstract void drawObstacle();
+
+
+    public VirtualRunway getVirtualRunway(){
+        return runway;
+    }
 }

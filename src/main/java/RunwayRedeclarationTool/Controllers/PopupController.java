@@ -24,10 +24,14 @@ public class PopupController {
 
 
     public void newPopup(RunwayView runwayView){
-        CanvasPopup popup = new CanvasPopup();
+
+        CanvasPopup popup;
+
         if(runwayView instanceof SideOnView){
+            popup = new CanvasPopup("Side on view - " + runwayView.getVirtualRunway().toString());
             side_popups.add(popup);
         } else {
+            popup = new CanvasPopup("Top down view - " + runwayView.getVirtualRunway().toString());
             top_popups.add(popup);
         }
 

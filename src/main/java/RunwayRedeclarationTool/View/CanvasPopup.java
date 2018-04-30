@@ -14,6 +14,12 @@ public class CanvasPopup {
     private Stage window;
     private Image image;
 
+    private final String title;
+
+    public CanvasPopup(String title){
+        this.title = title;
+    }
+
     public void display(Image image){
 
         this.image = image;

@@ -7,7 +7,6 @@ import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
 import RunwayRedeclarationTool.Models.xml.XML_Parser;
 import RunwayRedeclarationTool.View.ExportToTextWindow;
-import RunwayRedeclarationTool.View.PopupNotification;
 import RunwayRedeclarationTool.View.RunwayView;
 import RunwayRedeclarationTool.View.TopDownView;
 import javafx.collections.ObservableList;
