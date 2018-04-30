@@ -18,7 +18,23 @@ public class PopupNotification {
         tray.setRectangleFill(Paint.valueOf("#2A9A84"));
         tray.setImage(pic);
         tray.setAnimationType(AnimationType.POPUP);
-        tray.showAndDismiss(Duration.seconds(2));
+        tray.showAndDismiss(Duration.seconds(5));
+
+
+    }
+
+
+    public static void error(String title, String message){
+
+        TrayNotification tray = new TrayNotification();
+
+        Image pic = new Image("/popup.png");
+        tray.setTitle(title);
+        tray.setMessage(message);
+        tray.setRectangleFill(Paint.valueOf("#FF6961"));
+        tray.setImage(pic);
+        tray.setAnimationType(AnimationType.POPUP);
+        tray.showAndDismiss(Duration.seconds(5));
 
 
     }
