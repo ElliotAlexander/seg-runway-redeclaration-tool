@@ -214,7 +214,7 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleExportAsText() {
-        ioController.exportAsText(declaredDistances.getChildren(), calculationsBreakdown.getChildren(), obstructionComboBox.getSelectionModel().getSelectedItem());
+        ioController.exportAsText(declaredDistances.getChildren(), calculationsBreakdown.getChildren(), obstacleComboBox.getSelectionModel().getSelectedItem());
     }
 
     /**
