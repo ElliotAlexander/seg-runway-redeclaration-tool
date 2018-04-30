@@ -253,6 +253,7 @@ public class MainWindowController implements Initializable {
             calculationsBreakdown.getChildren().add(new Text(runway.rightRunway.getRecalcBreakdown()));
 
             drawRunway();
+            PopupNotification.display("Obstacle added", "Distances recalculated and display updated");
 
         } catch (NoRedeclarationNeededException e) {
             Logger.Log(Logger.Level.ERROR, e.getStackTrace().toString());
