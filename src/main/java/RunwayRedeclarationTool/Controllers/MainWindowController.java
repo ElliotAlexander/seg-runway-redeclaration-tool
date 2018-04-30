@@ -43,7 +43,7 @@ public class MainWindowController implements Initializable {
     @FXML
     private ComboBox<VirtualRunway> virtualRunwayComboBox;
     @FXML
-    private ComboBox<Obstacle> obstructionComboBox;
+    private ComboBox<Obstacle> obstacleComboBox;
     @FXML
     private ComboBox<RunwaySide> runwaySideComboBox;
     @FXML
@@ -86,6 +86,11 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    @FXML
+    public void handleVirtualRunwayComboBox(){
+        PopupNotification.display("Switched to " + virtualRunwayComboBox.getValue().toString(), "");
+        drawRunway();
+    }
 
     /**
      * Add top-down and side-on views to the main window.
@@ -165,7 +170,6 @@ public class MainWindowController implements Initializable {
         }
     }
 
-
     @FXML
     public void popoutSideView(){
         popupController.newPopup(sideOnView);
@@ -223,7 +227,7 @@ public class MainWindowController implements Initializable {
         Calculator calculator = Calculator.getInstance();
         try {
             Runway runway = runwayComboBox.getValue();
-            Obstacle obstacle = obstructionComboBox.getValue();
+            Obstacle obstacle = obstacleComboBox.getValue();
 
             int distFromCL;
             if (runwaySideComboBox.getValue() == RunwaySide.CENTER) {
@@ -323,8 +327,8 @@ public class MainWindowController implements Initializable {
             if (newObstacle == null) {
                 return;
             }
-            obstructionComboBox.getItems().add(newObstacle);
-            obstructionComboBox.setValue(newObstacle);
+            obstacleComboBox.getItems().add(newObstacle);
+            obstacleComboBox.setValue(newObstacle);
             controller.add_obstacle(newObstacle);
             PopupNotification.display("Success - Obstacle added", "Successfully added obstacle " + newObstacle.toString());
         } catch (NullPointerException e) {
@@ -379,6 +383,11 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
+    public void handleObstacleComboBox(){
+        PopupNotification.display("Switched to obstacle: " + obstacleComboBox.getValue().getName(),"");
+    }
+
+    @FXML
     private void refresh_runways() {
         if (airportComboBox.getItems().size() > 0) {
             Runway[] runways = controller.get_runways(airportComboBox.getValue().getAirport_id());
@@ -394,10 +403,10 @@ public class MainWindowController implements Initializable {
     }
 
     private void refresh_obstacles() {
-        obstructionComboBox.getItems().clear();
-        obstructionComboBox.getItems().addAll(controller.get_obstacles());
-        if (obstructionComboBox.getItems().size() > 0) {
-            obstructionComboBox.setValue(obstructionComboBox.getItems().get(0));
+        obstacleComboBox.getItems().clear();
+        obstacleComboBox.getItems().addAll(controller.get_obstacles());
+        if (obstacleComboBox.getItems().size() > 0) {
+            obstacleComboBox.setValue(obstacleComboBox.getItems().get(0));
         }
     }
 
@@ -437,12 +446,10 @@ public class MainWindowController implements Initializable {
         AboutPopup.display();
     }
 
-
     @FXML
     public void handleExportXML() {
         new XML_Export(controller, obstaclePosition);
     }
-
 
     @FXML
     public void handleRemoveObstacle() {
