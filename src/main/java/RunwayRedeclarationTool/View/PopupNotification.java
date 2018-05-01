@@ -15,7 +15,7 @@ public class PopupNotification {
         Image pic = new Image("/popup.png");
         tray.setTitle(title);
         tray.setMessage(message);
-        tray.setRectangleFill(Paint.valueOf("#2A9A84"));
+        tray.setRectangleFill(Paint.valueOf("#007bff"));
         tray.setImage(pic);
         tray.setAnimationType(AnimationType.POPUP);
         tray.showAndDismiss(Duration.seconds(5));
