@@ -1,6 +1,5 @@
 package RunwayRedeclarationTool.View;
 
-import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.Airport;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import javafx.collections.FXCollections;
@@ -30,7 +29,7 @@ public class SelectAirportPopup {
 
         // Window setup
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Select Airport to Remove");
+        window.setTitle("Select Airport to export");
         BorderPane grid = new BorderPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(grid, 700, 400);
