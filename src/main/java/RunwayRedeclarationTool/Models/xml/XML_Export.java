@@ -104,7 +104,6 @@ public class XML_Export {
         Logger.Log("Adding Obstacle Node [" + obstacle.toString() + "]");
     }
 
-
     private void buildAirportElement(Airport airport, Document document, Element rootElement) {
 
         // Root airport element + name attribute
@@ -129,19 +128,19 @@ public class XML_Export {
                 vr_node.setAttribute("designator", vr.getDesignator());
 
 
-                Element TORA = document.createElement("tora");
+                Element TORA = document.createElement("TORA");
                 TORA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getTORA())));
                 vr_node.appendChild(TORA);
 
-                Element TODA = document.createElement("toda");
+                Element TODA = document.createElement("TODA");
                 TODA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getTODA())));
                 vr_node.appendChild(TODA);
 
-                Element ASDA = document.createElement("asda");
+                Element ASDA = document.createElement("ASDA");
                 ASDA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getASDA())));
                 vr_node.appendChild(ASDA);
 
-                Element LDA = document.createElement("lda");
+                Element LDA = document.createElement("LDA");
                 LDA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getLDA())));
                 vr_node.appendChild(LDA);
 
@@ -153,7 +152,6 @@ public class XML_Export {
             airport_element.appendChild(runway_Element);
         }
     }
-
 
     private void exportObstaclePosition(Document document, Element rootElement) {
         if (obstaclePosition == null) {
@@ -211,7 +209,7 @@ public class XML_Export {
             // If obstacle position is not set - inform the user, and skip.
             if (obstaclePosition == null) {
                 Logger.Log("Skipping export Obstacle Position Dialog - Obstacle Position is null.");
-                PopupNotification.error("Obstacle Position not set!", "Skipping exporting obstacle position - no obstacle position has been set.");
+                PopupNotification.error("Obstacle Position not set!", "Skipping exporting obstacle position\n.No obstacle position has been set.");
             } else {
 
                 // Else - export the obstacle position. The user recieves no feedback here (they'e already checked the box inside ObstaclePopup).
@@ -221,9 +219,6 @@ public class XML_Export {
         } else {
             Logger.Log("Not exporting obstacle position [" + SelectObstaclePopup.export_obstacle_position + "].");
         }
-
-
-
 
     }
 

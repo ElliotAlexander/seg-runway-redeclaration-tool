@@ -386,6 +386,11 @@ public class MainWindowController implements Initializable {
         Airport[] airports = popup.display(controller);
         if(airports != null){
             for (Airport a : airports) {
+                for(Runway runway : controller.get_runways(a.getAirport_id())){
+                    Logger.Log("Removing " + runway.toString() + " attached to Airport " + a.toString() + ".");
+                    controller.remove_Runway(runway);
+                }
+                Logger.Log("Removed Airport " + a.toString());
                 controller.remove_Airport(a);
                 remove_count++;
             }
@@ -517,5 +522,17 @@ public class MainWindowController implements Initializable {
         distanceFromTHRLeft.setText(String.valueOf(obstaclePosition.getDistLeftTSH()));
         obstacleWidth.setText(String.valueOf(obstaclePosition.getWidth()));
         recalculateDistances();
+    }
+
+    public Obstacle getObstacle(){
+        if(obstacleComboBox.getSelectionModel().getSelectedItem() != null){
+            return obstacleComboBox.getSelectionModel().getSelectedItem();
+        } else if(obstacleComboBox.getItems().size() > 0) {
+            obstacleComboBox.getItems().get(0);
+        } else {
+            Logger.Log("No obstacles have been added! Returning a dummy obstacle.");
+            return new Obstacle("Dummy Obstacle", 50);
+        }
+        return null;
     }
 }
