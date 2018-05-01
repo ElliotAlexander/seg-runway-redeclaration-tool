@@ -84,3 +84,7 @@
 #calculationsBreakdown, #declaredDistances {
     -fx-background-color: #ddd;
 }
+
+.menu-bar {
+    -fx-background-color: #ddd;
+}
