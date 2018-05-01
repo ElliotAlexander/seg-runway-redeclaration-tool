@@ -76,18 +76,17 @@ public class SideOnView extends RunwayView {
         gc.setGlobalAlpha(0.5);
 
         int oHeight = obstaclePosition.getObstacle().getHeight();
-        int slopeLength = slopecalc + 60;   // slope calculation + 60
 
         if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
             // __|=|________
             int endObstacle = leftSpace + obstaclePosition.getDistLeftTSH() + oLength;
 
-            gc.fillPolygon(new double[]{scale_x(endObstacle), scale_x(endObstacle), scale_x(endObstacle + slopeLength)}, new double[]{scale_y(149 - oHeight), scale_y(149), scale_y(149)}, 3);
+            gc.fillPolygon(new double[]{scale_x(endObstacle), scale_x(endObstacle), scale_x(endObstacle + slopecalc)}, new double[]{scale_y(149 - oHeight), scale_y(149), scale_y(149)}, 3);
         } else {
             // ________|=|__
             int startObstacle = leftSpace + obstaclePosition.getDistLeftTSH();
 
-            gc.fillPolygon(new double[]{scale_x(startObstacle - slopeLength), scale_x(startObstacle), scale_x(startObstacle)}, new double[]{scale_y(149), scale_y(149), scale_y(149 - oHeight)}, 3);
+            gc.fillPolygon(new double[]{scale_x(startObstacle - slopecalc), scale_x(startObstacle), scale_x(startObstacle)}, new double[]{scale_y(149), scale_y(149), scale_y(149 - oHeight)}, 3);
         }
 
         gc.setGlobalAlpha(1.0);
