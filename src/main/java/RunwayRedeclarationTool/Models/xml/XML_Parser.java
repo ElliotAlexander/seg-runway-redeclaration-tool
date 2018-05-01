@@ -104,7 +104,7 @@ public class XML_Parser {
                 Integer ASDA_1 = Integer.parseInt(vrs[0].getChild("ASDA").getValue());
                 Integer LDA_1 = Integer.parseInt(vrs[0].getChild("LDA").getValue());
                 VirtualRunway vr1 = new VirtualRunway(vr1_designator, new RunwayParameters(TORA_1, TODA_1, ASDA_1, LDA_1));
-                Logger.Log("Loaded Virtual Runway " + vr1_designator + " [ " + TORA_1 + ", " + TODA_1 + ", " + ASDA_1 + ", " + LDA_1 + "].");
+                Logger.Log("Loaded Virtual Runway " + vr1_designator + " [ " + TORA_1 + ", " + TODA_1 + ", " + ASDA_1 + ", " + LDA_1 + "] from XML.");
 
 
                 String vr2_designator = vrs[1].getAttribute("designator").getValue();
