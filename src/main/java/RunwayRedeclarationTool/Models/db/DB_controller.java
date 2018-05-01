@@ -112,30 +112,32 @@ public class DB_controller
 
         String useful = runway.toString().replace("Runway ", "");
 
-        String query_right = "INSERT INTO runway VALUES (" +
-                runway_id + ", \'" +
+        String query_left = "INSERT INTO runway VALUES (" +
+                runway_id  + ", \'" +
                 airport_id + "\', " +
                 physical_runway_id + ", \'" +
                 useful.split("/")[0] + "\'," +
-                R.getTORA() + ", " +
-                R.getTODA() + ", " +
-                R.getASDA() + ", " +
-                R.getLDA() + ", \'None\'" +
-                ");";
-
-        String query_left = "INSERT INTO runway VALUES (" +
-                (runway_id + 1) + ", \'" +
-                airport_id + "\', " +
-                physical_runway_id + ", \'" +
-                useful.split("/")[1] + "\'," +
                 L.getTORA() + ", " +
                 L.getTODA() + ", " +
                 L.getASDA() + ", " +
                 L.getLDA() + ",\' None\' " +
                 ");";
 
-        Logger.Log("Adding VR " + useful.split("/")[1] + " with Params [TODA=\'" + L.getTODA()+"\', TORA="+L.getTORA()+"\', ASDA=\'"+L.getASDA()+"\', LDA=\'"+L.getLDA()+"\'].");
-        Logger.Log("Adding VR " + useful.split("/")[0] + " with Params [TODA=\'" + R.getTODA()+"\', TORA="+R.getTORA()+"\', ASDA=\'"+R.getASDA()+"\', LDA=\'"+R.getLDA()+"\'].");
+        String query_right = "INSERT INTO runway VALUES (" +
+                (runway_id + 1) + ", \'" +
+                airport_id + "\', " +
+                physical_runway_id + ", \'" +
+                useful.split("/")[1] + "\'," +
+                R.getTORA() + ", " +
+                R.getTODA() + ", " +
+                R.getASDA() + ", " +
+                R.getLDA() + ", \'None\'" +
+                ");";
+
+
+
+        Logger.Log("Adding VR " + useful.split("/")[1] + " with Params [TODA=\'" + L.getTODA()+"\', TORA="+L.getTORA()+"\', ASDA=\'"+L.getASDA()+"\', LDA=\'"+L.getLDA()+"\'] to Database.");
+        Logger.Log("Adding VR " + useful.split("/")[0] + " with Params [TODA=\'" + R.getTODA()+"\', TORA="+R.getTORA()+"\', ASDA=\'"+R.getASDA()+"\', LDA=\'"+R.getLDA()+"\'] to Database.");
 
         execute(false,query_left);
         execute(false, query_right);
@@ -171,15 +173,12 @@ public class DB_controller
 
             for(int i : runways.keySet()){
                 ArrayList<VirtualRunway> vrs = runways.get(i);
-                if(vrs.size() > 2){
+                if(vrs.size() !=  2){
                     throw new MalformattedDataException("Found > 2 virtual runways with the same physical ID.");
                 } else {
-                    Runway new_runway;
-                    if(Integer.parseInt(substring(vrs.get(0).getDesignator(), 0, 2)) < Integer.parseInt(substring(vrs.get(1).getDesignator(), 0, 2))){
-                        new_runway = new Runway(vrs.get(0), vrs.get(1));
-                    } else {
-                        new_runway = new Runway(vrs.get(1), vrs.get(0));
-                    }
+                    int desg_int_1 = Integer.parseInt(vrs.get(0).getDesignator().replaceAll("[^0-9]", ""));
+                    int desg_int_2 = Integer.parseInt(vrs.get(1).getDesignator().replaceAll("[^0-9]", ""));
+                    Runway new_runway = desg_int_1 < desg_int_2 ? new Runway(vrs.get(0), vrs.get(1)) : new Runway(vrs.get(0), vrs.get(1));
                     return_array.add(new_runway);
                 }
             }
@@ -204,7 +203,11 @@ public class DB_controller
 
     public void remove_Runway(Runway runway){
         String useful = runway.toString().replace("Runway ", "");
-        String remove_query = "DELETE FROM runway WHERE runway_id=\'" + useful.split("/")[0] + "\';";
+        String remove_query = "DELETE FROM runway WHERE runway_designator=\'" + useful.split("/")[0] + "\';";
+        Logger.Log("Executing: " + remove_query);
+        execute(false, remove_query);
+
+         remove_query = "DELETE FROM runway WHERE runway_designator=\'" + useful.split("/")[1] + "\';";
         Logger.Log("Executing: " + remove_query);
         execute(false, remove_query);
     }
