@@ -1,86 +1,78 @@
 .root {
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
+    -fx-faint-focus-color:transparent;
+    -fx-focus-color:transparent;
 }
 
 .headers-region {
-    -fx-effect: null;
+    -fx-effect:null;
 }
 
-.text{
-    -fx-font-smoothing-type: gray;
+.text {
+    -fx-font-smoothing-type:gray;
 }
 
 .text-field {
-    -fx-focus-color: #007bff;
+    -fx-focus-color:#007bff;
 }
 
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-opacity: 0;
+    -fx-opacity:0;
 }
 
 .tab-pane {
-    -fx-tab-min-width: 70px;
-    -fx-background-color: #fff;
+    -fx-background-color:#fff;
+    -fx-tab-min-width:70px;
 }
 
 .tab {
-    -fx-background-insets: 0 1 0 1, 0, 0;
-    -fx-padding: 4px 10px;
+    -fx-background-insets:0 1 0 1, 0 0;
+    -fx-padding:4px 10px;
 }
 
 .tab-pane .tab {
-    -fx-background-color: #bbb;
+    -fx-background-color:#bbb;
 }
 
 .tab .tab-label {
-    -fx-text-fill: #eee;
-    -fx-alignment: CENTER;
-    -fx-font-weight: bold;
-}
-
-.tab-pane .tab:selected {
-    -fx-background-color: #ddd;
+    -fx-alignment:CENTER;
+    -fx-font-weight:bold;
+    -fx-text-fill:#eee;
 }
 
 .tab:selected .tab-label {
-    -fx-alignment: CENTER;
-    -fx-text-fill: #007bff;
+    -fx-alignment:CENTER;
+    -fx-text-fill:#007bff;
 }
 
 #controls {
-    -fx-background-color: #fff;
+    -fx-background-color:#fff;
 }
 
 #controls .button {
-    -fx-background-color: #007bff;
-    -fx-text-fill: #fff;
-    -fx-font-weight: bold;
-}
-
-.combo-box {
-    -fx-background-color: #ddd;
+    -fx-background-color:#007bff;
+    -fx-font-weight:bold;
+    -fx-text-fill:#fff;
 }
 
 .combo-box-base {
-    -fx-padding: 0;
+    -fx-padding:0;
 }
 
 .list-view {
-    -fx-background-insets: 0;
-    -fx-padding: 0;
+    -fx-background-insets:0;
+    -fx-padding:0;
 }
 
-.combo-box .combo-box-popup .list-view, .combo-box .combo-box-popup .list-cell {
-    -fx-background-color: #ddd;
-    -fx-text-fill: #000;
+.combo-box .combo-box-popup .list-view,.combo-box .combo-box-popup .list-cell {
+    -fx-background-color:#ddd;
+    -fx-text-fill:#000;
 }
 
 .combo-box .combo-box-popup .list-cell:hover {
-    -fx-text-fill: #fff;
-    -fx-background-color: #007bff;
+    -fx-background-color:#007bff;
+    -fx-text-fill:#fff;
 }
 
-#calculationsBreakdown, #declaredDistances {
-    -fx-background-color: #ddd;
+.tab-pane .tab:selected,.combo-box,#calculationsBreakdown,#declaredDistances,.menu-bar {
+    -fx-background-color:#ddd;
 }
