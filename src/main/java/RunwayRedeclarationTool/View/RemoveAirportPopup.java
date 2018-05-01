@@ -19,9 +19,11 @@ import javafx.stage.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectAirportPopup {
+public class RemoveAirportPopup {
 
+    // Force closed must be false so it can be modified from within inner methods.
     private static boolean force_closed = false;
+
 
     public Airport[] display(DB_controller controller) {
         final Stage window = new Stage();
@@ -29,7 +31,7 @@ public class SelectAirportPopup {
 
         // Window setup
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Select Airport to export");
+        window.setTitle("Select Airport to Remove");
         BorderPane grid = new BorderPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(grid, 700, 400);
@@ -37,7 +39,7 @@ public class SelectAirportPopup {
 
 
         // Top Panel
-        Label topLabel = new Label("Select one or more Airports from the table.");
+        Label topLabel = new Label("Select one or more Airports to remove");
         grid.setTop(topLabel);
 
 
@@ -51,11 +53,11 @@ public class SelectAirportPopup {
         final ObservableList<Airport> data = FXCollections.observableArrayList(controller.get_airports());
 
         airportName.setCellValueFactory(
-                new PropertyValueFactory<Airport, String>("airport_name")
+                new PropertyValueFactory<Airport,String>("airport_name")
         );
 
         airportID.setCellValueFactory(
-                new PropertyValueFactory<Airport, String>("airport_id")
+                new PropertyValueFactory<Airport,String>("airport_id")
         );
 
         table.getSelectionModel().setSelectionMode(
@@ -67,7 +69,7 @@ public class SelectAirportPopup {
         grid.setCenter(table);
 
         // Bottom Panel
-        Button confirmButtom = new Button("Select");
+        Button confirmButtom = new Button("Remove");
         Button cancelButton = new Button("Cancel");
         FlowPane layout = new FlowPane();
         layout.getChildren().add(confirmButtom);
@@ -84,12 +86,11 @@ public class SelectAirportPopup {
             @Override
             public void handle(ActionEvent event) {
                 List<Airport> showing = table.getSelectionModel().getSelectedItems();
-                for (Airport a : showing) {
+                for(Airport a : showing){
                     airports.add(a);
                 }
                 window.close();
-            }
-        });
+            }});
 
 
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -116,4 +117,5 @@ public class SelectAirportPopup {
         Airport[] return_array = force_closed ? null : airports.toArray(new Airport[airports.size()]);
         return return_array;
     }
+
 }
