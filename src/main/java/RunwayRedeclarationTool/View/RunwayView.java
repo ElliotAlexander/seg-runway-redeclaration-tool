@@ -61,10 +61,10 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         double designator = Integer.parseInt(runway.getDesignator().substring(0, 2));
 
-        if (designator < 18) {
+        if (designator <= 18) {
             bearing = designator * 10;
         } else {
-            bearing = (36 - designator) * 10;
+            bearing = (designator - 18) * 10;
         }
 
         gc = getGraphicsContext2D();

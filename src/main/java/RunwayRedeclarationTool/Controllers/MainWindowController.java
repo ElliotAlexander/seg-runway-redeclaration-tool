@@ -121,10 +121,10 @@ public class MainWindowController implements Initializable {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         double designator = Integer.parseInt(virtualRunway.getDesignator().substring(0, 2));
         double bearing;
-        if (designator < 18) {
+        if (designator <= 18) {
             bearing = designator * 10;
         } else {
-            bearing = (36 - designator) * 10;
+            bearing = (designator - 18) * 10;
         }
         if (rotateViewCheckbox.isSelected()) {
             canvas.setRotate(0);
