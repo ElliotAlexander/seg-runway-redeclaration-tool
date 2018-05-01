@@ -91,7 +91,7 @@ public class XML_Parser {
                 Integer TODA_1 = Integer.parseInt(vrs[0].getChild("toda").getValue());
                 Integer ASDA_1 = Integer.parseInt(vrs[0].getChild("asda").getValue());
                 Integer LDA_1 = Integer.parseInt(vrs[0].getChild("lda").getValue());
-                VirtualRunway vr1 = new VirtualRunway(vr1_designator, new RunwayParameters(TODA_1, TORA_1, ASDA_1, LDA_1));
+                VirtualRunway vr1 = new VirtualRunway(vr1_designator, new RunwayParameters(TORA_1, TODA_1, ASDA_1, LDA_1));
                 Logger.Log("Loaded Virtual Runway " + vr1_designator + " [ " + TODA_1 + ", " + TORA_1 + ", " + ASDA_1 + ", " + LDA_1 + "].");
 
 
@@ -100,7 +100,7 @@ public class XML_Parser {
                 Integer TODA_2 = Integer.parseInt(vrs[1].getChild("toda").getValue());
                 Integer ASDA_2 = Integer.parseInt(vrs[1].getChild("asda").getValue());
                 Integer LDA_2 = Integer.parseInt(vrs[1].getChild("lda").getValue());
-                VirtualRunway vr2 = new VirtualRunway(vr2_designator, new RunwayParameters(TODA_2, TORA_2, ASDA_2, LDA_2));
+                VirtualRunway vr2 = new VirtualRunway(vr2_designator, new RunwayParameters(TORA_2, TODA_2, ASDA_2, LDA_2));
                 Logger.Log("Loaded Virtual Runway " + vr2_designator + " [ " + TODA_2 + ", " + TORA_2 + ", " + ASDA_2 + ", " + LDA_2 + "].");
                 controller.add_Runway(new Runway(vr1, vr2), airport_id);
             }
