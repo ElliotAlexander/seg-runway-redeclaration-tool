@@ -29,108 +29,70 @@ import java.io.IOException;
 import java.net.URL;
 
 public class XML_Export {
-    
-    
+
+
     private final DB_controller db_controller;
     private final ObstaclePosition obstaclePosition;
 
-    public static boolean force_close_event = false;
-    
-    public XML_Export(DB_controller db_controller, ObstaclePosition obstaclePosition){
+
+    public XML_Export(DB_controller db_controller, ObstaclePosition obstaclePosition) {
         this.db_controller = db_controller;
         this.obstaclePosition = obstaclePosition;
+        Logger.Log("Starting XML Exporter...");
         export();
     }
 
-    private void export(){
+    private void export() {
         try {
+
+            // build the XML document.
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
+            // Build the root element
             Document document = docBuilder.newDocument();
             Element rootElement = document.createElement("class");
             document.appendChild(rootElement);
 
-
-            // Single threaded
-            force_close_event  = false;
-
-            SelectAirportPopup popup = new SelectAirportPopup();
-            for (Airport airport : popup.display(db_controller)) {
-                    buildAirportElement(airport, document, rootElement);
-                }
-
-                if(force_close_event) {
-                    force_close_event = false;
-                    return;
-                }
-
-            SelectObstaclePopup popup2 = new SelectObstaclePopup();
-            Obstacle[] obstacles = popup2.display(db_controller);
+            Logger.Log("Building root element was successful. Displaying Airport/Obstacle Popups.");
 
 
-                if(force_close_event){
-                    force_close_event = false;
-                    return;
-                }
+            // Present the user windows to select what Airports / Obstacles to export.
+            displayAirportPopupWindow(document, rootElement);
+            displayObstaclePopupWindow(document, rootElement);
 
 
-                if(SelectObstaclePopup.export_obstacle_position == true) {
-                        if (obstaclePosition == null) {
-                            Logger.Log("Skipping export Obstacle Position Dialog - Obstacle Position is null.");
-                            Alert no_obstacle_set = new Alert(Alert.AlertType.ERROR, "Failed to export obstacle position. \nNo obstacle position is set!", ButtonType.CLOSE);
-                            no_obstacle_set.showAndWait();
-                        } else {
-                                Logger.Log("Exporting obstacle position to XML.");
-                                exportObstaclePosition(document, rootElement);
-                        }
-                    } else {
-                        Logger.Log("Not exporting obstacle position [" + SelectObstaclePopup.export_obstacle_position + "].");
-                    }
+            // Present the user a window to choose where they save their XML file.
+            File file = displayFileChooserWindow();
+            Logger.Log("File Chooser window closed. Configuring transformer...");
 
 
-                for(Obstacle obstacle : obstacles){
-                    buildObstacleElement(obstacle, document, rootElement);
-                }
+            // Configure XML transformer.
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.INDENT, "YES");
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(file);
+            transformer.transform(source, result);
 
-                FileChooser fd = new FileChooser();
-                fd.setInitialDirectory(new File(System.getProperty("user.home")));
-                fd.setTitle("Select a save location");
-                fd.setInitialFileName("exported_airports.xml");
-                fd.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("XML", "*.xml")
-                );
-
-                File file = fd.showSaveDialog(null);
-
-
-                if(file == null){
-                    Logger.Log(Logger.Level.WARNING, "User closed file chooser window before selection. Exiting export procedure.");
-                    return;
-                }
-
-                TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                Transformer transformer = transformerFactory.newTransformer();
-                transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-                transformer.setOutputProperty(OutputKeys.INDENT, "YES");
-                DOMSource source = new DOMSource(document);
-                StreamResult result = new StreamResult(file);
-                transformer.transform(source, result);
-                Logger.Log("Saving XML file [File=" + file.getAbsolutePath() + "].");
-                PopupNotification.display("Success", "XML file exported to file " + file.getName());
-
-                return;
+            // User / console feedback.
+            Logger.Log("Saving XML file [File=" + file.getAbsolutePath() + "].");
+            PopupNotification.display("Success", "XML file exported to file " + file.getName());
+            return;
 
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
+            Logger.Log("There was a problem configuring the parser! Exiting");
+            PopupNotification.error("Parser Error!", "There was a problem configuring the parser - check the logfile for more details.");
             e.printStackTrace();
         } catch (TransformerException e) {
+            Logger.Log("There was a problem configuring the transformer. Exiting.");
+            PopupNotification.error("Transformer configuration error", "There was a transformer error when exporting to XML - check the logfile for more details.");
             e.printStackTrace();
         }
     }
 
-    private void buildObstacleElement(Obstacle obstacle, Document document, Element rootElement){
+    private void buildObstacleElement(Obstacle obstacle, Document document, Element rootElement) {
         Element obstacle_element = document.createElement("Obstacle");
         obstacle_element.setAttribute("obstacle_name", obstacle.getName());
         rootElement.appendChild(obstacle_element);
@@ -143,7 +105,7 @@ public class XML_Export {
     }
 
 
-    private void buildAirportElement(Airport airport, Document document, Element rootElement){
+    private void buildAirportElement(Airport airport, Document document, Element rootElement) {
 
         // Root airport element + name attribute
         Element airport_element = document.createElement("Airport");
@@ -160,41 +122,41 @@ public class XML_Export {
 
         // Runway and vr elements
 
-            for (Runway runway : db_controller.get_runways(airport.getAirport_id())){
-                Element runway_Element = document.createElement("Runway");
-                for (VirtualRunway vr : new VirtualRunway[]{runway.leftRunway, runway.rightRunway}){
-                    Element vr_node = document.createElement("vr");
-                    vr_node.setAttribute("designator", vr.getDesignator());
+        for (Runway runway : db_controller.get_runways(airport.getAirport_id())) {
+            Element runway_Element = document.createElement("Runway");
+            for (VirtualRunway vr : new VirtualRunway[]{runway.leftRunway, runway.rightRunway}) {
+                Element vr_node = document.createElement("vr");
+                vr_node.setAttribute("designator", vr.getDesignator());
 
 
-                    Element TORA = document.createElement("tora");
-                    TORA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getTORA())));
-                    vr_node.appendChild(TORA);
+                Element TORA = document.createElement("tora");
+                TORA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getTORA())));
+                vr_node.appendChild(TORA);
 
-                    Element TODA = document.createElement("toda");
-                    TODA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getTODA())));
-                    vr_node.appendChild(TODA);
+                Element TODA = document.createElement("toda");
+                TODA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getTODA())));
+                vr_node.appendChild(TODA);
 
-                    Element ASDA = document.createElement("asda");
-                    ASDA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getASDA())));
-                    vr_node.appendChild(ASDA);
+                Element ASDA = document.createElement("asda");
+                ASDA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getASDA())));
+                vr_node.appendChild(ASDA);
 
-                    Element LDA = document.createElement("lda");
-                    LDA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getLDA())));
-                    vr_node.appendChild(LDA);
+                Element LDA = document.createElement("lda");
+                LDA.appendChild(document.createTextNode(String.valueOf(vr.getOrigParams().getLDA())));
+                vr_node.appendChild(LDA);
 
 
-                    runway_Element.appendChild(vr_node);
-                    Logger.Log("Adding Virtual Runway [" + vr.toString() + "] to XML.");
+                runway_Element.appendChild(vr_node);
+                Logger.Log("Adding Virtual Runway [" + vr.toString() + "] to XML.");
 
-                }
-                airport_element.appendChild(runway_Element);
             }
+            airport_element.appendChild(runway_Element);
+        }
     }
 
 
-    private void exportObstaclePosition(Document document, Element rootElement){
-        if(obstaclePosition == null){
+    private void exportObstaclePosition(Document document, Element rootElement) {
+        if (obstaclePosition == null) {
             Logger.Log(Logger.Level.WARNING, "Obstacle position is null, skipping.");
         }
 
@@ -202,30 +164,103 @@ public class XML_Export {
         Element op_element = document.createElement("ObstaclePosition");
         rootElement.appendChild(op_element);
 
-        Element width  = document.createElement("width");
+        Element width = document.createElement("width");
         width.appendChild(document.createTextNode(String.valueOf(obstaclePosition.getWidth())));
         op_element.appendChild(width);
 
-        Element distanceFromCL  = document.createElement("DistanceFromCL");
+        Element distanceFromCL = document.createElement("DistanceFromCL");
         distanceFromCL.appendChild(document.createTextNode(String.valueOf(obstaclePosition.getDistFromCL())));
         op_element.appendChild(distanceFromCL);
 
-        Element  distLeftTSH = document.createElement("DistanceLeftTSH");
+        Element distLeftTSH = document.createElement("DistanceLeftTSH");
         distLeftTSH.appendChild(document.createTextNode(String.valueOf(obstaclePosition.getDistLeftTSH())));
         op_element.appendChild(distLeftTSH);
 
-        Element  distRightTSH = document.createElement("DistanceRightTSH");
+        Element distRightTSH = document.createElement("DistanceRightTSH");
         distRightTSH.appendChild(document.createTextNode(String.valueOf(obstaclePosition.getDistRightTSH())));
         op_element.appendChild(distRightTSH);
 
 
-        Element  runwaySide = document.createElement("RunwaySide");
+        Element runwaySide = document.createElement("RunwaySide");
         runwaySide.appendChild(document.createTextNode(String.valueOf(obstaclePosition.getRunwaySide())));
         op_element.appendChild(runwaySide);
 
         Logger.Log("Writing obstacle position [" + obstaclePosition.toString() + "] to XML.");
         Logger.Log("Finished building obstacle position XML.");
     }
-    
+
+    private void displayObstaclePopupWindow(Document document, Element rootElement) {
+        SelectObstaclePopup popup2 = new SelectObstaclePopup();
+        Obstacle[] obstacles = popup2.display(db_controller);
+
+        // Check if the export Obstacle Position checkboxw as checked inside the Obstacle Popup window.
+        if (SelectObstaclePopup.export_obstacle_position == true) {
+
+            // If obstacle position is not set - inform the user, and skip.
+            if (obstaclePosition == null) {
+                Logger.Log("Skipping export Obstacle Position Dialog - Obstacle Position is null.");
+                PopupNotification.error("Obstacle Position not set!", "Skipping exporting obstacle position - no obstacle position has been set.");
+            } else {
+
+                // Else - export the obstacle position. The user recieves no feedback here (they'e already checked the box inside ObstaclePopup).
+                Logger.Log("Exporting obstacle position to XML.");
+                exportObstaclePosition(document, rootElement);
+            }
+        } else {
+            Logger.Log("Not exporting obstacle position [" + SelectObstaclePopup.export_obstacle_position + "].");
+        }
+
+
+        // Check if the user cancelled the export process from within the select window.
+        // Else export all the obstacles they selected.
+        if (obstacles != null) {
+            for (Obstacle obstacle : obstacles) {
+                buildObstacleElement(obstacle, document, rootElement);
+            }
+        } else {
+            Logger.Log("Export process cancelled by the user inside ObstacleSelectWindow - exiting export process.");
+            PopupNotification.error("Export process cancelled", "The XML exporting process has been cancelled.");
+            return;
+        }
+
+    }
+
+    private void displayAirportPopupWindow(Document document, Element rootElement) {
+
+        SelectAirportPopup popup = new SelectAirportPopup();
+        Airport[] airports = popup.display(db_controller);
+        if (airports != null) {
+            for (Airport airport : popup.display(db_controller)) {
+                buildAirportElement(airport, document, rootElement);
+            }
+        } else {
+            Logger.Log("Export process cancelled by the user inside AirportSelectWindow - exiting export process.");
+            PopupNotification.error("Export process cancelled", "The XML exporting process has been cancelled.");
+            return;
+        }
+
+    }
+
+    private File displayFileChooserWindow(){
+        // Configure file chooser for the user to define where they want to display the file.
+        FileChooser fd = new FileChooser();
+        fd.setInitialDirectory(new File(System.getProperty("user.home")));
+        fd.setTitle("Select a save location");
+        fd.setInitialFileName("exported_airports.xml");
+        fd.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("XML", "*.xml")
+        );
+
+        File file = fd.showSaveDialog(null);
+
+
+        if (file == null) {
+            Logger.Log(Logger.Level.WARNING, "User closed file chooser window before selection. Exiting export procedure.");
+            return null;
+        } else {
+            return file;
+        }
+    }
+
 
 }

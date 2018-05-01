@@ -27,6 +27,7 @@ import java.util.List;
 public class SelectObstaclePopup {
 
     public static boolean export_obstacle_position = true;
+    private static boolean force_close = false;
 
     public Obstacle[] display(DB_controller controller) {
         final Stage window = new Stage();
@@ -114,19 +115,22 @@ public class SelectObstaclePopup {
             @Override
             public void handle(ActionEvent event) {
                 window.close();
+                force_close = true;
             }
         });
 
         window.setOnCloseRequest(new EventHandler<WindowEvent>() {
             public void handle(WindowEvent we) {
-                Logger.Log("Window closed from SelectObstaclePopup. Exiting Export process.");
-                XML_Export.force_close_event = true;
+                window.close();
+                force_close = true;
             }
         });
 
 
         window.setScene(scene);
         window.showAndWait();
-        return obstacles.toArray(new Obstacle[obstacles.size()]);
+        // This allows us to tell in XML_Export whether the user closed the window via the X button/Cancel button (i.e. cancel the export process), or just
+        // didn't select any values.
+        return force_close ? null : obstacles.toArray(new Obstacle[obstacles.size()]);
     }
 }
