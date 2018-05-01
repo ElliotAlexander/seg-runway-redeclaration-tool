@@ -38,6 +38,10 @@ public class XML_Parser {
             parse_airports(rootElement.getChildren("Airport").toArray(new Element[rootElement.getChildren("Airport").size()]));
             Logger.Log("Found " + rootElement.getChildren("Obstacle").size() + " Obstacle Elements.");
             parse_obstacles(rootElement.getChildren("Obstacle").toArray(new Element[rootElement.getChildren("Obstacle").size()]));
+
+            Logger.Log("Found " + rootElement.getChildren("ObstaclePosition").size() + " ObstaclePosition Elements. Only the first declared ObstaclePosition will be imported.");
+            parse_obstacle_position(rootElement.getChildren("ObstaclePosition").toArray(new Element[rootElement.getChildren("ObstaclePosition").size()]));
+
         } catch (JDOMException e1) {
             Logger.Log("Catching JDOMException - printing stack trace, displaying popup notification to the user.");
             PopupNotification.error("JDOM Error when loading file!", "There was an error parsing XML from the file, is it formatted correctly?");
@@ -54,6 +58,8 @@ public class XML_Parser {
 
     private void parse_airports(Element[] airport_nodes){
         ArrayList<Airport> duplicates = new ArrayList<>();
+
+        int imported_airports = 0;
 
         nodeloop:
         for(Element child : airport_nodes) {
@@ -108,13 +114,17 @@ public class XML_Parser {
                 VirtualRunway vr2 = new VirtualRunway(vr2_designator, new RunwayParameters(TORA_2, TODA_2, ASDA_2, LDA_2));
                 Logger.Log("Loaded Virtual Runway " + vr2_designator + " [ " + TODA_2 + ", " + TORA_2 + ", " + ASDA_2 + ", " + LDA_2 + "].");
 
-                int desg1 = Integer.parseInt(vr1.getDesignator().replaceAll("[^\\d.]", ""));
-                int desg2 = Integer.parseInt(vr2.getDesignator().replaceAll("[^\\d.]", ""));
+                int desg_int_1 = Integer.parseInt(vr1.getDesignator().replaceAll("[^0-9]", ""));
+                int desg_int_2 = Integer.parseInt(vr2.getDesignator().replaceAll("[^0-9]", ""));
+                Runway new_runway = desg_int_1 < desg_int_2 ? new Runway(vr1, vr2) : new Runway(vr2, vr1);
 
-                Runway new_runway = desg1 < desg2 ? new Runway(vr1, vr2) : new Runway(vr2, vr1);
+                Logger.Log("Placing " + new_runway.leftRunway.getDesignator() + " on the left hand side (Smaller designator).");
                 controller.add_Runway(new_runway, airport_id);
             }
+            imported_airports++;
         }
+
+        PopupNotification.display("Imported Airports", "Successfully imported " + imported_airports + " airports into database.");
 
         if(duplicates.size() > 0){
             String list_str = "";
@@ -132,6 +142,8 @@ public class XML_Parser {
 
     private void parse_obstacles(Element[] obstacle_nodes){
 
+        int imported_obstacles = 0;
+
         ArrayList<Obstacle> duplicates = new ArrayList<>();
         nodeloop:
         for(Element child : obstacle_nodes) {
@@ -148,7 +160,10 @@ public class XML_Parser {
             Obstacle obstacle = new Obstacle(obstacle_name, height);
             Logger.Log("Loaded obstacle from XML with parameters [Name='"+obstacle_name+"\', Height=" + height + "].");
             controller.add_obstacle(obstacle);
+            imported_obstacles++;
         }
+
+        PopupNotification.display("Successfully imported Obstacles", "Successfully imported " + imported_obstacles + " obstacles into the database.");
 
         if(duplicates.size() > 0){
             String list_str = "";
@@ -179,21 +194,26 @@ public class XML_Parser {
             int DistanceLeftTSH = Integer.parseInt(import_position.getChild("DistanceLeftTSH").getValue());
             int DistanceRightTSH = Integer.parseInt(import_position.getChild("DistanceRightTSH").getValue());
 
-            RunwaySide side = RunwaySide.CENTER;
+            Logger.Log("Loaded ObstaclePosition Values [width=" + width + ", dCL=" + DistanceFromCL + ", dLTSH=" + DistanceLeftTSH + ", dRTSH=" + DistanceRightTSH + "].");
 
-            switch (import_position.getChild("RunwaySide").getValue()) {
-                case "RIGHT":
-                    side = RunwaySide.RIGHT;
-                case "LEFT":
-                    side = RunwaySide.LEFT;
-                case "CENTRE":
-                    side = RunwaySide.CENTER;
+            String side = import_position.getChild("RunwaySide").getValue();
+            RunwaySide side_val;
+            if (side.equalsIgnoreCase("RIGHT")){
+
+                side_val = RunwaySide.RIGHT;
+            } else if (side.equalsIgnoreCase("LEFT")){
+                side_val = RunwaySide.LEFT;
+            } else {
+                side_val = RunwaySide.CENTER;
             }
 
 
-            ObstaclePosition newOP = new ObstaclePosition(mwc.getObstaclePosition().getObstacle(), width, DistanceFromCL, DistanceLeftTSH, DistanceRightTSH, side);
-            mwc.setObstaclePosition(newOP);
+            Logger.Log("Side Val: " + side_val.toString());
 
+            ObstaclePosition newOP = new ObstaclePosition(mwc.getObstacle(), DistanceLeftTSH, DistanceRightTSH, width, DistanceFromCL, side_val);
+            mwc.setObstaclePosition(newOP);
+            Logger.Log("Successfully imported obstacle position [" + newOP.toString() + "] into database.");
+            PopupNotification.display("Successfully imported Obstacle Position", "Obstacle Position successfully imported.");
         } catch(NumberFormatException e){
             Logger.Log(Logger.Level.ERROR, "Failed to parse values in ObstaclePosition XML data.");
             Logger.Log(Logger.Level.ERROR, "Failed at: [" + obstacle_positions[0].coalesceText(true) + "].");

@@ -193,6 +193,18 @@ public class XML_Export {
         SelectObstaclePopup popup2 = new SelectObstaclePopup();
         Obstacle[] obstacles = popup2.display(db_controller);
 
+        // Check if the user cancelled the export process from within the select window.
+        // Else export all the obstacles they selected.
+        if (obstacles != null) {
+            for (Obstacle obstacle : obstacles) {
+                buildObstacleElement(obstacle, document, rootElement);
+            }
+        } else {
+            Logger.Log("Export process cancelled by the user inside ObstacleSelectWindow - exiting export process.");
+            PopupNotification.error("Export process cancelled", "The XML exporting process has been cancelled.");
+            return;
+        }
+
         // Check if the export Obstacle Position checkboxw as checked inside the Obstacle Popup window.
         if (SelectObstaclePopup.export_obstacle_position == true) {
 
@@ -211,17 +223,7 @@ public class XML_Export {
         }
 
 
-        // Check if the user cancelled the export process from within the select window.
-        // Else export all the obstacles they selected.
-        if (obstacles != null) {
-            for (Obstacle obstacle : obstacles) {
-                buildObstacleElement(obstacle, document, rootElement);
-            }
-        } else {
-            Logger.Log("Export process cancelled by the user inside ObstacleSelectWindow - exiting export process.");
-            PopupNotification.error("Export process cancelled", "The XML exporting process has been cancelled.");
-            return;
-        }
+
 
     }
 
@@ -230,7 +232,7 @@ public class XML_Export {
         SelectAirportPopup popup = new SelectAirportPopup();
         Airport[] airports = popup.display(db_controller);
         if (airports != null) {
-            for (Airport airport : popup.display(db_controller)) {
+            for (Airport airport :  airports) {
                 buildAirportElement(airport, document, rootElement);
             }
         } else {

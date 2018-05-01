@@ -26,7 +26,7 @@ public class XML_File_Loader {
         File file = fd.showOpenDialog(null);
 
         if (file == null) {
-            Logger.Log("File [" + file.getName() + "] doesn't exist. Cancelled import process.");
+            Logger.Log("File doesn't exist. Cancelled import process.");
             PopupNotification.error("XML import cancelled", "The XML import process has been cancelled.");
             return null;
         } else {
