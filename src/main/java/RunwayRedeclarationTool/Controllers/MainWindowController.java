@@ -382,13 +382,19 @@ public class MainWindowController implements Initializable {
     @FXML
     public void handleRemoveAirport() {
         int remove_count = 0;
-        SelectAirportPopup popup = new SelectAirportPopup();
-        for (Airport a : popup.display(controller)) {
-            controller.remove_Airport(a);
-            remove_count++;
+        RemoveAirportPopup popup = new RemoveAirportPopup();
+        Airport[] airports = popup.display(controller);
+        if(airports != null){
+            for (Airport a : airports) {
+                controller.remove_Airport(a);
+                remove_count++;
+            }
+            refresh_airports();
+            PopupNotification.display("Success - Airports removed", "Successfully removed " + remove_count + " airports.");
+
+        } else {
+            Logger.Log("Remove Airports Popup force closed by user.");
         }
-        refresh_airports();
-        PopupNotification.display("Success - Airports removed", "Successfully removed " + remove_count + " airports.");
     }
 
     /**
