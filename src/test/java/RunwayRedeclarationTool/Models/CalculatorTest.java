@@ -136,4 +136,46 @@ public class CalculatorTest {
             }
         }
     }
+
+    @Test
+    public void testSlopeTallObstacle() {
+        ObstaclePosition o = new ObstaclePosition(new Obstacle("scenario4", 19), 1606, 198, 10, 20, RunwaySide.RIGHT);
+
+        try {
+            Runway r = runways.get(1); // Runway 08L/26R
+            calculator.calculate(o, r);
+
+            RunwayParameters paramsL = r.leftRunway.getRecalcParams();
+            RunwayParameters paramsR = r.rightRunway.getRecalcParams();
+
+            assertEquals(paramsL.getSlopeCalculation(), 950);
+            assertEquals(paramsR.getSlopeCalculation(), 950);
+
+        } catch (NoRedeclarationNeededException e) {
+            fail("Calculator throws exception in the wrong situation.");
+        } catch (AttributeNotAssignedException e) {
+            fail("Calculator failed to assign redeclared distances and breakdown to runways.");
+        }
+    }
+
+    @Test
+    public void testSlopeSmallObstacle() {
+        ObstaclePosition o = new ObstaclePosition(new Obstacle("scenario4", 4), 195, 1503, 10, 20, RunwaySide.RIGHT);
+
+        try {
+            Runway r = runways.get(1); // Runway 08L/26R
+            calculator.calculate(o, r);
+
+            RunwayParameters paramsL = r.leftRunway.getRecalcParams();
+            RunwayParameters paramsR = r.rightRunway.getRecalcParams();
+
+            assertEquals(paramsL.getSlopeCalculation(), 240);
+            assertEquals(paramsR.getSlopeCalculation(), 240);
+
+        } catch (NoRedeclarationNeededException e) {
+            fail("Calculator throws exception in the wrong situation.");
+        } catch (AttributeNotAssignedException e) {
+            fail("Calculator failed to assign redeclared distances and breakdown to runways.");
+        }
+    }
 }
