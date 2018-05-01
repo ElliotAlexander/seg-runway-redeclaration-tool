@@ -402,6 +402,39 @@ public class MainWindowController implements Initializable {
         }
     }
 
+
+    @FXML
+    public void handleRemoveRunway(){
+        SelectAirportPopup airportPopup = new SelectAirportPopup();
+        Airport[] airports = airportPopup.display(controller);
+
+        if(airports == null) {
+            Logger.Log("User cancelled Runway remove operation. Exiting remove process.");
+            PopupNotification.display("Cancelled removing runway", "");
+            return;
+        }
+        if(airports.length > 1){
+            Logger.Log("Multiple airports selected, taking only the first airport.");
+            PopupNotification.error("Please select a single airport!", "Runways can only be removed from one airport at once.");
+            return;
+        }
+
+        RemoveRunwayPopup popup = new RemoveRunwayPopup();
+        Runway[] runways = popup.display(controller.get_runways(airports[0].getAirport_id()));
+
+        if(runways == null){
+            Logger.Log("User cancelled Runway remove operation. Exiting remove process.");
+            PopupNotification.display("Cancelled removing runway", "");
+            return;
+        }
+
+        for(Runway runway :runways){
+            controller.remove_Runway(runway);
+            Logger.Log("Removing " + runway.toString() + " from airport " + airports[0].toString());
+            PopupNotification.display("Removed Runway " + runway.toString(), "");
+        }
+    }
+
     /**
      * Refresh the combo boxes to reflect changes to .
      */

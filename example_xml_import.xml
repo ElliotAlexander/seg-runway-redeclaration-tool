@@ -4,16 +4,16 @@
         <airport_id>LHR</airport_id>
         <Runway>
             <vr designator="09L">
-                <tora>3901</tora>
-                <toda>3901</toda>
-                <asda>3901</asda>
-                <lda>3592</lda>
+                <TORA>3901</TORA>
+                <TODA>3901</TODA>
+                <ASDA>3901</ASDA>
+                <LDA>3592</LDA>
             </vr>
             <vr designator="27R">
-                <tora>3882</tora>
-                <toda>3960</toda>
-                <asda>3882</asda>
-                <lda>3882</lda>
+                <TORA>3882</TORA>
+                <TODA>3960</TODA>
+                <ASDA>3882</ASDA>
+                <LDA>3882</LDA>
             </vr>
         </Runway>
     </Airport>
@@ -21,16 +21,16 @@
         <airport_id>LGW</airport_id>
         <Runway>
             <vr designator="08L">
-                <tora>2565</tora>
-                <toda>3040</toda>
-                <asda>2565</asda>
-                <lda>2243</lda>
+                <TORA>2565</TORA>
+                <TODA>3040</TODA>
+                <ASDA>2565</ASDA>
+                <LDA>2243</LDA>
             </vr>
             <vr designator="26R">
-                <tora>2565</tora>
-                <toda>2703</toda>
-                <asda>2565</asda>
-                <lda>2148</lda>
+                <TORA>2565</TORA>
+                <TODA>2703</TODA>
+                <ASDA>2565</ASDA>
+                <LDA>2148</LDA>
             </vr>
         </Runway>
     </Airport>
@@ -38,16 +38,16 @@
         <airport_id>SOU</airport_id>
         <Runway>
             <vr designator="02">
-                <tora>1723</tora>
-                <toda>1831</toda>
-                <asda>1723</asda>
-                <lda>1650</lda>
+                <TORA>1723</TORA>
+                <TODA>1831</TODA>
+                <ASDA>1723</ASDA>
+                <LDA>1650</LDA>
             </vr>
             <vr designator="20">
-                <tora>1650</tora>
-                <toda>1805</toda>
-                <asda>1650</asda>
-                <lda>1605</lda>
+                <TORA>1650</TORA>
+                <TODA>1805</TODA>
+                <ASDA>1650</ASDA>
+                <LDA>1605</LDA>
             </vr>
         </Runway>
     </Airport>

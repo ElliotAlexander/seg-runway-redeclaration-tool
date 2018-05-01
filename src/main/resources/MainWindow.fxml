@@ -31,6 +31,7 @@
                 <Menu mnemonicParsing="false" text="Remove">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleRemoveAirport" text="Airport" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleRemoveRunway" text="Runway" />
                   <MenuItem mnemonicParsing="false" onAction="#handleRemoveObstacle" text="Obstacle" />
                     </items>
                 </Menu>
