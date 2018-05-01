@@ -376,6 +376,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
+     *
      * Remove an airport from the database.
      */
     @FXML
@@ -421,6 +422,13 @@ public class MainWindowController implements Initializable {
                 runwayComboBox.getItems().addAll(runways);
                 runwayComboBox.setValue(runwayComboBox.getItems().get(0));
                 PopupNotification.display("Switched to " + runwayComboBox.getItems().get(0).toString(), "");
+                try {
+                    if(obstaclePosition != null){
+                        recalculateDistances();
+                    }
+                } catch (Exception e){
+                    Logger.Log(Logger.Level.ERROR, "NOPE");
+                }
                 refresh_virtual_runways();
             }
         } else {

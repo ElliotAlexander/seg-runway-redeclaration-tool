@@ -30,7 +30,7 @@ public class SelectAirportPopup {
 
         // Window setup
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Select Airports to Remove");
+        window.setTitle("Select Airport to Remove");
         BorderPane grid = new BorderPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(grid, 700, 400);
@@ -92,8 +92,6 @@ public class SelectAirportPopup {
 
                 }});
 
-
-        // This is hopelessly inefficient
 
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

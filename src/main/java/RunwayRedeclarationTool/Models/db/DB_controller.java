@@ -71,7 +71,7 @@ public class DB_controller
             DatabaseMetaData md = conn.getMetaData();
             ResultSet rs = md.getTables(null, null, "%", null);
             Boolean not_null = false;
-            while (rs.next()) {
+            while (rs != null && rs.next()) {
                 not_null = true;
             }
 
@@ -90,9 +90,7 @@ public class DB_controller
     public void refresh_ids(){
         try {
             // Refresh unique runway ID'
-            Statement stmt = null;
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT MAX(runway_id),MAX(physical_runway_id) FROM runway");
+            ResultSet rs = execute(true, "SELECT MAX(runway_id),MAX(physical_runway_id) FROM runway;");
             runway_id = rs.getInt("MAX(runway_id)") + 1;
             physical_runway_id = rs.getInt("MAX(physical_runway_id)") + 1;
             Logger.Log("Updated runway ID to reflect database. [new_id=="+runway_id+"].");
@@ -100,7 +98,7 @@ public class DB_controller
 
             // Refresh Obstacle ID's
 
-            rs = stmt.executeQuery("SELECT MAX(obstacle_id) FROM obstacle");
+            rs = execute(true, "SELECT MAX(obstacle_id) FROM obstacle;");
             obstacle_id = rs.getInt("MAX(obstacle_id)") + 1;
             Logger.Log("Updated Obstacle ID to reflect database. [new_id=="+obstacle_id+"].");
         } catch (SQLException e) {
@@ -139,15 +137,8 @@ public class DB_controller
         Logger.Log("Adding VR " + useful.split("/")[1] + " with Params [TODA=\'" + L.getTODA()+"\', TORA="+L.getTORA()+"\', ASDA=\'"+L.getASDA()+"\', LDA=\'"+L.getLDA()+"\'].");
         Logger.Log("Adding VR " + useful.split("/")[0] + " with Params [TODA=\'" + R.getTODA()+"\', TORA="+R.getTORA()+"\', ASDA=\'"+R.getASDA()+"\', LDA=\'"+R.getLDA()+"\'].");
 
-        try {
-            Statement stmt = null;
-            stmt = conn.createStatement();
-            stmt.execute(query_left);
-            stmt.execute(query_right);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        execute(false,query_left);
+        execute(false, query_right);
         runway_id += 2;
         physical_runway_id += 1;
         return true;
@@ -162,10 +153,8 @@ public class DB_controller
         HashMap<Integer, ArrayList<VirtualRunway>> runways = new HashMap<Integer, ArrayList<VirtualRunway>>();
         try {
             String query = airport_id=="" ? "SELECT * from runway" : "SELECT * from runway WHERE airport_id=\'"+airport_id+"\'";
-            Statement stmt = null;
-                stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-            while(rs.next()){
+            ResultSet rs = execute(true, query);
+            while(rs != null && rs.next()){
                 String designator = rs.getString("runway_designator");
                 int TORA = rs.getInt("tora");
                 int TODA = rs.getInt("toda");
@@ -209,27 +198,15 @@ public class DB_controller
                 airport.airport_id + "\', \'" +
                 airport.airport_name + "\', " +
                 0 + ");";
-        Statement stmt = null;
-        try {
-            Logger.Log("Adding airport to Database with values [Name=\'" + airport.getAirport_name() + "\', ID=\'" + airport.getAirport_id() + "\'].");
-            stmt = conn.createStatement();
-            stmt.execute(airport_query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Logger.Log("Adding airport to Database with values [Name=\'" + airport.getAirport_name() + "\', ID=\'" + airport.getAirport_id() + "\'].");
+        execute(false, airport_query);
     }
 
     public void remove_Runway(Runway runway){
         String useful = runway.toString().replace("Runway ", "");
-        String add_query = "DELETE FROM runway WHERE runway_id=\'" + useful.split("/")[0] + "\';";
-        Logger.Log("Executnig: " + add_query);
-        Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-            stmt.execute(add_query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String remove_query = "DELETE FROM runway WHERE runway_id=\'" + useful.split("/")[0] + "\';";
+        Logger.Log("Executing: " + remove_query);
+        execute(false, remove_query);
     }
 
     public void remove_Airport(Airport airport){
@@ -237,32 +214,21 @@ public class DB_controller
         String remove_runways = "DELETE FROM runway WHERE airport_id=\'" + airport.getAirport_id() + "\';";
         Logger.Log("Removing all Runways with Airport ID " + airport.getAirport_id());
         Logger.Log("Removing airport " + airport.getAirport_name());
-        Statement stmt = null;
-        try {
-            stmt = conn.createStatement();
-            stmt.execute(remove_airport);
-            stmt = conn.createStatement();
-            stmt.execute(remove_runways);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        execute(false, remove_airport);
+        execute(false, remove_runways);
     }
 
     public Airport[] get_airports(){
         ArrayList<Airport> return_list = new ArrayList<Airport>();
-        Statement stmt = null;
         try {
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from airport");
-
-            while(rs.next()){
+            ResultSet rs = execute(true,"SELECT * from airport;");
+            while(rs != null && rs.next()){
                 Airport new_airport = new Airport(rs.getString("airport_name"), rs.getString("airport_id"));
                 return_list.add(new_airport);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return return_list.toArray(new Airport[return_list.size()]);
     }
 
@@ -271,45 +237,49 @@ public class DB_controller
                 obstacle_id + ", \'" +
                 obstacle.getName() + "\', " +
                 obstacle.getHeight() + ");";
-        Statement stmt = null;
-        try {
-            Logger.Log("Adding obstacle to DB [Name=\'"+obstacle.getName()+"\', Height=\'" + obstacle.getHeight() + "\'].");
-            stmt = conn.createStatement();
-            stmt.execute(add_query);
-            obstacle_id += 1;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Logger.Log("Adding obstacle to DB [Name=\'"+obstacle.getName()+"\', Height=\'" + obstacle.getHeight() + "\'].");
+        execute(false, add_query);
+        obstacle_id += 1;
     }
 
     public Obstacle[] get_obstacles(){
         ArrayList<Obstacle> return_list = new ArrayList<Obstacle>();
-        Statement stmt = null;
+        ResultSet rs = execute(true, "SELECT * from obstacle;");
         try {
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * from obstacle");
-            while(rs.next()){
+            while(rs != null && rs.next()){
                 Obstacle new_obstacle = new Obstacle(rs.getString("obstacle_name"), rs.getInt("height"));
                 return_list.add(new_obstacle);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
         }
         return return_list.toArray(new Obstacle[return_list.size()]);
     }
 
     public void remove_obstacle(Obstacle o){
         String remove_obstacle = "DELETE FROM obstacle WHERE obstacle_name=\'" + o.getName() + "\';";
-        Statement stmt = null;
+        execute(false, remove_obstacle);
+        Logger.Log("Executing: " + remove_obstacle);
+        Logger.Log("Removing obstacle [" + o.toString() + "].");
+
+    }
+
+    private ResultSet execute(boolean response, String query){
+        Statement stmt;
         try {
-            stmt = conn.createStatement();
-            Logger.Log("Executing: " + remove_obstacle);
-            stmt.execute(remove_obstacle);
-            Logger.Log("Removing obstacle [" + o.toString() + "].");
+            if(response){
+                stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+                return rs;
+            } else {
+                stmt = conn.createStatement();
+                stmt.execute(query);
+                return null;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        return null;
     }
 
     private void rebuild_db(Connection connection){

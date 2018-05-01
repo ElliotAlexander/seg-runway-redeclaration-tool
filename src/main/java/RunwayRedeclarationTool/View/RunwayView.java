@@ -185,7 +185,13 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
             return;
         }
 
-        RunwayParameters recalcParams = runway.getRecalcParams();
+        RunwayParameters recalcParams;
+
+        try {
+             recalcParams = runway.getRecalcParams();
+        } catch(AttributeNotAssignedException e){
+            return;
+        }
 
         int rTORA = recalcParams.getTORA();
         int rLDA = recalcParams.getLDA();

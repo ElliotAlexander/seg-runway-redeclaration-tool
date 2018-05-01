@@ -40,6 +40,11 @@ public class SideOnView extends RunwayView {
      */
     public void drawObstacle() {
         try {
+
+            if(obstaclePosition == null || runway == null){
+                return;
+            }
+
             draw();
 
             int obstacleLength = runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH();
@@ -59,10 +64,7 @@ public class SideOnView extends RunwayView {
 
             drawBrokenDownDistances(obstacleLength, 200);
 
-        } catch (NullPointerException e) {
-            // TODO: this is bad practice. Make sure that there is an object when this method is called
         } catch (AttributeNotAssignedException e) {
-            e.printStackTrace();
             System.err.println("Recalculated parameters have not been assigned!");
         }
 
