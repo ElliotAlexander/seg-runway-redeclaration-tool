@@ -4,6 +4,7 @@ import RunwayRedeclarationTool.Controllers.MainWindowController;
 import RunwayRedeclarationTool.Logger.Logger;
 import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.db.DB_controller;
+import RunwayRedeclarationTool.View.PopupNotification;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.jdom2.Document;
@@ -38,9 +39,13 @@ public class XML_Parser {
             Logger.Log("Found " + rootElement.getChildren("Obstacle").size() + " Obstacle Elements.");
             parse_obstacles(rootElement.getChildren("Obstacle").toArray(new Element[rootElement.getChildren("Obstacle").size()]));
         } catch (JDOMException e1) {
+            Logger.Log("Catching JDOMException - printing stack trace, displaying popup notification to the user.");
+            PopupNotification.error("JDOM Error when loading file!", "There was an error parsing XML from the file, is it formatted correctly?");
             e1.printStackTrace();
             // Return an empty hashmap.
         } catch (IOException e1) {
+            Logger.Log("Catching IOException - printing stack trace, displaying popup notification to the user.");
+            PopupNotification.error("IO Error when loading file!", "There was an IO error when loading the XML file.");
             e1.printStackTrace();
             // Return an empty hashmap.
         }
@@ -102,7 +107,12 @@ public class XML_Parser {
                 Integer LDA_2 = Integer.parseInt(vrs[1].getChild("lda").getValue());
                 VirtualRunway vr2 = new VirtualRunway(vr2_designator, new RunwayParameters(TORA_2, TODA_2, ASDA_2, LDA_2));
                 Logger.Log("Loaded Virtual Runway " + vr2_designator + " [ " + TODA_2 + ", " + TORA_2 + ", " + ASDA_2 + ", " + LDA_2 + "].");
-                controller.add_Runway(new Runway(vr1, vr2), airport_id);
+
+                int desg1 = Integer.parseInt(vr1.getDesignator().replaceAll("[\\d.]", ""));
+                int desg2 = Integer.parseInt(vr2.getDesignator().replaceAll("[\\d.]", ""));
+
+                Runway new_runway = desg1 < desg2 ? new Runway(vr1, vr2) : new Runway(vr2, vr1);
+                controller.add_Runway(new_runway, airport_id);
             }
         }
 
