@@ -10,6 +10,7 @@ import RunwayRedeclarationTool.Models.xml.XML_Export;
 import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
 import RunwayRedeclarationTool.Models.xml.XML_Parser;
 import RunwayRedeclarationTool.View.*;
+import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,6 +24,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Popup;
 
 import java.io.File;
 import java.net.URL;
@@ -84,11 +86,14 @@ public class MainWindowController implements Initializable {
             refresh_airports();
             drawRunway();
         }
+
+        if(controller.get_obstacles().length > 0){
+            refresh_obstacles();
+        }
     }
 
     @FXML
     public void handleVirtualRunwayComboBox(){
-        PopupNotification.display("Switched to " + virtualRunwayComboBox.getSelectionModel().getSelectedItem(), "");
         drawRunway();
     }
 
@@ -106,9 +111,11 @@ public class MainWindowController implements Initializable {
 
         try {
             if (runway == null) {
-                runway = runwayComboBox.getItems().get(0);
-                // Default to the left virtual runway
-                virtualRunway = runway.leftRunway;
+                if(runwayComboBox.getItems().size() > 0){
+                    runway = runwayComboBox.getItems().get(0);
+                    // Default to the left virtual runway
+                    virtualRunway = runway.leftRunway;
+                }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             // There is no runway yet
@@ -355,6 +362,7 @@ public class MainWindowController implements Initializable {
     public void handleImportFile() {
         ioController.importXMLFile();
         refresh_airports();
+        refresh_obstacles();
     }
 
     /**
@@ -364,6 +372,7 @@ public class MainWindowController implements Initializable {
     void handleImportFolder() {
         ioController.importXMLFolder();
         refresh_airports();
+        refresh_obstacles();
     }
 
     /**
@@ -387,18 +396,20 @@ public class MainWindowController implements Initializable {
     private void refresh_airports() {
         airportComboBox.getItems().clear();
         Airport[] airports = controller.get_airports();
-        airportComboBox.getItems().addAll(airports);
         if (airports.length > 0) {
+            airportComboBox.getItems().addAll(airports);
             airportComboBox.setValue(airports[0]);
             refresh_runways();
+        } else {
+            airportComboBox.getItems().clear();
         }
-
-        refresh_obstacles();
     }
 
     @FXML
     public void handleObstacleComboBox(){
-        PopupNotification.display("Switched to obstacle: " + obstacleComboBox.getValue().getName(),"");
+        if(obstacleComboBox.getValue() != null){
+            PopupNotification.display("Switched to obstacle: " + obstacleComboBox.getValue().getName(),"");
+        }
     }
 
     @FXML
@@ -409,6 +420,7 @@ public class MainWindowController implements Initializable {
                 runwayComboBox.getItems().clear();
                 runwayComboBox.getItems().addAll(runways);
                 runwayComboBox.setValue(runwayComboBox.getItems().get(0));
+                PopupNotification.display("Switched to " + runwayComboBox.getItems().get(0).toString(), "");
                 refresh_virtual_runways();
             }
         } else {
@@ -421,6 +433,8 @@ public class MainWindowController implements Initializable {
         obstacleComboBox.getItems().addAll(controller.get_obstacles());
         if (obstacleComboBox.getItems().size() > 0) {
             obstacleComboBox.setValue(obstacleComboBox.getItems().get(0));
+        } else {
+            obstacleComboBox.getItems().clear();
         }
     }
 
