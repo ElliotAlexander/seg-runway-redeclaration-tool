@@ -21,7 +21,6 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
     protected int leftSpace;
     protected int padding;
 
-    protected boolean rotateView;
     protected double bearing;
 
     protected ObstaclePosition obstaclePosition;
@@ -34,10 +33,9 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * @param runway           the runway to draw.
      * @param obstaclePosition the position of the obstacle.
      */
-    public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition, boolean rotateView) {
+    public RunwayView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
         this.runway = runway;
         this.obstaclePosition = obstaclePosition;
-        this.rotateView = rotateView;
 
         if(runway == null){
             return;

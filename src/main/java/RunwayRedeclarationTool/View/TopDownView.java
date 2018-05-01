@@ -9,9 +9,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class TopDownView extends RunwayView {
+    protected boolean rotateView;
 
     public TopDownView(VirtualRunway runway, ObstaclePosition obstaclePosition, boolean rotateView) {
-        super(runway, obstaclePosition, rotateView);
+        super(runway, obstaclePosition);
+        this.rotateView = rotateView;
     }
 
     /**

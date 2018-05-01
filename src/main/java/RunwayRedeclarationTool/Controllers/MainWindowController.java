@@ -162,7 +162,7 @@ public class MainWindowController implements Initializable {
         pane.getChildren().addAll(staticElements, topDownView, canvas);
         topDownViewContainer.getChildren().add(pane);
 
-        sideOnView = new SideOnView(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
+        sideOnView = new SideOnView(virtualRunway, obstaclePosition);
         sideOnView.widthProperty().bind(sideOnViewContainer.widthProperty());
         sideOnView.heightProperty().bind(sideOnViewContainer.heightProperty());
         sideOnViewContainer.getChildren().add(sideOnView);

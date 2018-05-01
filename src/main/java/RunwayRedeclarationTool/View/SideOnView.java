@@ -7,8 +7,8 @@ import javafx.scene.paint.Color;
 
 public class SideOnView extends RunwayView {
 
-    public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition, boolean rotateView) {
-        super(runway, obstaclePosition, rotateView);
+    public SideOnView(VirtualRunway runway, ObstaclePosition obstaclePosition) {
+        super(runway, obstaclePosition);
     }
 
     /**

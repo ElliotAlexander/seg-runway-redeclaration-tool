@@ -10,13 +10,12 @@ import javafx.scene.text.TextAlignment;
 /**
  * For drawing elements on the top-down view that do not change when the runway is rotated.
  */
-public class StaticElements extends RunwayView {
+public class StaticElements extends TopDownView {
 
     private GraphicsContext gc;
 
     public StaticElements(VirtualRunway runway, ObstaclePosition obstaclePosition, boolean rotateView) {
         super(runway, obstaclePosition, rotateView);
-
     }
 
     protected void draw() {
@@ -38,6 +37,7 @@ public class StaticElements extends RunwayView {
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(scale_y(0.5));
         gc.setFont(Font.font("Consolas", 16));
+
         if(rotateView){
             scaledStrokeLine(60, 290, 560*(0.0089*bearing+0.2), 290);
             scaledStrokeLine(60, 292, 60, 288);
