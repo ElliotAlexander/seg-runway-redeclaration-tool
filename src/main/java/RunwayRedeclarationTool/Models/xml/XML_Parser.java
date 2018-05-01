@@ -108,8 +108,8 @@ public class XML_Parser {
                 VirtualRunway vr2 = new VirtualRunway(vr2_designator, new RunwayParameters(TORA_2, TODA_2, ASDA_2, LDA_2));
                 Logger.Log("Loaded Virtual Runway " + vr2_designator + " [ " + TODA_2 + ", " + TORA_2 + ", " + ASDA_2 + ", " + LDA_2 + "].");
 
-                int desg1 = Integer.parseInt(vr1.getDesignator().replaceAll("[\\d.]", ""));
-                int desg2 = Integer.parseInt(vr2.getDesignator().replaceAll("[\\d.]", ""));
+                int desg1 = Integer.parseInt(vr1.getDesignator().replaceAll("[^\\d.]", ""));
+                int desg2 = Integer.parseInt(vr2.getDesignator().replaceAll("[^\\d.]", ""));
 
                 Runway new_runway = desg1 < desg2 ? new Runway(vr1, vr2) : new Runway(vr2, vr1);
                 controller.add_Runway(new_runway, airport_id);
