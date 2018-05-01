@@ -26,21 +26,9 @@ public class SplashScreen extends Preloader {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.preloaderStage = primaryStage;
-
-        Dimension display = Toolkit.getDefaultToolkit().getScreenSize();
-        // This roughly keeps the window in the ratio of the image, without delay causing reprocessing of the image
-        double width = display.width * 0.4;
-        double height = width / 2.1;
-
-        if(width > 1278){
-            width = 1278;
-            height = 607;
-            Logger.Log("Limiting splashscreen size for high resolution displays.");
-        }
-
         preloaderStage.initStyle(StageStyle.UNDECORATED);
         BorderPane flowPane = new BorderPane();
-        Scene scene = new Scene(flowPane, width, height);
+        Scene scene = new Scene(flowPane, 500, 500);
         preloaderStage.setScene(scene);
         Image image = new Image("splashscreen.png");
         ImageView iv2 = new ImageView();
