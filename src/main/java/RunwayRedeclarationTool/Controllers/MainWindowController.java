@@ -15,12 +15,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -592,4 +597,21 @@ public class MainWindowController implements Initializable {
         ioController.openLogDirectory(config);
     }
 
+    @FXML
+    public void handleHelpButton(){
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI("http://51.38.80.223/User%20Guide.pdf"));
+            } catch (IOException e) {
+                Logger.Log("Error opening help file!");
+                PopupNotification.error("Error - failed to open help file!", "");
+
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                Logger.Log("Error opening help file!");
+                PopupNotification.error("Error - failed to open help file!", "");
+                e.printStackTrace();
+            }
+        }
+    }
 }

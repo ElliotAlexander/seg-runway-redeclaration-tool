@@ -70,7 +70,7 @@
                 <MenuItem onAction="#showAbout" text="Our project" />
             </Menu>
             <Menu text="Help">
-                <MenuItem text="Help" />
+                <MenuItem onAction="#handleHelpButton" text="Help" />
             </Menu>
         </MenuBar>
     </top>
