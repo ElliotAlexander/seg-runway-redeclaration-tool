@@ -62,6 +62,8 @@
                    <MenuItem mnemonicParsing="false" onAction="#popoutTopView" text="Top View" />
                  </items>
                </Menu>
+               <MenuItem mnemonicParsing="false" onAction="#handleOpenLogFile" text="Open Log file" />
+               <MenuItem mnemonicParsing="false" onAction="#handleOpenLogDirectory" text="Open Log Directory" />
            </items>
          </Menu>
             <Menu text="About">

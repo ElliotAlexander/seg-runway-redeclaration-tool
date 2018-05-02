@@ -65,7 +65,6 @@ public class MainWindowController implements Initializable {
     private final IOController ioController;
 
 
-
     public MainWindowController(Configuration config, DB_controller controller) {
         this.config = config;
         this.controller = controller;
@@ -87,13 +86,13 @@ public class MainWindowController implements Initializable {
             drawRunway();
         }
 
-        if(controller.get_obstacles().length > 0){
+        if (controller.get_obstacles().length > 0) {
             refresh_obstacles();
         }
     }
 
     @FXML
-    public void handleVirtualRunwayComboBox(){
+    public void handleVirtualRunwayComboBox() {
         drawRunway();
     }
 
@@ -108,10 +107,9 @@ public class MainWindowController implements Initializable {
         VirtualRunway virtualRunway = virtualRunwayComboBox.getSelectionModel().getSelectedItem();
 
 
-
         try {
             if (runway == null) {
-                if(runwayComboBox.getItems().size() > 0){
+                if (runwayComboBox.getItems().size() > 0) {
                     runway = runwayComboBox.getItems().get(0);
                     // Default to the left virtual runway
                     virtualRunway = runway.leftRunway;
@@ -122,7 +120,7 @@ public class MainWindowController implements Initializable {
             return;
         }
 
-        if(virtualRunway == null){
+        if (virtualRunway == null) {
             return;
         }
 
@@ -137,7 +135,6 @@ public class MainWindowController implements Initializable {
         Integer designator = Integer.parseInt(designator_String.replaceAll("[^\\d.]", ""));
 
 
-
         double bearing;
         if (designator <= 18) {
             bearing = designator * 10;
@@ -147,7 +144,7 @@ public class MainWindowController implements Initializable {
         if (rotateViewCheckbox.isSelected()) {
             canvas.setRotate(0);
         } else {
-            canvas.setRotate(90-bearing);
+            canvas.setRotate(90 - bearing);
         }
         gc.drawImage(compass, 0, 0, 30, 30);
 
@@ -174,7 +171,6 @@ public class MainWindowController implements Initializable {
         popupController.redrawAll(sideOnView, topDownView);
 
 
-
     }
 
     public void updateDeclaredDistancesTextfield() {
@@ -189,12 +185,12 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    public void popoutSideView(){
+    public void popoutSideView() {
         popupController.newPopup(sideOnView);
     }
 
     @FXML
-    public void popoutTopView(){
+    public void popoutTopView() {
         popupController.newPopup(topDownView);
     }
 
@@ -314,26 +310,24 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleNewRunway() {
-        try {
-            Airport currentAirport = airportComboBox.getValue();
-            if (currentAirport == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "You need to add or import an airport prior to adding a runway.", ButtonType.CLOSE);
-                alert.setTitle("Failed to parse values");
-                alert.showAndWait();
-                return;
-            }
-            NewRunwayPopup popup = new NewRunwayPopup();
-            Runway newRunway = popup.display("Add a new runway to " + currentAirport.toString());
-            // This stops select a runway being added to the combo box.
-            if (newRunway == null) {
-                return;
-            }
-            runwayComboBox.getItems().addAll(newRunway);
-            runwayComboBox.setValue(newRunway);
-            controller.add_Runway(newRunway, currentAirport.getAirport_id());
-            PopupNotification.display("Success - Runway added", "Successfully added Runway " + newRunway.toString());
-        } catch (NullPointerException e) {
+
+        Airport currentAirport = airportComboBox.getValue();
+        if (currentAirport == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "You need to add or import an airport prior to adding a runway.", ButtonType.CLOSE);
+            alert.setTitle("Failed to parse values");
+            alert.showAndWait();
+            return;
         }
+        NewRunwayPopup popup = new NewRunwayPopup();
+        Runway newRunway = popup.display("Add a new runway to " + currentAirport.toString());
+        // This stops select a runway being added to the combo box.
+        if (newRunway == null) {
+            return;
+        }
+        runwayComboBox.getItems().addAll(newRunway);
+        runwayComboBox.setValue(newRunway);
+        controller.add_Runway(newRunway, currentAirport.getAirport_id());
+        PopupNotification.display("Success - Runway added", "Successfully added Runway " + newRunway.toString());
 
     }
 
@@ -342,17 +336,17 @@ public class MainWindowController implements Initializable {
      */
     @FXML
     public void handleNewObstacle() {
-            Obstacle newObstacle;
-            NewObstaclePopup popup = new NewObstaclePopup();
-            newObstacle = popup.display("Add a New Obstacle");
-            // This stops 'select an obstacle' being added as an option on the combo box.
-            if (newObstacle == null) {
-                return;
-            }
-            obstacleComboBox.getItems().add(newObstacle);
-            obstacleComboBox.setValue(newObstacle);
-            controller.add_obstacle(newObstacle);
-            PopupNotification.display("Success - Obstacle added", "Successfully added obstacle " + newObstacle.toString());
+        Obstacle newObstacle;
+        NewObstaclePopup popup = new NewObstaclePopup();
+        newObstacle = popup.display("Add a New Obstacle");
+        // This stops 'select an obstacle' being added as an option on the combo box.
+        if (newObstacle == null) {
+            return;
+        }
+        obstacleComboBox.getItems().add(newObstacle);
+        obstacleComboBox.setValue(newObstacle);
+        controller.add_obstacle(newObstacle);
+        PopupNotification.display("Success - Obstacle added", "Successfully added obstacle " + newObstacle.toString());
     }
 
     /**
@@ -376,7 +370,6 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     *
      * Remove an airport from the database.
      */
     @FXML
@@ -384,9 +377,9 @@ public class MainWindowController implements Initializable {
         int remove_count = 0;
         RemoveAirportPopup popup = new RemoveAirportPopup();
         Airport[] airports = popup.display(controller);
-        if(airports != null){
+        if (airports != null) {
             for (Airport a : airports) {
-                for(Runway runway : controller.get_runways(a.getAirport_id())){
+                for (Runway runway : controller.get_runways(a.getAirport_id())) {
                     Logger.Log("Removing " + runway.toString() + " attached to Airport " + a.toString() + ".");
                     controller.remove_Runway(runway);
                 }
@@ -404,16 +397,16 @@ public class MainWindowController implements Initializable {
 
 
     @FXML
-    public void handleRemoveRunway(){
+    public void handleRemoveRunway() {
         SelectAirportPopup airportPopup = new SelectAirportPopup();
         Airport[] airports = airportPopup.display(controller);
 
-        if(airports == null) {
+        if (airports == null) {
             Logger.Log("User cancelled Runway remove operation. Exiting remove process.");
             PopupNotification.display("Cancelled removing runway", "");
             return;
         }
-        if(airports.length > 1){
+        if (airports.length > 1) {
             Logger.Log("Multiple airports selected, taking only the first airport.");
             PopupNotification.error("Please select a single airport!", "Runways can only be removed from one airport at once.");
             return;
@@ -422,13 +415,13 @@ public class MainWindowController implements Initializable {
         RemoveRunwayPopup popup = new RemoveRunwayPopup();
         Runway[] runways = popup.display(controller.get_runways(airports[0].getAirport_id()));
 
-        if(runways == null){
+        if (runways == null) {
             Logger.Log("User cancelled Runway remove operation. Exiting remove process.");
             PopupNotification.display("Cancelled removing runway", "");
             return;
         }
 
-        for(Runway runway :runways){
+        for (Runway runway : runways) {
             controller.remove_Runway(runway);
             Logger.Log("Removing " + runway.toString() + " from airport " + airports[0].toString());
             PopupNotification.display("Removed Runway " + runway.toString(), "");
@@ -451,9 +444,9 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML
-    public void handleObstacleComboBox(){
-        if(obstacleComboBox.getValue() != null){
-            PopupNotification.display("Switched to obstacle: " + obstacleComboBox.getValue().getName(),"");
+    public void handleObstacleComboBox() {
+        if (obstacleComboBox.getValue() != null) {
+            PopupNotification.display("Switched to obstacle: " + obstacleComboBox.getValue().getName(), "");
         }
     }
 
@@ -467,10 +460,10 @@ public class MainWindowController implements Initializable {
                 runwayComboBox.setValue(runwayComboBox.getItems().get(0));
                 PopupNotification.display("Switched to " + runwayComboBox.getItems().get(0).toString(), "");
                 try {
-                    if(obstaclePosition != null){
+                    if (obstaclePosition != null) {
                         recalculateDistances();
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     Logger.Log(Logger.Level.ERROR, "NOPE");
                 }
                 refresh_virtual_runways();
@@ -543,11 +536,11 @@ public class MainWindowController implements Initializable {
         PopupNotification.display("Success - Obstacles removed.", "Successfully removed " + removed_count + " obstacles.");
     }
 
-    public ObstaclePosition getObstaclePosition(){
+    public ObstaclePosition getObstaclePosition() {
         return obstaclePosition;
     }
 
-    public void setObstaclePosition(ObstaclePosition o){
+    public void setObstaclePosition(ObstaclePosition o) {
         obstaclePosition = o;
         Logger.Log(Logger.Level.INFO, "Updated Obstacle Position to [" + obstaclePosition.toString() + "]");
         distanceFromCL.setText(String.valueOf(obstaclePosition.getDistFromCL()));
@@ -557,10 +550,10 @@ public class MainWindowController implements Initializable {
         recalculateDistances();
     }
 
-    public Obstacle getObstacle(){
-        if(obstacleComboBox.getSelectionModel().getSelectedItem() != null){
+    public Obstacle getObstacle() {
+        if (obstacleComboBox.getSelectionModel().getSelectedItem() != null) {
             return obstacleComboBox.getSelectionModel().getSelectedItem();
-        } else if(obstacleComboBox.getItems().size() > 0) {
+        } else if (obstacleComboBox.getItems().size() > 0) {
             obstacleComboBox.getItems().get(0);
         } else {
             Logger.Log("No obstacles have been added! Returning a dummy obstacle.");
@@ -568,4 +561,15 @@ public class MainWindowController implements Initializable {
         }
         return null;
     }
+
+    @FXML
+    public void handleOpenLogFile(){
+        ioController.openLogFile(config);
+    }
+
+    @FXML
+    public void handleOpenLogDirectory(){
+        ioController.openLogDirectory(config);
+    }
+
 }
