@@ -73,9 +73,12 @@ public class XML_Test {
             }
 
             Logger.Log("XML importing passed successfully!");
+            controller = null;
 
         } catch (ExceptionInInitializerError e) {
 
         }
+
+
     }
 }

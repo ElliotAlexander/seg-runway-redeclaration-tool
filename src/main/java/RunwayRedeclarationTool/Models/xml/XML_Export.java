@@ -70,6 +70,8 @@ public class XML_Export {
             // Configure XML transformer.
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+
+            // Set encoding and Indentation depth.
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.setOutputProperty(OutputKeys.INDENT, "YES");
             DOMSource source = new DOMSource(document);
@@ -93,7 +95,11 @@ public class XML_Export {
     }
 
     private void buildObstacleElement(Obstacle obstacle, Document document, Element rootElement) {
+
+        // Create a root obstacle element
         Element obstacle_element = document.createElement("Obstacle");
+
+        // Set Attribute, i.e. <Obstacle name="HelloWorld"></Obstacle>
         obstacle_element.setAttribute("obstacle_name", obstacle.getName());
         rootElement.appendChild(obstacle_element);
 

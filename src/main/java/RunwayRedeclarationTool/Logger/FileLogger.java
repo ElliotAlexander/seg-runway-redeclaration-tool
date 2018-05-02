@@ -27,8 +27,10 @@ public class FileLogger {
 
             File f = new File(log_dir.getAbsolutePath() + "/" + logstr);
 
+            // if a log file already exists -  we rename it ot the date it was created.
             if(f.exists()){
 
+                // Rename the file based on the date it was created.
                 BasicFileAttributes attr = Files.readAttributes(f.toPath(), BasicFileAttributes.class);
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
                 String dateCreated = dtf.format(LocalDateTime.ofInstant(attr.lastAccessTime().toInstant(), ZoneId.systemDefault()));

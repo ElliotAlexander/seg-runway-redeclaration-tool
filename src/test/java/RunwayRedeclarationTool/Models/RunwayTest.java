@@ -76,5 +76,6 @@ public class RunwayTest {
 
 
         Logger.Log("Test Passed! " + bound + " Runways added to database and removed again.");
+        controller = null;
     }
 }

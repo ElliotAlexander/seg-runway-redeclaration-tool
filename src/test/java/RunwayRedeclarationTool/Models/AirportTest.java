@@ -61,6 +61,7 @@ public class AirportTest {
 
 
         Logger.Log("Test Passed! " + bound + " airports added to database and removed again.");
+        controller =null;
     }
 
 
