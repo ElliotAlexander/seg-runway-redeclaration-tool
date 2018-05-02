@@ -419,7 +419,7 @@ public class MainWindowController implements Initializable {
         for (Runway runway : runways) {
             controller.remove_Runway(runway);
             Logger.Log("Removing " + runway.toString() + " from airport " + airports[0].toString());
-            PopupNotification.display("Success - removed Runway " + runway.toString(), "");
+            PopupNotification.display("Success - removed " + runway.toString(), "");
         }
     }
 
@@ -464,7 +464,7 @@ public class MainWindowController implements Initializable {
                 runwayComboBox.getItems().clear();
                 runwayComboBox.getItems().addAll(runways);
                 runwayComboBox.setValue(runwayComboBox.getItems().get(0));
-                PopupNotification.display("Switched to runway" + runwayComboBox.getItems().get(0).toString(), "");
+                PopupNotification.display("Switched to " + runwayComboBox.getItems().get(0).toString(), "");
 
                 refresh_virtual_runways();
 
