@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
+<BorderPane prefHeight="800.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RunwayRedeclarationTool.Controllers.MainWindowController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu text="File">
@@ -102,7 +102,7 @@
                 <Label text="Runway:" GridPane.rowIndex="1" />
                 <Label text="Runway in use:" GridPane.rowIndex="2" />
                 <Label text="Obstacle:" GridPane.rowIndex="3" />
-                <ComboBox fx:id="airportComboBox" onAction="#refresh_runways" prefWidth="325.0" promptText="Select an airport..." GridPane.columnIndex="1" />
+                <ComboBox fx:id="airportComboBox" onAction="#handleAirportComboBox" prefWidth="325.0" promptText="Select an airport..." GridPane.columnIndex="1" />
                 <ComboBox fx:id="runwayComboBox" onAction="#refresh_virtual_runways" prefWidth="325.0" promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
                 <ComboBox fx:id="virtualRunwayComboBox" onAction="#handleVirtualRunwayComboBox" prefWidth="325.0" promptText="Select a runway..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
                 <ComboBox fx:id="obstacleComboBox" onAction="#handleObstacleComboBox" prefWidth="325.0" promptText="Add an obstacle..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -148,8 +148,7 @@
                 </rowConstraints>
                 <children>
                     <Button fx:id="calculateButton" alignment="CENTER" onAction="#recalculateDistances" prefHeight="25.0" prefWidth="150.0" text="Calculate" GridPane.columnIndex="1" />
-                    <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearObstacleFields"
-                            prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #777;" text="Clear"/>
+                    <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearObstacleFields" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #777;" text="Clear" />
                 </children>
                 <VBox.margin>
                     <Insets bottom="10.0" left="10.0" right="10.0" />

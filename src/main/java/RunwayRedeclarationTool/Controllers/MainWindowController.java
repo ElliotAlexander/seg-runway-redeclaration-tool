@@ -447,6 +447,13 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleAirportComboBox(){
+        obstaclePosition = null;
+        clearObstacleFields();
+        refresh_runways();
+    }
+
     /**
      * This method is called when the user switches airports or when the list of airports is changed.
      */
@@ -461,17 +468,12 @@ public class MainWindowController implements Initializable {
                 runwayComboBox.setValue(runwayComboBox.getItems().get(0));
                 PopupNotification.display("Switched to " + runwayComboBox.getItems().get(0).toString(), "");
 
-//                try {
-//                    if (obstaclePosition != null) {
-//                        recalculateDistances();
-//                    }
-//                } catch (Exception e) {
-//                    Logger.Log(Logger.Level.ERROR, "NOPE");
-//                }
                 refresh_virtual_runways();
 
-                obstaclePosition = null;
-                clearObstacleFields();
+                if(obstaclePosition != null){
+                    recalculateDistances();
+
+                }
                 drawRunway();
             }
         } else {
@@ -487,7 +489,7 @@ public class MainWindowController implements Initializable {
         }
 
         ArrayList<VirtualRunway> virtualRunways = new ArrayList<>();
-        Collections.addAll(virtualRunways, runway.leftRunway, runway.rightRunway);
+            Collections.addAll(virtualRunways, runway.leftRunway, runway.rightRunway);
         ObservableList<VirtualRunway> observableList = FXCollections.observableList(virtualRunways);
         virtualRunwayComboBox.setItems(observableList);
         virtualRunwayComboBox.setValue(virtualRunwayComboBox.getItems().get(0));
@@ -566,6 +568,8 @@ public class MainWindowController implements Initializable {
         distanceFromTHRLeft.setText(String.valueOf(obstaclePosition.getDistLeftTSH()));
         obstacleWidth.setText(String.valueOf(obstaclePosition.getWidth()));
         recalculateDistances();
+        drawRunway();
+
     }
 
     public Obstacle getObstacle() {
