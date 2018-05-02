@@ -15,13 +15,14 @@ import RunwayRedeclarationTool.View.TopDownView;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
-import sun.security.krb5.Config;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
+/**
+ * This class deals with importing/exporting xml files/folders, exporting images and text
+ */
 public class IOController {
 
     private final MainWindowController mwc;
@@ -97,8 +98,8 @@ public class IOController {
 
 
     /**
-     * Platform independent implentation to open the log file in the default text editor.
-     * @param config
+     * Platform independent implementation to open the log file in the default text editor.
+     * @param config The configuration file that specifies the location of the logfile
      */
     public void openLogFile(Configuration config) {
         String file = null, dir = null;
@@ -108,7 +109,6 @@ public class IOController {
         } catch (ConfigurationKeyNotFound configurationKeyNotFound) {
             // This would've been caught at init.
             configurationKeyNotFound.printStackTrace();
-
         }
 
         // Build the logfile string.
@@ -133,7 +133,7 @@ public class IOController {
     /**
      * Cross platform implementation to open the directory where log files are stored.
      * Recall that all former log files are still saved, albeit renamed.
-     * @param config
+     * @param config The configuration file that specifies the location of the logfile
      */
     public void openLogDirectory(Configuration config){
         String dir = null;
@@ -151,7 +151,5 @@ public class IOController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

@@ -14,7 +14,13 @@ public class IntegerOnlyTextListener implements ChangeListener {
     }
 
 
-    // This listener replaces any inputted text of non-numeric format with whitespace.
+    /**
+     * The listener replaces any inputted text of non-numeric format with an empty string.
+     *
+     * @param observable The ObservableValue which value changed
+     * @param oldValue   The old value
+     * @param newValue   The new value
+     */
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
         if(oldValue instanceof String || newValue instanceof String) {
