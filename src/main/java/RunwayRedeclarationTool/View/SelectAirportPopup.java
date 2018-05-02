@@ -29,7 +29,7 @@ public class SelectAirportPopup {
 
         // Window setup
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Select Airport to export");
+        window.setTitle("Select Airport");
         BorderPane grid = new BorderPane();
         grid.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(grid, 700, 400);
