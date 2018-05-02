@@ -42,10 +42,10 @@ public class TopDownView extends RunwayView {
         drawThresholdMarkers(gc);
         drawCentreLine(gc);
         drawDesignators(150, Color.WHITE);
-        drawStopway(100);
-        drawClearway(110);
+        drawStopway(80);
+        drawClearway(90);
 
-        drawDisplacedThreshold(100);
+        drawDisplacedThreshold(80);
 
     }
 
@@ -142,7 +142,7 @@ public class TopDownView extends RunwayView {
 
             int obstacleLength = runway.getOrigParams().getTORA() - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH();
 
-            drawBrokenDownDistances(obstacleLength, 210);
+            drawBrokenDownDistances(obstacleLength, 210, 110);
 
 
             gc.setFill(Color.RED);
@@ -153,9 +153,6 @@ public class TopDownView extends RunwayView {
             gc.setFill(Color.BLACK);
             scaledStrokeRect(obstacle_x, obstacle_y - obstaclePosition.getWidth() / 2, TORA - obstaclePosition.getDistRightTSH() - obstaclePosition.getDistLeftTSH(), obstaclePosition.getWidth());
 
-        } catch (AttributeNotAssignedException e) {
-            Logger.Log(Logger.Level.ERROR, "Failed to draw broken down distances!\nObstacle position = " + obstaclePosition.toString());
-            e.printStackTrace();
         } catch (NullPointerException e) {
         }
     }
