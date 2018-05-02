@@ -7,15 +7,11 @@ import RunwayRedeclarationTool.Models.*;
 import RunwayRedeclarationTool.Models.config.Configuration;
 import RunwayRedeclarationTool.Models.db.DB_controller;
 import RunwayRedeclarationTool.Models.xml.XML_Export;
-import RunwayRedeclarationTool.Models.xml.XML_File_Loader;
-import RunwayRedeclarationTool.Models.xml.XML_Parser;
 import RunwayRedeclarationTool.View.*;
-import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -24,17 +20,17 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Popup;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
+/**
+ * This is the controller that handles user events and updates the views.
+ */
 public class MainWindowController implements Initializable {
 
-    private final DB_controller controller;
     private final Configuration config;
     @FXML
     private FlowPane topDownViewContainer, sideOnViewContainer;
@@ -51,8 +47,6 @@ public class MainWindowController implements Initializable {
     @FXML
     private TextFlow declaredDistances, calculationsBreakdown;
     @FXML
-    private Button calculateButton, clearAllButton;
-    @FXML
     private CheckBox rotateViewCheckbox;
     @FXML
     private TextField distanceFromTHRLeft, distanceFromTHRRight, distanceFromCL, obstacleWidth;
@@ -60,8 +54,8 @@ public class MainWindowController implements Initializable {
     private SideOnView sideOnView;
     private ObstaclePosition obstaclePosition;
 
+    private final DB_controller controller;
     private final PopupController popupController;
-
     private final IOController ioController;
 
 
@@ -72,6 +66,12 @@ public class MainWindowController implements Initializable {
         this.ioController = new IOController(this, controller);
     }
 
+    /**
+     * Called to initialize a controller after its root element has been completely processed.
+     *
+     * @param location  used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         runwaySideComboBox.getItems().addAll(RunwaySide.LEFT, RunwaySide.RIGHT, RunwaySide.CENTER);
@@ -97,7 +97,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Add top-down and side-on views to the main window.
+     * Add top-down and side-on views of the selected runway to the canvas
      */
     public void drawRunway() {
         topDownViewContainer.getChildren().clear();
@@ -105,7 +105,6 @@ public class MainWindowController implements Initializable {
 
         Runway runway = runwayComboBox.getSelectionModel().getSelectedItem();
         VirtualRunway virtualRunway = virtualRunwayComboBox.getSelectionModel().getSelectedItem();
-
 
         try {
             if (runway == null) {
@@ -127,27 +126,31 @@ public class MainWindowController implements Initializable {
         Pane pane = new Pane();
 
         // Add a compass to the top-down view
-        Canvas canvas = new Canvas(30, 30);
+        Canvas canvas = new Canvas(60, 60);
         Image compass = new Image(this.getClass().getClassLoader().getResourceAsStream("compass.png"));
-        GraphicsContext gc = canvas.getGraphicsContext2D();
 
         String designator_String = virtualRunway.getDesignator();
         Integer designator = Integer.parseInt(designator_String.replaceAll("[^\\d.]", ""));
 
+        GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        // Calculate bearing of runway
         double bearing;
         if (designator <= 18) {
             bearing = designator * 10;
         } else {
             bearing = (designator - 18) * 10;
         }
+
+        // Rotate compass accordingly
         if (rotateViewCheckbox.isSelected()) {
             canvas.setRotate(0);
         } else {
             canvas.setRotate(90 - bearing);
         }
-        gc.drawImage(compass, 0, 0, 30, 30);
+        gc.drawImage(compass, 0, 0, 60, 60);
 
+        // Draw static elements: measuring line, take-off direction, compass
         StaticElements staticElements = new StaticElements(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
         staticElements.widthProperty().bind(topDownViewContainer.widthProperty());
         staticElements.heightProperty().bind(topDownViewContainer.heightProperty());
@@ -156,33 +159,24 @@ public class MainWindowController implements Initializable {
         topDownView.widthProperty().bind(topDownViewContainer.widthProperty());
         topDownView.heightProperty().bind(topDownViewContainer.heightProperty());
 
+        // Add everything to top down view tab
         pane.getChildren().addAll(staticElements, topDownView, canvas);
         topDownViewContainer.getChildren().add(pane);
 
+        // Draw side on view
         sideOnView = new SideOnView(virtualRunway, obstaclePosition);
         sideOnView.widthProperty().bind(sideOnViewContainer.widthProperty());
         sideOnView.heightProperty().bind(sideOnViewContainer.heightProperty());
         sideOnViewContainer.getChildren().add(sideOnView);
 
-        topDownView.drawObstacle();
-        sideOnView.drawObstacle();
-
+        if (obstaclePosition != null) {
+            topDownView.drawObstacle();
+            sideOnView.drawObstacle();
+        }
 
         popupController.redrawAll(sideOnView, topDownView);
-
-
     }
 
-    public void updateDeclaredDistancesTextfield() {
-        try {
-            Runway runway = runwayComboBox.getValue();
-            declaredDistances.getChildren().clear();
-            declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
-            declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n"));
-        } catch (NullPointerException e) {
-            // The runway is not set.
-        }
-    }
 
     @FXML
     public void popoutSideView() {
@@ -195,10 +189,10 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Clear the current object and additional markings.
+     * Clear the current object position text boxes.
      */
     @FXML
-    public void clearFields() {
+    public void clearObstacleFields() {
         distanceFromTHRLeft.clear();
         distanceFromTHRRight.clear();
         distanceFromCL.clear();
@@ -396,6 +390,9 @@ public class MainWindowController implements Initializable {
     }
 
 
+    /**
+     * This method is called when a runway is removed.
+     */
     @FXML
     public void handleRemoveRunway() {
         SelectAirportPopup airportPopup = new SelectAirportPopup();
@@ -429,7 +426,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Refresh the combo boxes to reflect changes to .
+     * Refresh the combo boxes to reflect changes done by importing or removing airports.
      */
     private void refresh_airports() {
         airportComboBox.getItems().clear();
@@ -450,26 +447,61 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * This method is called when the user switches airports or when the list of airports is changed.
+     */
     @FXML
     private void refresh_runways() {
         if (airportComboBox.getItems().size() > 0) {
             Runway[] runways = controller.get_runways(airportComboBox.getValue().getAirport_id());
+
             if (runways.length > 0) {
                 runwayComboBox.getItems().clear();
                 runwayComboBox.getItems().addAll(runways);
                 runwayComboBox.setValue(runwayComboBox.getItems().get(0));
                 PopupNotification.display("Switched to " + runwayComboBox.getItems().get(0).toString(), "");
-                try {
-                    if (obstaclePosition != null) {
-                        recalculateDistances();
-                    }
-                } catch (Exception e) {
-                    Logger.Log(Logger.Level.ERROR, "NOPE");
-                }
+
+//                try {
+//                    if (obstaclePosition != null) {
+//                        recalculateDistances();
+//                    }
+//                } catch (Exception e) {
+//                    Logger.Log(Logger.Level.ERROR, "NOPE");
+//                }
                 refresh_virtual_runways();
+
+                obstaclePosition = null;
+                clearObstacleFields();
+                drawRunway();
             }
         } else {
             runwayComboBox.getItems().clear();
+        }
+    }
+
+    @FXML
+    private void refresh_virtual_runways() {
+        Runway runway = runwayComboBox.getValue();
+        if (runway == null) {
+            return;
+        }
+
+        ArrayList<VirtualRunway> virtualRunways = new ArrayList<>();
+        Collections.addAll(virtualRunways, runway.leftRunway, runway.rightRunway);
+        ObservableList<VirtualRunway> observableList = FXCollections.observableList(virtualRunways);
+        virtualRunwayComboBox.setItems(observableList);
+        virtualRunwayComboBox.setValue(virtualRunwayComboBox.getItems().get(0));
+        updateDeclaredDistancesTextfield();
+    }
+
+    public void updateDeclaredDistancesTextfield() {
+        try {
+            Runway runway = runwayComboBox.getValue();
+            declaredDistances.getChildren().clear();
+            declaredDistances.getChildren().add(new Text("Runway " + runway.leftRunway.getDesignator() + ":\nTORA: " + runway.leftRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.leftRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.leftRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.leftRunway.getOrigParams().getLDA() + "m\n\n"));
+            declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n"));
+        } catch (NullPointerException e) {
+            // The runway is not set.
         }
     }
 
@@ -481,20 +513,6 @@ public class MainWindowController implements Initializable {
         } else {
             obstacleComboBox.getItems().clear();
         }
-    }
-
-    @FXML
-    private void refresh_virtual_runways() {
-        Runway runway = runwayComboBox.getValue();
-        if (runway == null) {
-            return;
-        }
-        ArrayList<VirtualRunway> virtualRunways = new ArrayList<>();
-        Collections.addAll(virtualRunways, runway.leftRunway, runway.rightRunway);
-        ObservableList<VirtualRunway> observableList = FXCollections.observableList(virtualRunways);
-        virtualRunwayComboBox.setItems(observableList);
-        virtualRunwayComboBox.setValue(virtualRunwayComboBox.getItems().get(0));
-        updateDeclaredDistancesTextfield();
     }
 
     /**
