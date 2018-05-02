@@ -27,10 +27,10 @@ public class SideOnView extends RunwayView {
         scaledFillRect(leftSpace, 149, TORA, 2);
 
         drawDesignators(170, Color.BLACK);
-        drawStopway(100);
-        drawClearway(110);
+        drawStopway(80);
+        drawClearway(90);
 
-        drawDisplacedThreshold(100);
+        drawDisplacedThreshold(80);
         drawMapScale();
         drawTakeOffLandingDirection();
     }
@@ -62,7 +62,7 @@ public class SideOnView extends RunwayView {
 
             drawSlope(obstacleLength, slopecalc);
 
-            drawBrokenDownDistances(obstacleLength, 200);
+            drawBrokenDownDistances(obstacleLength, 200, 110);
 
         } catch (AttributeNotAssignedException e) {
             System.err.println("Recalculated parameters have not been assigned!");

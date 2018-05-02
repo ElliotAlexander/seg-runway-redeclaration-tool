@@ -175,9 +175,8 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
      * Draw a breakdown of the distances relating to the object.
      *
      * @param oLength the length of the obstacle.
-     * @throws AttributeNotAssignedException
      */
-    protected void drawBrokenDownDistances(int oLength, int y) throws AttributeNotAssignedException {
+    protected void drawBrokenDownDistances(int oLength, int yDistances, int yObstacle) {
 
         if(obstaclePosition == null){
             Logger.Log(Logger.Level.WARNING, "Obstacle Position is not yet set, and this method has been called in error");
@@ -201,48 +200,49 @@ public abstract class RunwayView extends javafx.scene.canvas.Canvas {
 
         if (obstaclePosition.getDistLeftTSH() < obstaclePosition.getDistRightTSH()) {
             if (obstaclePosition.getDistLeftTSH() > 0) {
-                drawMeasuringLine(leftSpace, obstaclePosition.getDistLeftTSH(), y, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
+                drawMeasuringLine(leftSpace, obstaclePosition.getDistLeftTSH(), yObstacle, Integer.toString(obstaclePosition.getDistLeftTSH()) + "m");
             }
-            drawMeasuringLine(obstaclePosition.getDistLeftTSH() + leftSpace, oLength, y, "Obstacle");
+            drawMeasuringLine(obstaclePosition.getDistLeftTSH() + leftSpace, oLength, yObstacle, "Obstacle");
             int endObstacle = leftSpace + obstaclePosition.getDistLeftTSH() + oLength;
 
             if (leftRunway) {
                 // __|=|__->______
-                drawMeasuringLine(endObstacle, 300, y, "blast protection");
-                drawTORA_TODA_ASDA(endObstacle + 300, y, recalcParams);
+                drawMeasuringLine(endObstacle, 300, yDistances, "blast protection");
+                drawTORA_TODA_ASDA(endObstacle + 300, yDistances, recalcParams);
 
-                drawMeasuringLine(endObstacle, slopecalc + 60, y + 10, "slope + strip end");         // length = slopecalc+60 which is the strip end. Maybe show that in text too?
-                drawMeasuringLine(endObstacle + slopecalc + 60, rLDA, y + 10, "LDA " + rLDA + "m");
+                // length = slopecalc + 60 where 60 is the strip end
+                drawMeasuringLine(endObstacle, slopecalc + 60, yDistances + 10, "slope + strip end");
+                drawMeasuringLine(endObstacle + slopecalc + 60, rLDA, yDistances + 10, "LDA " + rLDA + "m");
             } else {
                 // __|=|__<-______
-                drawMeasuringLine(endObstacle, slopecalc + 60, y, "slope + strip end");
-                drawTORA_TODA_ASDA(endObstacle + slopecalc + 60, y, recalcParams);
+                drawMeasuringLine(endObstacle, slopecalc + 60, yDistances, "slope + strip end");
+                drawTORA_TODA_ASDA(endObstacle + slopecalc + 60, yDistances, recalcParams);
 
-                drawMeasuringLine(endObstacle, 300, y + 10, "RESA + strip end");
-                drawMeasuringLine(endObstacle + 300, rLDA, y + 10, "LDA " + rLDA + "m");
+                drawMeasuringLine(endObstacle, 300, yDistances + 10, "RESA + strip end");
+                drawMeasuringLine(endObstacle + 300, rLDA, yDistances + 10, "LDA " + rLDA + "m");
             }
         } else {
             int startObstacle = leftSpace + obstaclePosition.getDistLeftTSH();
 
             if (leftRunway) {
                 // ______->__|=|__
-                drawTORA_TODA_ASDA(0, y, recalcParams);
-                drawMeasuringLine(rTORA, slopecalc + 60, y, "strip end + slope");
+                drawTORA_TODA_ASDA(0, yDistances, recalcParams);
+                drawMeasuringLine(rTORA, slopecalc + 60, yDistances, "strip end + slope");
 
-                drawMeasuringLine(displacedThs, rLDA, y + 10, "LDA " + rLDA + "m");
-                drawMeasuringLine(displacedThs + rLDA, 300, y + 10, "strip end + RESA");
+                drawMeasuringLine(displacedThs, rLDA, yDistances + 10, "LDA " + rLDA + "m");
+                drawMeasuringLine(displacedThs + rLDA, 300, yDistances + 10, "strip end + RESA");
             } else {
                 // ______<-__|=|__
-                drawTORA_TODA_ASDA(leftSpace, y, recalcParams);
-                drawMeasuringLine(leftSpace + rTORA, 300, y, "blast protection");
+                drawTORA_TODA_ASDA(leftSpace, yDistances, recalcParams);
+                drawMeasuringLine(leftSpace + rTORA, 300, yDistances, "blast protection");
 
-                drawMeasuringLine(leftSpace, rLDA, y + 10, "LDA " + rLDA + "m");
-                drawMeasuringLine(leftSpace + rLDA, slopecalc + 60, y + 10, "strip end + slope");
+                drawMeasuringLine(leftSpace, rLDA, yDistances + 10, "LDA " + rLDA + "m");
+                drawMeasuringLine(leftSpace + rLDA, slopecalc + 60, yDistances + 10, "strip end + slope");
             }
 
-            drawMeasuringLine(startObstacle, oLength, y, "Obstacle");
+            drawMeasuringLine(startObstacle, oLength, yObstacle, "Obstacle");
             if (obstaclePosition.getDistRightTSH() > 0) {
-                drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), y, obstaclePosition.getDistRightTSH() + "m");
+                drawMeasuringLine(startObstacle + oLength, obstaclePosition.getDistRightTSH(), yObstacle, obstaclePosition.getDistRightTSH() + "m");
             }
         }
     }
