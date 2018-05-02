@@ -78,7 +78,7 @@ public class XML_Export {
 
             // User / console feedback.
             Logger.Log("Saving XML file [File=" + file.getAbsolutePath() + "].");
-            PopupNotification.display("Success", "XML file exported to file " + file.getName());
+            PopupNotification.display("Success - XML exported", "Exported to file " + file.getName());
             return;
 
         } catch (ParserConfigurationException e) {

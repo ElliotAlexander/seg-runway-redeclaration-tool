@@ -125,7 +125,7 @@ public class XML_Parser {
             imported_airports++;
         }
 
-        PopupNotification.display("Imported Airports", "Successfully imported " + imported_airports + " airports into database.");
+        PopupNotification.display("Success - Imported Airports", "Successfully imported " + imported_airports + " airports.");
 
         if(duplicates.size() > 0){
             String list_str = "";
@@ -164,7 +164,7 @@ public class XML_Parser {
             imported_obstacles++;
         }
 
-        PopupNotification.display("Successfully imported Obstacles", "Successfully imported " + imported_obstacles + " obstacles into the database.");
+        PopupNotification.display("Success - imported Obstacles", "Successfully imported " + imported_obstacles + " obstacles into the database.");
 
         if(duplicates.size() > 0){
             String list_str = "";
@@ -214,7 +214,7 @@ public class XML_Parser {
             ObstaclePosition newOP = new ObstaclePosition(mwc.getObstacle(), DistanceLeftTSH, DistanceRightTSH, width, DistanceFromCL, side_val);
             mwc.setObstaclePosition(newOP);
             Logger.Log("Successfully imported obstacle position [" + newOP.toString() + "] into database.");
-            PopupNotification.display("Successfully imported Obstacle Position", "Obstacle Position successfully imported.");
+            PopupNotification.display("Success - imported Obstacle Position", "");
         } catch(NumberFormatException e){
             Logger.Log(Logger.Level.ERROR, "Failed to parse values in ObstaclePosition XML data.");
             Logger.Log(Logger.Level.ERROR, "Failed at: [" + obstacle_positions[0].coalesceText(true) + "].");

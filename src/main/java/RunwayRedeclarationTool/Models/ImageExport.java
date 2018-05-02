@@ -50,7 +50,7 @@ public class ImageExport {
             boolean condition = ImageIO.write(renderedImage, extension, file);
             if(condition){
                 Logger.Log("Rendering image into file [" + file.getName() + "].");
-                PopupNotification.display("Success!", "File " + file.getName() + " was written successfully.");
+                PopupNotification.display("Success - File written successfully", "File Name:" + file.getName() + ".");
             } else {
                 Logger.Log("No appropriate writer could be found to write " + file.getName());
                 PopupNotification.error("Error - Appropriate writer not found!", "No writer could be found for format " + extension + ", try using another file format.");
