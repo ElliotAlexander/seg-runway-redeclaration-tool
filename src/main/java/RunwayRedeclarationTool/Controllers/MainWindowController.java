@@ -169,8 +169,10 @@ public class MainWindowController implements Initializable {
         sideOnView.heightProperty().bind(sideOnViewContainer.heightProperty());
         sideOnViewContainer.getChildren().add(sideOnView);
 
-        topDownView.drawObstacle();
-        sideOnView.drawObstacle();
+        if (obstaclePosition != null) {
+            topDownView.drawObstacle();
+            sideOnView.drawObstacle();
+        }
 
         popupController.redrawAll(sideOnView, topDownView);
     }
@@ -187,10 +189,10 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Clear the current object and additional markings.
+     * Clear the current object position text boxes.
      */
     @FXML
-    public void clearFields() {
+    public void clearObstacleFields() {
         distanceFromTHRLeft.clear();
         distanceFromTHRRight.clear();
         distanceFromCL.clear();
@@ -424,7 +426,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * Refresh the combo boxes to reflect changes to .
+     * Refresh the combo boxes to reflect changes done by importing or removing airports.
      */
     private void refresh_airports() {
         airportComboBox.getItems().clear();
@@ -445,36 +447,35 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * This method is called when the user switches airports or when the list of airports is changed.
+     */
     @FXML
     private void refresh_runways() {
         if (airportComboBox.getItems().size() > 0) {
             Runway[] runways = controller.get_runways(airportComboBox.getValue().getAirport_id());
+
             if (runways.length > 0) {
                 runwayComboBox.getItems().clear();
                 runwayComboBox.getItems().addAll(runways);
                 runwayComboBox.setValue(runwayComboBox.getItems().get(0));
                 PopupNotification.display("Switched to " + runwayComboBox.getItems().get(0).toString(), "");
-                try {
-                    if (obstaclePosition != null) {
-                        recalculateDistances();
-                    }
-                } catch (Exception e) {
-                    Logger.Log(Logger.Level.ERROR, "NOPE");
-                }
+
+//                try {
+//                    if (obstaclePosition != null) {
+//                        recalculateDistances();
+//                    }
+//                } catch (Exception e) {
+//                    Logger.Log(Logger.Level.ERROR, "NOPE");
+//                }
                 refresh_virtual_runways();
+
+                obstaclePosition = null;
+                clearObstacleFields();
+                drawRunway();
             }
         } else {
             runwayComboBox.getItems().clear();
-        }
-    }
-
-    private void refresh_obstacles() {
-        obstacleComboBox.getItems().clear();
-        obstacleComboBox.getItems().addAll(controller.get_obstacles());
-        if (obstacleComboBox.getItems().size() > 0) {
-            obstacleComboBox.setValue(obstacleComboBox.getItems().get(0));
-        } else {
-            obstacleComboBox.getItems().clear();
         }
     }
 
@@ -484,6 +485,7 @@ public class MainWindowController implements Initializable {
         if (runway == null) {
             return;
         }
+
         ArrayList<VirtualRunway> virtualRunways = new ArrayList<>();
         Collections.addAll(virtualRunways, runway.leftRunway, runway.rightRunway);
         ObservableList<VirtualRunway> observableList = FXCollections.observableList(virtualRunways);
@@ -500,6 +502,16 @@ public class MainWindowController implements Initializable {
             declaredDistances.getChildren().add(new Text("Runway " + runway.rightRunway.getDesignator() + ":\nTORA: " + runway.rightRunway.getOrigParams().getTORA() + "m\nTODA: " + runway.rightRunway.getOrigParams().getTODA() + "m\nASDA: " + runway.rightRunway.getOrigParams().getASDA() + "m\nLDA:  " + runway.rightRunway.getOrigParams().getLDA() + "m\n"));
         } catch (NullPointerException e) {
             // The runway is not set.
+        }
+    }
+
+    private void refresh_obstacles() {
+        obstacleComboBox.getItems().clear();
+        obstacleComboBox.getItems().addAll(controller.get_obstacles());
+        if (obstacleComboBox.getItems().size() > 0) {
+            obstacleComboBox.setValue(obstacleComboBox.getItems().get(0));
+        } else {
+            obstacleComboBox.getItems().clear();
         }
     }
 

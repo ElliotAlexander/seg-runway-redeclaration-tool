@@ -148,7 +148,8 @@
                 </rowConstraints>
                 <children>
                     <Button fx:id="calculateButton" alignment="CENTER" onAction="#recalculateDistances" prefHeight="25.0" prefWidth="150.0" text="Calculate" GridPane.columnIndex="1" />
-                    <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearFields" prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #777;" text="Clear" />
+                    <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearObstacleFields"
+                            prefHeight="25.0" prefWidth="150.0" style="-fx-background-color: #777;" text="Clear"/>
                 </children>
                 <VBox.margin>
                     <Insets bottom="10.0" left="10.0" right="10.0" />
