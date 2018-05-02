@@ -127,7 +127,7 @@ public class MainWindowController implements Initializable {
         Pane pane = new Pane();
 
         // Add a compass to the top-down view
-        Canvas canvas = new Canvas(30, 30);
+        Canvas canvas = new Canvas(60, 60);
         Image compass = new Image(this.getClass().getClassLoader().getResourceAsStream("compass.png"));
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -146,7 +146,7 @@ public class MainWindowController implements Initializable {
         } else {
             canvas.setRotate(90 - bearing);
         }
-        gc.drawImage(compass, 0, 0, 30, 30);
+        gc.drawImage(compass, 0, 0, 60, 60);
 
         StaticElements staticElements = new StaticElements(virtualRunway, obstaclePosition, rotateViewCheckbox.isSelected());
         staticElements.widthProperty().bind(topDownViewContainer.widthProperty());
