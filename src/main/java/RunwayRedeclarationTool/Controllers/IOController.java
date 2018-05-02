@@ -53,6 +53,12 @@ public class IOController {
     }
 
 
+    /**
+     *  Formats and displays the calculation breakdown, as well as details on airports + obstacles in a popup window.
+     * @param declaredDistances
+     * @param calculationsBreakdown
+     * @param currentlySelected
+     */
     public void exportAsText(ObservableList<Node> declaredDistances, ObservableList<Node> calculationsBreakdown, Obstacle currentlySelected) {
         String outputString = "";
 
@@ -74,6 +80,12 @@ public class IOController {
         popup.display(outputString);
     }
 
+    /**
+     * Exports the currently selected runway view as an image.
+     * Only the selected view iwll be exported.
+     * @param runwayView
+     */
+
     public void exportImage(RunwayView runwayView) {
         if (runwayView instanceof TopDownView) {
             Logger.Log("Running Image Exporter for top down view.");
@@ -84,6 +96,10 @@ public class IOController {
     }
 
 
+    /**
+     * Platform independent implentation to open the log file in the default text editor.
+     * @param config
+     */
     public void openLogFile(Configuration config) {
         String file = null, dir = null;
         try {
@@ -95,12 +111,14 @@ public class IOController {
 
         }
 
+        // Build the logfile string.
         File f = new File(dir + "/" + file);
-
         if (f.exists()) {
             try {
+                // Java's Desktop API is cross platform.
                 Desktop.getDesktop().edit(f);
             } catch (IOException e) {
+                // For some reason, we can't open the file - print details and inform the user.
                 Logger.Log("IOException when trying to open file [" + f.getName() + "].");
                 PopupNotification.error("Failed to open log file", "IO Exception when attempting to open log file.");
                 e.printStackTrace();
@@ -111,6 +129,12 @@ public class IOController {
         }
     }
 
+
+    /**
+     * Cross platform implementation to open the directory where log files are stored.
+     * Recall that all former log files are still saved, albeit renamed.
+     * @param config
+     */
     public void openLogDirectory(Configuration config){
         String dir = null;
         try {
